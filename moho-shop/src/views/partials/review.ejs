@@ -1,0 +1,123 @@
+<div class="review-slider">
+
+    <div class="review-track">
+
+        <% reviews.forEach(review => { %>
+
+            <div class="review-card">
+
+                <!-- ảnh review -->
+
+                <div class="review-image">
+
+                    <img
+                    src="<%= review.review_image %>"
+                    alt="">
+
+                </div>
+
+                <!-- nội dung -->
+
+                <div class="review-body">
+
+                    <!-- user -->
+
+                    <div class="review-user">
+
+                        <%= review.anonymous
+                        ? "Ẩn danh"
+                        : review.customer_username %>
+
+                    </div>
+
+                    <!-- sao -->
+
+                    <div class="review-stars">
+
+                        <% for(let i = 1; i <= 5; i++){ %>
+
+                            <% if(i <= review.rating){ %>
+
+                                <i class="fa-solid fa-star active"></i>
+
+                            <% }else{ %>
+
+                                <i class="fa-regular fa-star"></i>
+
+                            <% } %>
+
+                        <% } %>
+
+                    </div>
+
+                    <!-- nội dung -->
+
+                    <div class="review-text">
+
+                        <%= review.review_comment %>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        <% }) %>
+
+        <!-- duplicate để chạy vô hạn -->
+
+        <% reviews.forEach(review => { %>
+
+            <div class="review-card">
+
+                <div class="review-image">
+
+                    <img
+                    src="<%= review.review_image %>"
+                    alt="">
+
+                </div>
+
+                <div class="review-body">
+
+                    <div class="review-user">
+
+                        <%= review.anonymous
+                        ? "Ẩn danh"
+                        : review.customer_username %>
+
+                    </div>
+
+                    <div class="review-stars">
+
+                        <% for(let i = 1; i <= 5; i++){ %>
+
+                            <% if(i <= review.rating){ %>
+
+                                <i class="fa-solid fa-star active"></i>
+
+                            <% }else{ %>
+
+                                <i class="fa-regular fa-star"></i>
+
+                            <% } %>
+
+                        <% } %>
+
+                    </div>
+
+                    <div class="review-text">
+
+                        <%= review.review_comment %>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        <% }) %>
+
+    </div>
+
+</div>

@@ -1,0 +1,111 @@
+/* ===== HERO BANNER ===== */
+
+.hero-banner {
+  width: 100%;
+}
+
+.banner-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ===== HERO SLIDER ===== */
+
+.slider {
+  width: 100%;
+  aspect-ratio: 1920 / 550;
+  position: relative;
+  overflow: hidden;
+  max-height: 600px;
+}
+
+/* Slide */
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition: opacity 0.8s ease-in-out;
+
+  z-index: 1;
+}
+
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 2;
+}
+
+/* Ảnh */
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ===== BUTTONS ===== */
+
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 55px;
+  height: 55px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #f36f21;
+  color: white;
+
+  font-size: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition: 0.3s;
+
+  z-index: 10;
+}
+
+/* Hover slider mới hiện nút */
+
+.slider:hover .slider-btn {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Hover button */
+
+.slider-btn:hover {
+  background: #d95d16;
+}
+
+/* Left button */
+
+.prev {
+  left: 25px;
+}
+
+/* Right button */
+
+.next {
+  right: 25px;
+}

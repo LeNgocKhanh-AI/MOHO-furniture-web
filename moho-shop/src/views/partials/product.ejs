@@ -1,0 +1,108 @@
+<div class="product-item">
+
+  <a href="/product/<%= product.product_id %>"
+  class="product-image">
+
+    <img  
+      src="<%= product.image_url %>"
+      alt="<%= product.product_name %>"
+      class="product-img"
+    >
+
+  </a>
+
+  <div class="product-info">
+
+    <!-- TÊN -->
+
+    <h3 class="product-name">
+
+      <%= product.product_name %>
+
+    </h3>
+
+    <!-- GIÁ -->
+
+    <div class="product-price">
+
+      <div class="price-left">
+
+        <span class="current-price">
+
+          <%= Number(product.product_sale_price).toLocaleString('vi-VN') %>đ
+
+        </span>
+
+        <span class="old-price">
+
+          <%= Number(product.product_price).toLocaleString('vi-VN') %>đ
+
+        </span>
+
+      </div>
+
+    </div>
+
+    <!-- META -->
+
+    <div class="product-meta">
+
+    <% if(product.avg_rating > 0){ %>
+
+        <div class="product-rating">
+
+    <% 
+    
+    const fullStars = Math.floor(product.avg_rating);
+
+    const hasHalfStar = product.avg_rating % 1 >= 0.5;
+
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+    %>
+
+    <!-- FULL STAR -->
+
+    <% for(let i = 0; i < fullStars; i++){ %>
+
+        <i class="fa-solid fa-star active"></i>
+
+    <% } %>
+
+    <!-- HALF STAR -->
+
+    <% if(hasHalfStar){ %>
+
+        <i class="fa-solid fa-star-half-stroke active"></i>
+
+    <% } %>
+
+    <!-- EMPTY STAR -->
+
+    <% for(let i = 0; i < emptyStars; i++){ %>
+
+        <i class="fa-regular fa-star"></i>
+
+    <% } %>
+
+    <span class="rating-number">
+
+        (<%= product.avg_rating %>)
+
+    </span>
+
+</div>
+
+    <% } %>
+
+    <span class="sold-count">
+
+        Đã bán <%= product.total_sold %>
+
+    </span>
+
+</div>
+
+  </div>
+
+</div>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Tìm kiếm</title>
+
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/product.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/searchpage.css">
+
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+    <%- include('../partials/header') %>
+
+  <section class="product-section">
+
+  <div class="container-80">
+
+    <div class="section-header">
+      <h2>Tìm kiếm</h2>
+    </div>
+
+    <div class="search-info">
+      Có <%= products.length %> sản phẩm cho "<%= keyword %>"
+    </div>
+
+    <div class="product-grid">
+
+      <% products.forEach(product => { %>
+        <%- include('../partials/product', { product }) %>
+      <% }) %>
+
+    </div>
+
+  </div>
+
+</section>
+
+    <%- include('../partials/footer') %>
+<script src="/js/search.js"></script>
+<script src="/js/cart.js"></script>
+</body>
+
+</html>

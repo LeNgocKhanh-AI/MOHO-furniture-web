@@ -1,0 +1,228 @@
+<section class="detail-section">
+
+<div class="detail-container">
+
+    <!-- LEFT -->
+
+   <div class="detail-left">
+
+    <!-- LEFT THUMB -->
+
+    <div class="sub-images">
+
+        <% images.forEach(img=>{ %>
+
+            <img
+            src="<%= img.image_url %>"
+            class="sub-img"
+            onclick="changeImage(this)"
+            >
+
+        <% }) %>
+
+    </div>
+
+    <!-- MAIN IMAGE -->
+
+    <div class="main-image">
+
+        <img
+        id="mainProductImage"
+        src="<%= images[0].image_url %>"
+        alt="">
+
+    </div>
+
+</div>
+
+    <!-- RIGHT -->
+
+    <div class="detail-right">
+
+        <h1 class="detail-name">
+
+            <%= product.product_name %>
+
+        </h1>
+
+        <!-- META -->
+
+        <div class="detail-meta">
+
+            <div class="detail-rating">
+
+                <i class="fa-solid fa-star"></i>
+
+                <span>
+
+                    <%= product.avg_rating %>
+
+                </span>
+
+                <span>
+
+                    (<%= product.total_reviews %> đánh giá)
+
+                </span>
+
+            </div>
+
+            <span>|</span>
+
+            <div>
+
+                Đã bán <%= product.total_sold %>
+
+            </div>
+
+        </div>
+
+        <!-- SKU -->
+
+        <div class="detail-sku">
+
+            SKU:
+            <%= product.product_sku %>
+
+        </div>
+
+        <div class="detail-line"></div>
+
+        <!-- PRICE -->
+
+        <div class="detail-price">
+
+            <span class="sale-price">
+
+                <%= Number(product.product_sale_price).toLocaleString('vi-VN') %>đ
+
+            </span>
+
+            <span class="old-price-detail">
+
+                <%= Number(product.product_price).toLocaleString('vi-VN') %>đ
+
+            </span>
+
+        </div>
+
+        <div class="detail-line"></div>
+
+        <!-- DESC -->
+
+        <div class="detail-desc">
+
+            <%= product.product_description %>
+
+        </div>
+
+        <!-- QUANTITY -->
+
+        <div class="quantity-box">
+
+            <button onclick="decreaseQty()">-</button>
+
+            <input
+            type="text"
+            value="1"
+            id="qtyInput"
+            readonly>
+
+            <button onclick="increaseQty()">+</button>
+
+        </div>
+
+        <!-- BUTTON -->
+
+        <div class="detail-buttons">
+
+            <button class="btn-cart" onclick="handleAddToCart()">
+
+
+                THÊM VÀO GIỎ
+
+            </button>
+
+            <button class="btn-buy">
+
+                MUA NGAY
+
+            </button>
+
+            <a
+            href="https://zalo.me/"
+            class="btn-zalo"
+            >
+
+                LIÊN HỆ ZALO
+
+            </a>
+
+        </div>
+
+        <!-- POLICY -->
+
+        <div class="detail-policy">
+
+            <p>
+            Miễn phí giao hàng & lắp đặt tại tất cả quận huyện thuộc TP.HCM...
+            </p>
+
+            <p>
+            Miễn phí 1 đổi 1 - Bảo hành 5 năm...
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+<script>
+
+function changeImage(el){
+
+    document.getElementById("mainProductImage").src = el.src;
+
+}
+
+function increaseQty(){
+
+    const input = document.getElementById("qtyInput");
+
+    input.value = parseInt(input.value) + 1;
+
+}
+
+function decreaseQty(){
+
+    const input = document.getElementById("qtyInput");
+
+    if(parseInt(input.value) > 1){
+
+        input.value = parseInt(input.value) - 1;
+
+    }
+
+}
+function handleAddToCart() {
+   const img = document.querySelector(".main-image img");
+        if (img) flyToCart(img);
+    const product = {
+    id: "<%= product.product_id %>",
+    name: "<%= product.product_name %>",
+    image: "<%= images[0].image_url %>",
+    price: Number("<%= product.product_sale_price %>"),
+    oldPrice: Number("<%= product.product_price %>"),
+    quantity: parseInt(document.getElementById("qtyInput").value)
+  };
+
+  addToCart(product);
+ 
+}
+
+
+
+</script>

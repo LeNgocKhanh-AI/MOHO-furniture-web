@@ -1,0 +1,41 @@
+body{
+  margin: 0;
+  padding: 0;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ===== PRODUCT SECTION ===== */
+
+.product-section{
+  padding: 40px 0;
+}
+
+.container-80{
+  width: 80%;
+  margin: 0 auto;
+}
+
+/* ===== SECTION HEADER ===== */
+
+.section-header{
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 30px;
+}
+
+.section-header h2{
+  font-size: 32px;
+}
+
+.view-more{
+  text-decoration: none;
+
+  color: #f36f21;
+} 

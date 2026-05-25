@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title><%= product.product_name %></title>
+
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/detailproduct.css">
+<link rel="stylesheet" href="/css/footer.css">
+<link rel="stylesheet" href="/css/trangchu.css">
+<link rel="stylesheet" href="/css/product.css">
+<link rel="stylesheet" href="/css/review.css">
+<link
+href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+>
+
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <%- include('../partials/header') %>
+
+    <!-- DETAIL COMPONENT -->
+
+    <%- include('../partials/detailproduct',{
+        product,
+        images
+    }) %>
+   
+<script src="/js/search.js"></script>
+<script src="/js/cart.js"></script>
+</body>
+ <%- include('../partials/footer') %>
+
+</html>
