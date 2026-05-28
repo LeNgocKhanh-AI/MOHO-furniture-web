@@ -1,3 +1,8 @@
+.main-header {
+  margin-top: 30px;
+  /* tăng giảm tùy ý: 10px / 30px */
+}
+
 .container,
 .main-nav-container {
   width: 80%;
@@ -5,6 +10,7 @@
   display: flex;
   align-items: center;
 }
+
 
 /* 3. Header Top */
 .header-top {
@@ -389,4 +395,82 @@
   z-index: 99999;
   transition: all 0.8s ease-in-out;
   pointer-events: none;
+}
+
+.account {
+  position: relative;
+}
+
+/* ===== LOGIN POPUP ===== */
+
+.login-popup {
+  position: absolute;
+  top: 60px;
+  right: 0;
+
+  width: 320px;
+  background: #fff;
+
+  border: 1px solid #ddd;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+
+  padding: 15px;
+
+  display: none;
+  z-index: 99999;
+}
+
+.login-popup input {
+  width: 100%;
+  height: 40px;
+
+  margin-bottom: 10px;
+  padding: 0 10px;
+
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+.login-popup button {
+  width: 100%;
+  height: 40px;
+
+  background: #111;
+  color: #fff;
+
+  border: none;
+  cursor: pointer;
+}
+
+/* ===== USER DROPDOWN (LOGOUT) ===== */
+
+.user-dropdown {
+  position: absolute;
+  top: 60px;
+  right: 0;
+
+  width: 160px;
+  background: #fff;
+
+  border: 1px solid #ddd;
+
+  display: none;
+  z-index: 99999;
+}
+
+.user-dropdown a {
+  display: block;
+  padding: 10px;
+
+  text-decoration: none;
+  color: #333;
+}
+
+.user-dropdown a:hover {
+  background: #f5f5f5;
+}
+
+/* hover account => show logout */
+.account:hover .user-dropdown {
+  display: block;
 }

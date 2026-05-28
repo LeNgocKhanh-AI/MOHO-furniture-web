@@ -21,17 +21,218 @@
 
     </div>
     <div class="header-actions">
+     
+      <!-- ACCOUNT -->
+
       <div class="account">
+
         <i class="fa fa-user-o"></i>
-        <div class="account-text">
-          <span>Đăng nhập / Đăng ký</span>
-          <div class="my-account">
-            <strong>Tài khoản của tôi</strong>
-            <i class="fa fa-chevron-down"></i>
+
+        <!-- ===== LOGIN SUCCESS ===== -->
+
+        <% if(session.customer){ %>
+
+          <div class="account-text">
+
+            <span>
+
+              Xin chào
+
+            </span>
+
+            <div class="my-account">
+
+              <strong>
+
+                <%= session.customer.customer_firstname %>
+
+              </strong>
+
+              <i class="fa fa-chevron-down"></i>
+
+            </div>
+
           </div>
-        </div>
+
+          <!-- USER DROPDOWN -->
+
+          <div class="user-dropdown">
+
+            <a href="#">
+
+              Tài khoản của tôi
+
+            </a>
+
+            <a href="#">
+
+              Đơn hàng của tôi
+
+            </a>
+
+            <a href="/logout">
+
+              Đăng xuất
+
+            </a>
+
+          </div>
+
+        <% } else { %>
+
+          <!-- ===== NOT LOGIN ===== -->
+
+          <div class="account-text">
+
+            <span>
+
+              Đăng nhập / Đăng ký
+
+            </span>
+
+            <div class="my-account">
+
+              <strong>
+
+                Tài khoản của tôi
+
+              </strong>
+
+              <i class="fa fa-chevron-down"></i>
+
+            </div>
+
+          </div>
+
+          <!-- ===== LOGIN POPUP ===== -->
+
+          <div
+            class="login-popup"
+            id="loginPopup"
+          >
+
+            <h3>
+
+              Đăng nhập tài khoản
+
+            </h3>
+
+            <p>
+
+              Nhập email và mật khẩu của bạn
+
+            </p>
+
+            <!-- LOGIN FORM -->
+
+            <form id="loginForm">
+
+              <!-- EMAIL -->
+
+              <div class="floating-group">
+
+                <input
+                  type="email"
+                  name="email"
+                  required
+                >
+
+                <label>
+
+                  Nhập email của bạn
+
+                </label>
+
+              </div>
+
+              <!-- PASSWORD -->
+
+              <div class="floating-group">
+
+                <input
+                  type="password"
+                  name="password"
+                  required
+                >
+
+                <label>
+
+                  Nhập mật khẩu của bạn
+
+                </label>
+
+              </div>
+
+              <!-- GOOGLE TEXT -->
+
+              <div class="google-text">
+
+                Website được bảo vệ bởi
+                reCAPTCHA và
+
+                <a
+                  href="https://policies.google.com/privacy"
+                  target="_blank"
+                >
+
+                  Chính sách bảo mật
+
+                </a>
+
+                và
+
+                <a
+                  href="https://policies.google.com/terms"
+                  target="_blank"
+                >
+
+                  Điều khoản dịch vụ
+
+                </a>
+
+                của Google
+
+              </div>
+
+              <!-- BUTTON -->
+
+              <button
+                type="submit"
+                class="login-btn"
+              >
+
+                ĐĂNG NHẬP
+
+              </button>
+
+            </form>
+
+            <!-- FOOTER -->
+
+            <div class="login-bottom">
+
+              <a href="/register">
+
+                Khách hàng mới?
+                Tạo tài khoản
+
+              </a>
+
+              <a href="#">
+
+                Quên mật khẩu?
+
+              </a>
+
+            </div>
+
+          </div>
+
+        <% } %>
+
       </div>
 
+      <!-- CART -->
       <div class="cart">
         <div class="cart-icon">
           <i class="fa fa-shopping-bag"></i>
