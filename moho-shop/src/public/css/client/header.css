@@ -1,0 +1,740 @@
+.main-header {
+  margin-top: 10px;
+}
+
+.container,
+.main-nav-container {
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+
+/* 3. Header Top */
+.header-top {
+  padding: 25px 0;
+}
+
+.container {
+  justify-content: space-between;
+}
+
+/* Logo */
+.logo img {
+  height: 65px;
+  display: block;
+}
+
+.search-box {
+  position: relative;
+  width: 400px;
+  /* bằng input */
+  display: flex;
+  border: 1px solid #ddd;
+  background: #fff;
+}
+
+.search-box input {
+  flex: 1;
+  height: 40px;
+  border: none;
+  outline: none;
+  padding: 0 10px;
+}
+
+.search-box button {
+  width: 45px;
+  border: none;
+  background: black;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* DROPDOWN */
+.search-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border: 1px solid #ddd;
+  max-height: 400px;
+  overflow-y: auto;
+  display: none;
+  z-index: 99999;
+}
+
+/* ITEM */
+.search-item {
+  display: flex;
+  gap: 10px;
+  padding: 8px;
+  text-decoration: none;
+  color: #000;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.search-item:hover {
+  background: #f9f9f9;
+}
+
+.search-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
+/* TEXT */
+.search-name {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.search-price {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.sale-price {
+  font-weight: bold;
+  color: #000;
+}
+
+.old-price {
+  font-size: 10px;
+  color: #777;
+  text-decoration: line-through;
+}
+
+/* ===== HEADER ACTIONS ===== */
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 35px;
+  padding-right: 50px;
+  position: relative;
+}
+
+/* Account & Cart */
+.account,
+.cart {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  color: #333;
+}
+
+/* Text nhỏ phía trên */
+.account-text span {
+  display: block;
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 3px;
+  font-weight: 400;
+}
+
+/* Text chính */
+.my-account {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 15px;
+  font-weight: 400;
+  color: #222;
+}
+
+/* Cart */
+.cart {
+  font-size: 15px;
+  font-weight: 400;
+  color: #222;
+}
+
+/* Icon cart */
+.cart-icon {
+  position: relative;
+  font-size: 24px;
+}
+
+/* Badge số lượng */
+.cart-count {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+
+  background: #f36f21;
+  color: white;
+
+  font-size: 10px;
+  font-weight: 500;
+
+  width: 18px;
+  height: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+}
+
+/* ===== MENU NAVIGATION ===== */
+
+.main-nav {
+  width: 100%;
+  background: #fff;
+}
+
+/* Container menu */
+.main-nav-container {
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-start;
+
+  padding-left: 15px;
+}
+
+/* Danh sách menu */
+.main-nav ul {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 40px;
+}
+
+/* Item menu */
+.main-nav li {
+  padding: 16px 0;
+}
+
+/* Link menu */
+.main-nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+/* Hover */
+.main-nav a:hover {
+  color: #f36f21;
+}
+
+/* Icon */
+.main-nav i {
+  font-size: 10px;
+  margin-left: 4px;
+  color: #999;
+}
+
+/* minicart */
+.mini-cart {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  width: 360px;
+  background: #fff;
+  border: 1px solid #ddd;
+  display: none;
+  z-index: 9999;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* TITLE */
+.mini-cart-title {
+  padding: 12px;
+  font-weight: 600;
+  color: #444;
+  border-bottom: 1px solid #eee;
+}
+
+
+/* LIST */
+.mini-cart-item {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  align-items: center;
+  position: relative;
+}
+
+/* IMAGE */
+.mini-cart-item img {
+  width: 55px;
+  height: 55px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* NAME */
+.mini-cart-name {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* PRICE AREA */
+.mini-cart-price {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+/* CURRENT PRICE */
+.price-current {
+  font-weight: 600;
+  color: #000;
+}
+
+/* OLD PRICE */
+.price-old {
+  font-size: 12px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+/* QTY */
+.qty-box {
+  background: #eee;
+  padding: 2px 6px;
+  font-size: 12px;
+  border-radius: 3px;
+}
+
+/* REMOVE BUTTON */
+.remove-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 16px;
+  color: #999;
+  transition: 0.2s;
+}
+
+.remove-btn:hover {
+  color: red;
+  transform: translateY(-50%) scale(1.2);
+}
+
+/* TOTAL */
+.mini-cart-total {
+  padding: 12px;
+  border-top: 1px solid #eee;
+  font-weight: 600;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mini-cart-total span {
+  color: red;
+  font-weight: 700;
+}
+
+/* FOOTER BUTTONS */
+.mini-cart-footer {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  border-top: 1px solid #eee;
+}
+
+
+.mini-cart-footer a,
+.mini-cart-footer button {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* VIEW CART */
+.mini-cart-footer a {
+  border: 1px solid #0F7D6C;
+  color: #0F7D6C;
+  text-decoration: none;
+}
+
+/* PAY */
+.mini-cart-footer button {
+  background: #0F7D6C;
+  color: white;
+  border: none;
+}
+
+/* HOVER EFFECT */
+.mini-cart-footer a:hover,
+.mini-cart-footer button:hover {
+  opacity: 0.85;
+}
+
+.fly-img {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  z-index: 99999;
+  transition: all 0.8s ease-in-out;
+  pointer-events: none;
+}
+
+.account {
+  position: relative;
+}
+
+
+
+/* =========================================================
+   ACCOUNT AREA
+========================================================= */
+
+.account {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  cursor: pointer;
+
+  color: #333;
+}
+
+/* =========================================================
+   ACCOUNT TEXT
+========================================================= */
+
+.account-text span {
+  display: block;
+
+  font-size: 12px;
+  color: #888;
+
+  margin-bottom: 3px;
+}
+
+.my-account {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  font-size: 15px;
+  color: #222;
+}
+
+.username {
+  max-width: 120px;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* =========================================================
+   USER DROPDOWN
+========================================================= */
+
+.user-dropdown {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  width: 180px;
+  background: #fff;
+  border: 1px solid #ddd;
+  display: none;
+  z-index: 99999;
+}
+
+.user-dropdown.active {
+  display: block;
+}
+
+.user-dropdown a {
+  display: block;
+  padding: 12px;
+  color: #333;
+  text-decoration: none;
+}
+
+.user-dropdown a:hover {
+  background: #f5f5f5;
+}
+
+
+
+/* =========================================================
+   LOGIN POPUP
+========================================================= */
+
+.login-popup {
+  position: absolute;
+
+  top: 60px;
+  right: 0;
+
+  width: 370px;
+
+  background: #fff;
+
+  border: 1px solid #e5e5e5;
+
+
+  padding: 22px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+
+  display: none;
+
+  z-index: 99999;
+}
+
+/* show popup */
+
+.login-popup.active {
+  display: block;
+}
+
+/* =========================================================
+   LOGIN TITLE
+========================================================= */
+
+.login-popup h3 {
+  font-size: 22px;
+  color: black;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: normal;
+}
+
+/* =========================================================
+   FLOATING INPUT
+========================================================= */
+
+.floating-group {
+  position: relative;
+
+  margin-bottom: 18px;
+}
+
+/* ===== INPUT ===== */
+
+.floating-group input {
+  width: 100%;
+  height: 50px;
+
+  border: 1px solid #ddd;
+  outline: none;
+
+  padding: 20px 14px 6px;
+
+  font-size: 13px;
+  color: #222;
+
+  background: #fff;
+
+  box-sizing: border-box;
+
+  transition: 0.2s;
+}
+
+/* focus */
+
+/* .floating-group input:focus {
+  border-color: ;
+} */
+
+/* ===== LABEL ===== */
+
+.floating-group label {
+  position: absolute;
+
+  left: 14px;
+  top: 16px;
+
+  color: #999;
+
+  font-size: 13px;
+  font-weight: 600;
+  pointer-events: none;
+
+  transition: 0.2s;
+
+  background: #fff;
+
+  padding: 0 4px;
+}
+
+/* ===== FLOAT EFFECT ===== */
+
+.floating-group input:focus+label,
+.floating-group input:not(:placeholder-shown)+label {
+
+  top: 6px;
+
+  font-size: 11px;
+
+  color: #777;
+}
+
+/* =========================================================
+   GOOGLE TEXT
+========================================================= */
+
+.google-text {
+  font-size: 13px;
+
+  line-height: 1.6;
+
+  color: #777;
+
+  margin-bottom: 18px;
+}
+
+.google-text a {
+  color: #1976d2;
+  text-decoration: none;
+}
+
+.google-text a:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   LOGIN BUTTON
+========================================================= */
+
+.login-btn {
+  width: 100%;
+  height: 46px;
+
+  border: none;
+
+
+  background: black;
+  color: #fff;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.login-btn:hover {
+  opacity: 0.9;
+}
+
+.google-login-btn {
+  width: 100%;
+  height: 45px;
+
+  margin-top: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  border: 1px solid #ddd;
+  background: #fff;
+
+  text-decoration: none;
+  color: #222;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  border-radius: 4px;
+
+  transition: 0.2s;
+}
+
+.google-login-btn:hover {
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+.google-login-btn img {
+  width: 18px;
+  height: 18px;
+}
+
+
+/* =========================================================
+   LOGIN FOOTER
+========================================================= */
+
+.login-bottom {
+  margin-top: 15px;
+  gap: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ===== ROW ===== */
+
+.login-row {
+  display: flex;
+  align-items: center;
+
+
+  color: #777;
+  font-size: 13px;
+}
+
+/* TEXT ĐEN */
+
+.login-row span {
+  color: #777;
+  cursor: default;
+}
+
+/* LINK XANH */
+
+.login-row a {
+  color: #1976d2;
+
+  text-decoration: none;
+
+
+
+  transition: 0.2s;
+}
+
+/* HOVER LINK */
+
+.login-row a:hover {
+  text-decoration: underline;
+}
+
+.mini-cart {
+  display: none;
+}
+
+.mini-cart.show {
+  display: block;
+}
+
+
+
+/* ===== USER DROPDOWN (LOGOUT) ===== */

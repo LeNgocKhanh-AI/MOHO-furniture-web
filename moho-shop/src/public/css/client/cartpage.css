@@ -1,0 +1,316 @@
+/* ================= PAGE ================= */
+
+.cart-page {
+    width: 85%;
+    margin: 0 auto 50px;
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+/* ================= TITLE ================= */
+
+.cart-title {
+    text-align: center;
+    margin: 35px 0;
+}
+
+.cart-title h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.title-line {
+    width: 70px;
+    height: 4px;
+    background: #222;
+    margin: auto;
+}
+
+/* ================= LEFT ================= */
+
+.cart-left {
+    flex: 2;
+}
+
+#cartCountText {
+    text-align: left;
+    font-size: 17px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 18px;
+}
+
+/* ================= CART ITEM ================= */
+
+.cart-item {
+    position: relative;
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 18px;
+
+    padding: 18px;
+
+    margin-bottom: 14px;
+
+    border: 1px solid #ececec;
+    background: #fff;
+}
+
+.cart-item img {
+    width: 125px;
+    height: 125px;
+
+    object-fit: cover;
+
+    flex-shrink: 0;
+}
+
+/* ================= INFO ================= */
+
+.cart-info {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    min-height: 125px;
+}
+
+.product-name {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.5;
+
+    margin-bottom: 10px;
+
+    color: #111;
+}
+
+/* ================= PRICE ================= */
+
+.cart-price {
+    margin-bottom: 12px;
+}
+
+.sale-price {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111;
+}
+
+.old-price {
+    margin-left: 8px;
+
+    color: #999;
+
+    font-size: 14px;
+    text-decoration: line-through;
+}
+
+/* ================= QUANTITY ================= */
+
+.qty-box {
+    display: flex;
+    align-items: center;
+    gap: 0;
+
+    margin-top: 10px;
+
+    background: transparent;
+}
+
+.qty-box button {
+    width: 24px;
+    height: 24px;
+
+    border: 1px solid #ddd;
+    background: #f3f3f3;
+
+    color: #333;
+    cursor: pointer;
+}
+
+.qty-number {
+    width: 35px;
+    height: 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+
+    background: white;
+}
+
+/* ================= REMOVE ================= */
+
+.remove-btn {
+    position: absolute;
+
+    top: 20px;
+    right: 15px;
+
+    border: none !important;
+    background: transparent !important;
+
+    color: #111 !important;
+
+    font-size: 28px;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+.remove-btn:hover {
+    color: red !important;
+}
+
+/* ================= SUBTOTAL ================= */
+
+.subtotal {
+    position: absolute;
+
+    right: 18px;
+    bottom: 18px;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    color: #111;
+}
+
+/* ================= RIGHT ================= */
+
+.cart-right {
+    flex: 0.8;
+}
+
+/* ================= ORDER BOX ================= */
+
+.order-box {
+    border: 1px solid #e5e5e5;
+    background: #fff;
+}
+
+.order-box h3 {
+    margin: 0;
+
+    padding: 18px;
+
+    font-size: 20px;
+    font-weight: 700;
+
+    text-align: center;
+
+    border-bottom: 1px solid #eee;
+}
+
+#cartTotal {
+    padding: 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    font-size: 18px;
+    font-weight: 600;
+
+    border-bottom: 1px solid #eee;
+}
+
+#cartTotal b {
+    color: #ef5b2a;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.checkout-btn {
+    width: calc(100% - 40px);
+
+    margin: 20px;
+
+    border: none;
+
+    background: #ef5b2a;
+    color: white;
+
+    padding: 14px;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.checkout-btn:hover {
+    opacity: .9;
+}
+
+/* ================= POLICY ================= */
+
+.policy-box {
+    margin-top: 20px;
+
+    border: 1px solid #e5e5e5;
+
+    padding: 18px;
+
+    font-size: 14px;
+    line-height: 1.8;
+
+    background: #fff;
+}
+
+.policy-box p {
+    margin-bottom: 12px;
+}
+
+.policy-box b {
+    font-weight: 700;
+}
+
+/* ================= MINI CART ================= */
+
+.old-price-mini {
+    font-size: 12px;
+    color: #999;
+    text-decoration: line-through;
+    margin-left: 5px;
+}
+
+/* ================= OUT OF STOCK ================= */
+
+.out-stock {
+    position: relative;
+}
+
+.out-stock::after {
+    content: "HẾT HÀNG";
+
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, .55);
+
+    color: red;
+
+    font-size: 24px;
+    font-weight: 700;
+
+    z-index: 10;
+}
+
+.out-stock img,
+.out-stock .cart-info {
+    filter: blur(2px);
+}

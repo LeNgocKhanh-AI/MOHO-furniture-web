@@ -21,7 +21,7 @@
 
     </div>
     <div class="header-actions">
-     
+
       <!-- ACCOUNT -->
 
       <div class="account">
@@ -34,201 +34,141 @@
 
           <div class="account-text">
 
-            <span>
+            <span>Xin chào</span>
 
-              Xin chào
-
-            </span>
-
-            <div class="my-account">
-
-              <strong>
-
+            <div class="my-account" id="accountBox">
+              <strong class="username">
                 <%= session.customer.customer_firstname %>
-
               </strong>
-
               <i class="fa fa-chevron-down"></i>
-
             </div>
 
           </div>
 
-          <!-- USER DROPDOWN -->
+          <!-- DROPDOWN -->
+          <div class="user-dropdown" id="userDropdown">
 
-          <div class="user-dropdown">
-
-            <a href="#">
-
-              Tài khoản của tôi
-
-            </a>
-
-            <a href="#">
-
-              Đơn hàng của tôi
-
-            </a>
-
-            <a href="/logout">
-
-              Đăng xuất
-
-            </a>
+            <a href="/account">Tài khoản của bạn</a>
+            <a href="/orders">Đơn hàng của tôi</a>
+            <a href="/logout">Đăng xuất</a>
 
           </div>
 
-        <% } else { %>
+          <% } else { %>
 
-          <!-- ===== NOT LOGIN ===== -->
+            <!-- ===== NOT LOGIN ===== -->
 
-          <div class="account-text">
+            <div class="account-text">
 
-            <span>
+              <span>
 
-              Đăng nhập / Đăng ký
+                Đăng nhập / Đăng ký
 
-            </span>
+              </span>
 
-            <div class="my-account">
+              <div class="my-account">
 
-              <strong>
+                <strong>
 
-                Tài khoản của tôi
+                  Tài khoản của tôi
 
-              </strong>
+                </strong>
 
-              <i class="fa fa-chevron-down"></i>
+                <i class="fa fa-chevron-down"></i>
+
+              </div>
 
             </div>
 
-          </div>
+            <!-- ===== LOGIN POPUP ===== -->
 
-          <!-- ===== LOGIN POPUP ===== -->
+            <div class="login-popup" id="loginPopup">
 
-          <div
-            class="login-popup"
-            id="loginPopup"
-          >
+              <h3>
 
-            <h3>
+                ĐĂNG NHẬP TÀI KHOẢN
 
-              Đăng nhập tài khoản
+              </h3>
+              <!-- LOGIN FORM -->
 
-            </h3>
+              <form id="loginForm">
 
-            <p>
+                <!-- EMAIL -->
 
-              Nhập email và mật khẩu của bạn
+                <div class="floating-group">
+                  <input type="email" name="email" placeholder=" " required />
+                  <label>Nhập email của bạn</label>
+                </div>
 
-            </p>
+                <div class="floating-group">
+                  <input type="password" name="password" placeholder=" " required />
+                  <label>Nhập mật khẩu của bạn</label>
+                </div>
 
-            <!-- LOGIN FORM -->
+                <!-- GOOGLE TEXT -->
 
-            <form id="loginForm">
+                <div class="google-text">
 
-              <!-- EMAIL -->
+                  Website được bảo vệ bởi
+                  reCAPTCHA và
 
-              <div class="floating-group">
+                  <a href="https://policies.google.com/privacy" target="_blank">
 
-                <input
-                  type="email"
-                  name="email"
-                  required
-                >
+                    Chính sách bảo mật
 
-                <label>
+                  </a>
 
-                  Nhập email của bạn
+                  và
 
-                </label>
+                  <a href="https://policies.google.com/terms" target="_blank">
 
-              </div>
+                    Điều khoản dịch vụ
 
-              <!-- PASSWORD -->
+                  </a>
 
-              <div class="floating-group">
+                  của Google
 
-                <input
-                  type="password"
-                  name="password"
-                  required
-                >
+                </div>
 
-                <label>
+                <!-- BUTTON -->
 
-                  Nhập mật khẩu của bạn
+                <button type="submit" class="login-btn">
 
-                </label>
+                  ĐĂNG NHẬP
 
-              </div>
-
-              <!-- GOOGLE TEXT -->
-
-              <div class="google-text">
-
-                Website được bảo vệ bởi
-                reCAPTCHA và
-
-                <a
-                  href="https://policies.google.com/privacy"
-                  target="_blank"
-                >
-
-                  Chính sách bảo mật
-
+                </button>
+                <a href="/auth/google" class="google-login-btn">
+                  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" />
+                  <span>Tiếp tục với Google</span>
                 </a>
 
-                và
+              </form>
 
-                <a
-                  href="https://policies.google.com/terms"
-                  target="_blank"
-                >
+              <!-- FOOTER -->
 
-                  Điều khoản dịch vụ
+              <div class="login-bottom">
 
-                </a>
+                <div class="login-row">
+                  <span>Khách hàng mới?</span>
 
-                của Google
+                  <a href="/register">
+                    Tạo tài khoản
+                  </a>
+                </div>
+
+                <div class="login-row">
+                  <span>Quên mật khẩu?</span>
+
+                  <a href="#">
+                    Khôi phục mật khẩu
+                  </a>
+                </div>
 
               </div>
 
-              <!-- BUTTON -->
-
-              <button
-                type="submit"
-                class="login-btn"
-              >
-
-                ĐĂNG NHẬP
-
-              </button>
-
-            </form>
-
-            <!-- FOOTER -->
-
-            <div class="login-bottom">
-
-              <a href="/register">
-
-                Khách hàng mới?
-                Tạo tài khoản
-
-              </a>
-
-              <a href="#">
-
-                Quên mật khẩu?
-
-              </a>
-
             </div>
 
-          </div>
-
-        <% } %>
+            <% } %>
 
       </div>
 
@@ -257,7 +197,7 @@
     <div class="main-nav-container">
       <ul>
         <li>
-          <a href="#">Sản phẩm <i class="fa fa-chevron-down"></i></a>
+          <a href="/">Sản phẩm <i class="fa fa-chevron-down"></i></a>
         </li>
         <li><a href="#">Thiết kế - Thi công</a></li>
         <li>

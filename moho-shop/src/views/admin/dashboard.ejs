@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Admin Dashboard</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/admin/admindashboard.css" />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <div class="dashboard-container">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <a href="/admin/dashboard">
+            <img
+              src="/images/banners/LogoMoho.png"
+              alt="Moho Logo"
+              class="sidebar-logo"
+            />
+          </a>
+        </div>
+
+        <ul class="sidebar-menu">
+          <li>
+            <a href="/admin/dashboard" class="active">
+              <i class="fa-solid fa-chart-line"></i>
+              Tổng quan
+            </a>
+          </li>
+
+          <li class="dropdown-product">
+            <div class="dropdown-product-toggle">
+              <div class="menu-left">
+                <i class="fa-solid fa-box"></i>
+                <span>Quản lý sản phẩm</span>
+              </div>
+
+              <i class="fa-solid fa-chevron-down arrow-product"></i>
+            </div>
+
+            <ul class="submenu-product">
+              <li>
+                <a href="/admin/dashboard/product"> Sản phẩm </a>
+              </li>
+
+              <li>
+                <a href="/admin/dashboard/category"> Loại sản phẩm </a>
+              </li>
+
+              <li>
+                <a href="/admin/dashboard/product-images"> Hình ảnh sản phẩm</a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="dropdown-orders">
+            <div class="dropdown-orders-toggle">
+              <div class="menu-left">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span>Quản lý đơn hàng</span>
+              </div>
+
+              <i class="fa-solid fa-chevron-down arrow-orders"></i>
+            </div>
+
+            <ul class="submenu-orders">
+              <li>
+                <a href="/admin/dashboard/orders"> Đơn hàng </a>
+              </li>
+
+              <li>
+                <a href="/admin/dashboard/order-details"> Chi tiết đơn hàng </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="dropdown-feedback">
+            <div class="dropdown-feedback-toggle">
+              <div class="menu-left">
+                <i class="fa-solid fa-comments"></i>
+                <span>Quản lý phản hồi</span>
+              </div>
+
+              <i class="fa-solid fa-chevron-down arrow-feedback"></i>
+            </div>
+
+            <ul class="submenu-feedback">
+              <li>
+                <a href="/admin/dashboard/feedbacks"> Feedback </a>
+              </li>
+
+              <li>
+                <a href="/admin/dashboard/product-reviews"> Review </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="dropdown-menu">
+            <div class="dropdown-toggle">
+              <div class="menu-left">
+                <i class="fa-solid fa-users"></i>
+                <span>Quản lý người dùng</span>
+              </div>
+
+              <i class="fa-solid fa-chevron-down arrow-icon"></i>
+            </div>
+
+            <ul class="submenu">
+              <li>
+                <a href="/admin/dashboard/customers"> Khách hàng </a>
+              </li>
+
+              <li>
+                <a href="/admin/dashboard/admin-users"> Admin </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content">
+        <!-- HEADER -->
+        <div class="dashboard-header">
+          <h1>Tổng quan hệ thống</h1>
+          <p>Chào mừng bạn quay lại trang quản trị Moho</p>
+        </div>
+
+        <!-- CARDS -->
+        <!-- CARDS -->
+        <section class="cards">
+          <!-- USERS -->
+          <div class="card">
+            <div class="card-icon">
+              <i class="fa-solid fa-users"></i>
+            </div>
+
+            <div class="card-info">
+              <h3>Người dùng</h3>
+              <p><%= stats.users %></p>
+            </div>
+          </div>
+
+          <!-- PRODUCTS -->
+          <div class="card">
+            <div class="card-icon">
+              <i class="fa-solid fa-box"></i>
+            </div>
+
+            <div class="card-info">
+              <h3>Sản phẩm</h3>
+              <p><%= stats.products %></p>
+            </div>
+          </div>
+
+          <!-- ORDERS -->
+          <div class="card">
+            <div class="card-icon">
+              <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+
+            <div class="card-info">
+              <h3>Đơn hàng</h3>
+              <p><%= stats.orders %></p>
+            </div>
+          </div>
+
+          <!-- FEEDBACK -->
+          <div class="card">
+            <div class="card-icon">
+              <i class="fa-solid fa-comments"></i>
+            </div>
+
+            <div class="card-info">
+              <h3>Feedback</h3>
+              <p><%= stats.feedbacks %></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- CHART -->
+        <section class="chart-box">
+          <h3>Thống kê đơn hàng theo ngày</h3>
+
+          <canvas id="orderChart"></canvas>
+        </section>
+        <section class="chart-box">
+          <h3>Doanh thu theo ngày</h3>
+
+          <canvas id="revenueChart"></canvas>
+        </section>
+        <section class="chart-box">
+          <h3>Khách hàng đăng ký theo ngày</h3>
+
+          <canvas id="customerChart"></canvas>
+        </section>
+      </main>
+    </div>
+    <script>
+
+      const orderChartData =
+        <%- JSON.stringify(orderChart || []) %>;
+
+      const revenueChartData =
+        <%- JSON.stringify(revenueChart || []) %>;
+
+      const customerChartData =
+        <%- JSON.stringify(customerChart || []) %>;
+    </script>
+
+    <script src="/libs/chart.js"></script>
+
+    <script src="/js/dashboard.js"></script>
+  </body>
+</html>

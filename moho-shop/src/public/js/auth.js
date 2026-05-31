@@ -1,56 +1,123 @@
-const account = document.querySelector(".account");
-const popup = document.getElementById("loginPopup");
+document.addEventListener("DOMContentLoaded", () => {
 
-/* ===== TOGGLE LOGIN POPUP ===== */
+  /* =========================
+     ELEMENTS
+  ========================= */
 
-if (account && popup) {
-  account.addEventListener("click", (e) => {
-    e.stopPropagation(); // tránh click lan ra ngoài
+  const account = document.querySelector(".account");
+  const loginPopup = document.getElementById("loginPopup");
+  const loginForm = document.getElementById("loginForm");
+  const userDropdown = document.getElementById("userDropdown");
 
-    popup.style.display =
-      popup.style.display === "block"
-        ? "none"
-        : "block";
-  });
-}
+  const cart = document.querySelector(".cart");
+  const miniCart = document.getElementById("miniCart");
 
-/* ===== CLICK OUTSIDE TO CLOSE ===== */
+  const searchInput = document.getElementById("searchInput");
+  const searchDropdown = document.getElementById("searchDropdown");
 
-document.addEventListener("click", () => {
-  if (popup) {
-    popup.style.display = "none";
-  }
-});
+  const isLoggedIn = !!userDropdown;
 
-/* ===== LOGIN ===== */
+  /* =========================
+     ACCOUNT TOGGLE
+  ========================= */
 
-const loginForm = document.getElementById("loginForm");
+  if (account) {
+    account.addEventListener("click", (e) => {
+      e.stopPropagation();
 
-if (loginForm) {
-  loginForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+      if (e.target.closest(".login-popup")) return;
 
-    const formData = new FormData(loginForm);
-
-    const data = {
-      email: formData.get("email"),
-      password: formData.get("password"),
-    };
-
-    const res = await fetch("/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
+      if (isLoggedIn && userDropdown) {
+        userDropdown.classList.toggle("active");
+        loginPopup?.classList.remove("active");
+      } else {
+        loginPopup?.classList.toggle("active");
+        userDropdown?.classList.remove("active");
+      }
     });
+  }
 
-    const result = await res.json();
+  /* =========================
+     CLICK OUTSIDE CLOSE ALL
+  ========================= */
 
-    if (result.success) {
-      location.reload(); // reload để header update session
-    } else {
-      alert(result.message);
+  document.addEventListener("click", (e) => {
+    if (!account?.contains(e.target)) {
+      loginPopup?.classList.remove("active");
+      userDropdown?.classList.remove("active");
+    }
+
+    if (!cart?.contains(e.target)) {
+      if (miniCart) miniCart.style.display = "none";
     }
   });
-}
+
+  /* =========================
+     LOGIN FORM
+  ========================= */
+
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const data = {
+        email: loginForm.email.value,
+        password: loginForm.password.value,
+      };
+
+      try {
+        const res = await fetch("/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+
+          if (result.redirect) {
+            window.location.href = result.redirect;
+            return;
+          }
+
+          location.reload();
+        }
+
+      } catch (err) {
+        console.error(err);
+        alert("Server error");
+      }
+    });
+  }
+
+  /* =========================
+     MINI CART TOGGLE
+  ========================= */
+
+  if (cart && miniCart) {
+    cart.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      miniCart.style.display =
+        miniCart.style.display === "block" ? "none" : "block";
+    });
+  }
+
+  /* =========================
+     SEARCH DROPDOWN
+  ========================= */
+
+  if (searchInput && searchDropdown) {
+    searchInput.addEventListener("focus", () => {
+      searchDropdown.style.display = "block";
+    });
+
+    searchInput.addEventListener("blur", () => {
+      setTimeout(() => {
+        searchDropdown.style.display = "none";
+      }, 150);
+    });
+  }
+
+}); 

@@ -1,0 +1,397 @@
+/* ==========================
+   TABLE CONTAINER & HEADER
+========================== */
+
+.table-container {
+  background: #fff;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.08),
+    0 4px 10px rgba(0, 0, 0, 0.05);
+  /* Không dùng overflow-x ở đây để giữ cố định header */
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.btn-add {
+  text-decoration: none;
+  background: #0284c7;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.btn-add:hover {
+  background: #0369a1;
+}
+
+/* ==========================
+   SCROLL WRAPPER (CHỈ CUỘN RIÊNG BẢNG)
+========================== */
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto; /* Kích hoạt thanh cuộn ngang độc lập cho bảng */
+}
+
+.admin-table {
+  width: 100%;
+  min-width: 1400px; /* Đảm bảo độ rộng của bảng để bật cuộn ngang */
+  border-collapse: collapse;
+}
+
+.admin-table th {
+  background: #f3f4f6;
+  padding: 14px;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+}
+
+.admin-table td {
+  padding: 14px;
+  color: #4b5563;
+  vertical-align: middle; /* Căn giữa nội dung văn bản theo chiều dọc */
+}
+
+.admin-table tr {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.admin-table tr:hover {
+  background: #f9fafb;
+}
+
+/* ==========================
+   CĂN GIỮA NÚT THAO TÁC (HORIZONTAL & VERTICAL)
+========================== */
+
+.admin-table td.actions-cell {
+  display: flex;
+  gap: 8px;
+  justify-content: center; /* Căn giữa 2 nút theo chiều ngang */
+  align-items: center; /* Căn giữa 2 nút theo chiều dọc (trên / dưới) */
+  border-bottom: none; /* Xử lý lỗi hiển thị viền khi dùng flex trong td */
+  min-height: 55px; /* Đảm bảo chiều cao tối thiểu cho ô hành động */
+}
+
+.btn-edit,
+.btn-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap; /* Tuyệt đối không để chữ bị nhảy dòng */
+  min-width: 65px; /* Hai nút có độ rộng bằng nhau */
+  height: 32px; /* Chiều cao bằng nhau */
+  transition: opacity 0.2s;
+}
+
+.btn-edit:hover,
+.btn-delete:hover {
+  opacity: 0.9;
+}
+
+.btn-edit {
+  background: #0ea5e9;
+}
+
+.btn-delete {
+  background: #ef4444;
+}
+
+/* ==========================
+   PAGINATION
+========================== */
+
+/* ==========================
+   PAGINATION (PHÂN TRANG)
+========================== */
+
+.pagination {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.pagination a {
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  color: #374151;
+}
+
+.pagination a:hover {
+  background: #f3f4f6;
+}
+
+.active-page {
+  background: #0284c7;
+  color: white !important;
+}
+
+/* ==========================
+   MODAL CONTAINER
+========================== */
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.modal-content {
+  background: white;
+  width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  padding: 25px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.close-modal {
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* ==========================
+   FORM CONTROLS
+========================== */
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+/* Định dạng chung cho các ô nhập liệu nhập văn bản/số */
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-sizing: border-box; /* Đảm bảo padding không làm tràn chiều rộng */
+}
+
+.btn-save {
+  background: #0284c7;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  width: 100%; /* Cho nút lưu dài ra nhìn cân đối hơn */
+  margin-top: 10px;
+}
+
+.btn-save:hover {
+  background: #0369a1;
+}
+
+/* ==========================
+   ĐỊNH DẠNG RIÊNG CHO CHECKBOX (XỬ LÝ LỖI BỊ LỆCH)
+========================== */
+
+/* Ép toàn bộ hàng chứa ô checkbox đưa về hàng ngang */
+.form-group.checkbox-group {
+  display: flex;
+  align-items: center; /* Căn giữa ô vuông và chữ theo trục dọc (trên/dưới) */
+  gap: 10px; /* Khoảng cách giữa ô vuông và chữ */
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* Đè lại thuộc tính width: 100% của input chung phía trên */
+.form-group.checkbox-group input[type="checkbox"] {
+  width: 18px !important; /* Khóa kích thước rộng cố định cho ô vuông */
+  height: 18px !important; /* Khóa kích thước cao cố định cho ô vuông */
+  margin: 0; /* Triệt tiêu margin thừa */
+  cursor: pointer;
+}
+
+/* Định dạng lại nhãn chữ kế bên checkbox */
+.form-group.checkbox-group label {
+  display: inline-block;
+  margin-bottom: 0; /* Bỏ khoảng trống phía dưới để không bị đẩy lệch */
+  cursor: pointer;
+  font-weight: 600;
+  user-select: none; /* Tránh bôi đen chữ khi click nhầm */
+}
+/*Phân trang*/
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.pagination a {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  text-decoration: none;
+  color: #333;
+  border-radius: 4px;
+}
+
+.pagination a.active {
+  background: #333;
+  color: #fff;
+}
+
+/* Định hình lưới chia chuẩn 4 ô trên một dòng */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 15px 0;
+}
+
+/* Thẻ bọc sản phẩm đơn lẻ */
+.product-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Khu vực hiển thị ảnh */
+.product-card-img {
+  width: 100%;
+  height: 160px;
+  background: #f8fafc;
+  position: relative;
+}
+.product-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.stock-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Đoạn chữ text thông tin */
+.product-card-info {
+  padding: 12px;
+  flex-grow: 1;
+}
+.product-sku {
+  font-size: 11px;
+  color: #94a3b8;
+  display: block;
+}
+.product-title {
+  font-size: 14px;
+  margin: 4px 0 8px 0;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.product-price-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.price-sale {
+  font-weight: bold;
+  color: #ef4444;
+  font-size: 14px;
+}
+.price-origin {
+  font-size: 12px;
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+/* 3 Nút chức năng ở đáy card */
+.product-card-actions {
+  display: flex;
+  border-top: 1px solid #f1f5f9;
+}
+.btn-card-action {
+  flex: 1;
+  padding: 10px 0;
+  font-size: 12px;
+  background: transparent;
+  border: none;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn-card-action:not(:last-child) {
+  border-right: 1px solid #f1f5f9;
+}
+.btn-view-detail {
+  color: #3b82f6;
+}
+.btn-edit-trigger {
+  color: #f59e0b;
+}
+.btn-delete-trigger {
+  color: #ef4444;
+}
+
+.btn-view-detail:hover {
+  background: #eff6ff;
+}
+.btn-edit-trigger:hover {
+  background: #fffbeb;
+}
+.btn-delete-trigger:hover {
+  background: #fef2f2;
+}

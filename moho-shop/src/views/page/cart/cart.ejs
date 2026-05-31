@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Giỏ hàng</title>
+
+    <!-- CSS -->
+
+    <link rel="stylesheet" href="/css/client/header.css">
+    <link rel="stylesheet" href="/css/client/footer.css">
+    <link rel="stylesheet" href="/css/client/cartpage.css">
+
+    <link rel="stylesheet" href="/css/client/service-feature.css">
+
+    <!-- FONT AWESOME -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <%- include("../../partials/header") %>
+        <div class="cart-title">
+            <h1>Giỏ hàng của bạn</h1>
+            <div class="title-line"></div>
+        </div>
+
+
+        <div class="cart-page">
+
+
+            <!-- LEFT -->
+            <div class="cart-left">
+
+                <p id="cartCountText" style="text-align:center"></p>
+
+                <div id="cartItems"></div>
+
+            </div>
+
+            <!-- RIGHT -->
+            <div class="cart-right">
+
+                <div class="order-box">
+
+                    <h3 style="text-align:center; margin-bottom:15px;">
+                        THÔNG TIN ĐƠN HÀNG
+                    </h3>
+
+                    <div id="cartTotal"></div>
+
+                    <button class="checkout-btn">
+                        THANH TOÁN
+                    </button>
+
+                </div>
+
+                <div class="policy-box">
+
+                    <p><b>✔ Không rủi ro.</b> Đặt hàng trước, thanh toán sau tại nhà.</p>
+
+                    <p><b>✔ Miễn phí giao hàng & lắp đặt</b> tại tất cả quận huyện thuộc TP.HCM, Hà Nội, Ecopark,
+                        Biên
+                        Hòa và một số khu vực Bình Dương (*)</p>
+
+                    <p><b>✔ Đơn hàng giao trong vòng 3 ngày</b>, nhân viên sẽ xác nhận lịch giao trước khi chuyển
+                        khoản
+                    </p>
+
+                    <p><b>✔ Miễn phí 1 đổi 1 - Bảo hành 2 năm - Bảo trì trọn đời (**)</b></p>
+
+                    <p><b>✔ Thiết kế bởi chuyên gia Đan Mạch & Hàn Quốc</b></p>
+
+                    <p><b>✔ Chất lượng quốc tế</b></p>
+
+                    <p><b>✔ Sản xuất tại SAVIMEX</b></p>
+
+                    <p>(*) Không áp dụng cho Đồ Trang Trí</p>
+                    <p>(**) Không áp dụng cho Clearance</p>
+
+                </div>
+
+            </div>
+
+        </div>
+        <%- include("../../partials/service-feature") %>
+            <script src="/js/search.js"></script>
+            <script src="/js/auth.js"></script>
+
+            <script src="/js/cart.js"></script>
+</body>
+<%- include("../../partials/footer") %>

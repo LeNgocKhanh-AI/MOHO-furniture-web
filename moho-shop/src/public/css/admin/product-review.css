@@ -1,0 +1,25 @@
+.review-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.review-status.public {
+  background: #eafaf1;
+  color: #27ae60;
+  border: 1px solid #b7ebc6;
+}
+
+.review-status.anonymous {
+  background: #f2f3f5;
+  color: #7f8c8d;
+  border: 1px solid #dcdde1;
+}
+
+.review-status i {
+  font-size: 12px;
+}

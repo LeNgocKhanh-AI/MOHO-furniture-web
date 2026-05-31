@@ -3,53 +3,52 @@
 
 <head>
 
-    <meta charset="UTF-8">
+  <meta charset="UTF-8">
 
-    <title>Tìm kiếm</title>
+  <title>Tìm kiếm</title>
 
-    <link rel="stylesheet" href="/css/header.css">
-    <link rel="stylesheet" href="/css/product.css">
-    <link rel="stylesheet" href="/css/footer.css">
-    <link rel="stylesheet" href="/css/searchpage.css">
+  <link rel="stylesheet" href="/css/client/header.css">
+  <link rel="stylesheet" href="/css/client/product.css">
+  <link rel="stylesheet" href="/css/client/footer.css">
+  <link rel="stylesheet" href="/css/client/searchpage.css">
 
-    <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 </head>
 
 <body>
 
-    <%- include('../partials/header') %>
+  <%- include('../partials/header') %>
 
-  <section class="product-section">
+    <section class="product-section">
 
-  <div class="container-80">
+      <div class="container-80">
 
-    <div class="section-header">
-      <h2>Tìm kiếm</h2>
-    </div>
+        <div class="section-header">
+          <h2>Tìm kiếm</h2>
+        </div>
 
-    <div class="search-info">
-      Có <%= products.length %> sản phẩm cho "<%= keyword %>"
-    </div>
+        <div class="search-info">
+          Có <%= products.length %> sản phẩm cho "<%= keyword %>"
+        </div>
 
-    <div class="product-grid">
+        <div class="product-grid">
 
-      <% products.forEach(product => { %>
-        <%- include('../partials/product', { product }) %>
-      <% }) %>
+          <% products.forEach(product=> { %>
+            <%- include('../partials/product', { product }) %>
+              <% }) %>
 
-    </div>
+        </div>
 
-  </div>
+      </div>
 
-</section>
+    </section>
 
     <%- include('../partials/footer') %>
-<script src="/js/search.js"></script>
-<script src="/js/cart.js"></script>
-<script src="/js/auth.js"></script>
+      <script src="/js/search.js"></script>
+      <script src="/js/cart.js"></script>
+      <script src="/js/auth.js"></script>
 </body>
 
 </html>

@@ -1,34 +1,41 @@
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let cart = [];
 
 /* =========================
-   SAVE
+   LOAD CART
 ========================= */
-function saveCart() {
-    localStorage.setItem("cart", JSON.stringify(cart));
+async function loadCart() {
+    try {
+        const res = await fetch("/cart/item");
+        cart = await res.json();
+
+        console.log("CART:", cart);
+
+        updateCartCount();
+        renderMiniCart();
+        renderCartPage();
+
+    } catch (err) {
+        console.error("loadCart error:", err);
+    }
 }
 
 /* =========================
    UPDATE COUNT
 ========================= */
 function updateCartCount() {
-
-    const count = cart.reduce(
-        (sum, item) => sum + item.quantity,
+    const count = (cart || []).reduce(
+        (sum, item) => sum + Number(item.quantity || 0),
         0
     );
 
     const el = document.querySelector(".cart-count");
-
-    if (el) {
-        el.innerText = count;
-    }
+    if (el) el.innerText = count;
 }
 
 /* =========================
-   RENDER MINI CART
+   MINI CART
 ========================= */
 function renderMiniCart() {
-
     const list = document.getElementById("miniCartList");
     const totalEl = document.getElementById("miniCartTotal");
 
@@ -40,162 +47,261 @@ function renderMiniCart() {
 
     cart.forEach(item => {
 
-        total += item.price * item.quantity;
+        const qty = Number(item.quantity || 0);
+
+        const salePrice = Number(item.product_sale_price || item.product_price || 0);
+        const oldPrice = Number(item.product_price || 0);
+
+        const stock = Number(item.product_stock_quantity || 0);
+        const outOfStock = stock <= 0;
+
+        if (!outOfStock) {
+            total += salePrice * qty;
+        }
 
         list.innerHTML += `
-      <div class="mini-cart-item">
+            <div class="mini-cart-item ${outOfStock ? "out-stock" : ""}">
 
-        <img src="${item.image}" />
+                <img src="${item.image_url || '/images/no-image.jpg'}">
 
-        <div style="flex:1">
+                <div style="flex:1">
 
-          <div class="mini-cart-name">
-            ${item.name.toUpperCase()}
-          </div>
+                    <div class="mini-cart-name">
+                        ${item.product_name || ""}
+                    </div>
 
-          <div class="mini-cart-price">
+                    <div class="mini-cart-price">
 
-            <span class="price-current">
-              ${item.price.toLocaleString()}đ
-            </span>
+                        <span class="price-current">
+                            ${salePrice.toLocaleString()}đ
+                        </span>
 
-            <span class="price-old">
-              ${item.oldPrice.toLocaleString()}đ
-            </span>
+                        <span class="old-price-mini">
+                            (${oldPrice.toLocaleString()}đ)
+                        </span>
 
-            <span class="qty-box">
-              x${item.quantity}
-            </span>
+                        <span class="qty-box">
+                            x${qty}
+                        </span>
 
-          </div>
-        </div>
+                    </div>
 
-        <span 
-          class="remove-btn"
-          onclick="removeFromCart('${item.id}')"
-        >
-          ×
-        </span>
+                    ${outOfStock ? `
+                        <div style="color:red;font-weight:bold;margin-top:5px;">
+                            HẾT HÀNG
+                        </div>
+                    ` : ""}
 
-      </div>
-    `;
+                </div>
+
+                <span class="remove-btn"
+                    onclick="removeFromCart(${item.product_id})">
+                    ×
+                </span>
+
+            </div>
+        `;
     });
 
     totalEl.innerHTML = `
-    Tổng:
-    <span style="color:red">
-      ${total.toLocaleString()}đ
-    </span>
-  `;
+        Tổng:
+        <span style="color:red;font-weight:bold">
+            ${total.toLocaleString()}đ
+        </span>
+    `;
 }
 
 /* =========================
    ADD TO CART
 ========================= */
-function addToCart(product) {
+async function addToCart(productId) {
+    try {
+        const res = await fetch("/cart/add", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ productId })
+        });
 
-    const existing = cart.find(
-        i => i.id === product.id
-    );
+        const data = await res.json();
 
-    if (existing) {
+        if (!data.success) {
+            alert(data.message || "Không thể thêm sản phẩm");
+            return;
+        }
 
-        existing.quantity += product.quantity;
+        await loadCart();
 
-    } else {
+        const miniCart = document.getElementById("miniCart");
+        if (miniCart) miniCart.classList.add("show");
 
-        cart.push(product);
-
+    } catch (err) {
+        console.error(err);
     }
-
-    saveCart();
-
-    updateCartCount();
-
-    renderMiniCart();
 }
 
 /* =========================
    REMOVE
 ========================= */
-function removeFromCart(id) {
+async function removeFromCart(productId) {
+    try {
+        const res = await fetch("/cart/remove", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ productId })
+        });
 
-    cart = cart.filter(
-        i => i.id !== id
-    );
+        const data = await res.json();
 
-    saveCart();
+        if (data.success) {
+            await loadCart();
+        }
 
-    updateCartCount();
-
-    renderMiniCart();
+    } catch (err) {
+        console.error(err);
+    }
 }
 
 /* =========================
-   TOGGLE MINI CART
+   UPDATE QTY
 ========================= */
-window.addEventListener("load", () => {
+async function updateQuantity(productId, quantity) {
 
-    updateCartCount();
+    quantity = Number(quantity);
 
-    renderMiniCart();
+    if (isNaN(quantity) || quantity <= 0) {
+        await removeFromCart(productId);
+        return;
+    }
 
-    const cartBtn = document.querySelector(".cart");
+    try {
+        const res = await fetch("/cart/update", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ productId, quantity })
+        });
 
-    if (!cartBtn) return;
+        const data = await res.json();
 
-    cartBtn.addEventListener("click", (e) => {
+        if (data.success) {
+            await loadCart();
+        }
 
-        e.stopPropagation();
+    } catch (err) {
+        console.error(err);
+    }
+}
 
-        const el = document.getElementById("miniCart");
-
-        if (!el) return;
-
-        el.style.display =
-            el.style.display === "block"
-                ? "none"
-                : "block";
-    });
-
-});
+/* =========================
+   LOAD INIT
+========================= */
+document.addEventListener("DOMContentLoaded", loadCart);
 
 /* =========================
    FLY EFFECT
 ========================= */
 function flyToCart(imgElement) {
 
-    const cartIcon =
-        document.querySelector(".cart");
-
+    const cartIcon = document.querySelector(".cart");
     if (!cartIcon) return;
 
     const img = imgElement.cloneNode(true);
 
-    const rect =
-        imgElement.getBoundingClientRect();
-
-    const cartRect =
-        cartIcon.getBoundingClientRect();
+    const rect = imgElement.getBoundingClientRect();
+    const cartRect = cartIcon.getBoundingClientRect();
 
     img.classList.add("fly-img");
-
     document.body.appendChild(img);
 
+    img.style.position = "fixed";
     img.style.left = rect.left + "px";
     img.style.top = rect.top + "px";
 
     setTimeout(() => {
-
         img.style.left = cartRect.left + "px";
         img.style.top = cartRect.top + "px";
         img.style.opacity = "0";
-
     }, 10);
 
-    setTimeout(() => {
+    setTimeout(() => img.remove(), 800);
+}
 
-        img.remove();
+/* =========================
+   CART PAGE RENDER
+========================= */
+function renderCartPage() {
 
-    }, 800);
+    const container = document.getElementById("cartItems");
+    const totalBox = document.getElementById("cartTotal");
+    const countText = document.getElementById("cartCountText");
+
+    if (!container || !totalBox) return;
+
+    container.innerHTML = "";
+
+    let total = 0;
+
+    cart.forEach(item => {
+
+        const qty = Number(item.quantity || 0);
+
+        const price = Number(item.product_sale_price || item.product_price || 0);
+        const oldPrice = Number(item.product_price || 0);
+
+        const subtotal = price * qty;
+        total += subtotal;
+
+        container.innerHTML += `
+        <div class="cart-item">
+
+            <!-- TOP RIGHT X -->
+            <button class="remove-btn"
+                onclick="removeFromCart(${item.product_id})">×</button>
+
+            <!-- IMAGE -->
+            <img src="${item.image_url || '/images/no-image.jpg'}">
+
+            <!-- INFO -->
+            <div class="cart-info">
+
+                <h3 class="product-name">${item.product_name}</h3>
+
+                <!-- PRICE -->
+                <div class="cart-price">
+                    <span class="sale-price">
+                        ${price.toLocaleString()}đ
+                    </span>
+
+                    <span class="old-price">
+                        ${oldPrice > price ? `(${oldPrice.toLocaleString()}đ)` : ""}
+                    </span>
+                </div>
+
+                <!-- QTY -->
+                <div class="qty-box">
+                    <button onclick="updateQuantity(${item.product_id}, ${qty - 1})">-</button>
+
+                    <span class="qty-number">${qty}</span>
+
+                    <button onclick="updateQuantity(${item.product_id}, ${qty + 1})">+</button>
+                </div>
+
+            </div>
+
+            <!-- SUBTOTAL BOTTOM RIGHT -->
+            <div class="subtotal">
+                ${subtotal.toLocaleString()}đ
+            </div>
+
+        </div>
+        `;
+    });
+
+    if (countText) {
+        countText.innerText = `Có ${cart.length} sản phẩm trong giỏ hàng`;
+    }
+
+    totalBox.innerHTML = `
+        Tổng tiền:
+        <b>${total.toLocaleString()}đ</b>
+    `;
 }

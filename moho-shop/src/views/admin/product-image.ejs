@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý hình ảnh sản phẩm</title>
+    <link rel="stylesheet" href="/css/admin/admindashboard.css">
+    <link rel="stylesheet" href="/css/admin/product.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* CSS hỗ trợ xem trước ảnh trực tiếp trên hàng của bảng */
+        .table-img-preview {
+            width: 55px;
+            height: 55px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #eaeaea;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <a href="/admin/dashboard">
+                    <img src="/images/banners/LogoMoho.png" alt="Moho Logo" class="sidebar-logo">
+                </a>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="/admin/dashboard">
+                        <i class="fa-solid fa-chart-line"></i> Tổng quan
+                    </a>
+                </li>
+
+                <li class="dropdown-product active">
+                    <div class="dropdown-product-toggle">
+                        <div class="menu-left">
+                            <i class="fa-solid fa-box"></i>
+                            <span>Quản lý sản phẩm</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down arrow-product"></i>
+                    </div>
+                    <ul class="submenu-product">
+                        <li><a href="/admin/dashboard/product">Sản phẩm</a></li>
+                        <li><a href="/admin/dashboard/category">Loại sản phẩm</a></li>
+                        <li><a href="/admin/dashboard/product-images" class="active">Hình ảnh sản phẩm</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown-orders">
+                    <div class="dropdown-orders-toggle">
+                        <div class="menu-left"><i class="fa-solid fa-cart-shopping"></i><span>Quản lý đơn hàng</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down arrow-orders"></i>
+                    </div>
+                    <ul class="submenu-orders">
+                        <li><a href="/admin/orders">Đơn hàng</a></li>
+                        <li><a href="/admin/order-details">Chi tiết đơn hàng</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown-feedback">
+                    <div class="dropdown-feedback-toggle">
+                        <div class="menu-left"><i class="fa-solid fa-comments"></i><span>Quản lý phản hồi</span></div>
+                        <i class="fa-solid fa-chevron-down arrow-feedback"></i>
+                    </div>
+                    <ul class="submenu-feedback">
+                        <li><a href="/admin/dashboard/feedbacks">Feedback</a></li>
+                        <li><a href="/admin/dashboard/product-reviews">Review</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown-menu">
+                    <div class="dropdown-toggle">
+                        <div class="menu-left"><i class="fa-solid fa-users"></i><span>Quản lý người dùng</span></div>
+                        <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                    </div>
+                    <ul class="submenu">
+                        <li><a href="/admin/dashboard/customers">Khách hàng</a></li>
+                        <li><a href="/admin/admin-users">Admin</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="dashboard-header">
+                <h1>Quản lý hình ảnh sản phẩm</h1>
+                <p>Danh sách bộ sưu tập hình ảnh của các sản phẩm</p>
+            </div>
+
+            <div class="table-container">
+                <div class="table-header">
+                    <h3>Bộ sưu tập hình ảnh</h3>
+                    <button id="openImageModal" class="btn-add">+ Thêm hình ảnh</button>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>image_id</th>
+                                <th>Xem trước ảnh</th>
+                                <th>Tên sản phẩm</th>
+                                <th>image_url</th>
+                                <th>Loại ảnh</th>
+                                <th>Thứ tự hiển thị</th>
+                                <th style="text-align: center;">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% images.forEach(img=> { %>
+                                <tr>
+                                    <td>
+                                        <%= img.image_id %>
+                                    </td>
+                                    <td>
+                                        <img src="<%= img.image_url %>" class="table-img-preview"
+                                            onerror="this.src='/images/banners/LogoMoho.png'">
+                                    </td>
+                                    <td><strong>
+                                            <%= img.product_name ? img.product_name : ('ID: ' + img.product_id) %></strong></td>
+              <td><small><%= img.image_url %></small></td>
+              <td>
+                <span class="badge-category">
+                  <%= img.image_type === ' main' ? 'Ảnh chính (Main)' : 'Ảnh phụ (Sub)' %>
+                                                </span>
+                                    </td>
+                                    <td>
+                                        <%= img.display_order %>
+                                    </td>
+                                    <td class="actions-cell">
+                                        <a href="#" class="btn-edit edit-img-btn" data-id="<%= img.image_id %>"
+                                            data-product="<%= img.product_id %>" data-url="<%= img.image_url %>"
+                                            data-type="<%= img.image_type %>" data-order="<%= img.display_order %>">
+                                            Sửa
+                                        </a>
+                                        <a href="/admin/dashboard/product-images/delete/<%= img.image_id %>"
+                                            class="btn-delete"
+                                            onclick="return confirm('Bạn có chắc chắn muốn xoá ảnh này không?')">
+                                            Xoá
+                                        </a>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+
+                    <div class="pagination">
+                        <% if (currentPage> 1) { %>
+                            <a href="/admin/dashboard/product-images?page=<%= currentPage - 1 %>">← Trước</a>
+                            <% } %>
+
+                                <% for (let i=1; i <=totalPages; i++) { %>
+                                    <a href="/admin/dashboard/product-images?page=<%= i %>"
+                                        class="<%= i === currentPage ? 'active' : '' %>">
+                                        <%= i %>
+                                    </a>
+                                    <% } %>
+
+                                        <% if (currentPage < totalPages) { %>
+                                            <a href="/admin/dashboard/product-images?page=<%= currentPage + 1 %>">Sau
+                                                →</a>
+                                            <% } %>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Thêm hình ảnh mới</h2>
+                <span class="close-img-modal">&times;</span>
+            </div>
+            <form action="/admin/dashboard/product-images/create" method="POST">
+                <div class="form-group">
+                    <label>Chọn sản phẩm áp dụng</label>
+                    <select name="product_id" required>
+                        <option value="">-- Chọn sản phẩm --</option>
+                        <% products.forEach(prod=> { %>
+                            <option value="<%= prod.product_id %>">
+                                <%= prod.product_name %>
+                            </option>
+                            <% }) %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Đường dẫn hình ảnh (URL hoặc Thư mục tĩnh)</label>
+                    <input type="text" name="image_url" placeholder="Ví dụ: /images/products/sofa-leather-01.jpg"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label>Loại hình ảnh hiển thị</label>
+                    <select name="image_type">
+                        <option value="sub">Ảnh phụ chi tiết (sub)</option>
+                        <option value="main">Ảnh đại diện chính sản phẩm (main)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Thứ tự sắp xếp hiển thị</label>
+                    <input type="number" name="display_order" value="0">
+                </div>
+                <button type="submit" class="btn-save">Lưu hình ảnh</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="editImageModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Sửa thông tin hình ảnh</h2>
+                <span class="close-edit-img">&times;</span>
+            </div>
+            <form id="editImageForm" method="POST">
+                <input type="hidden" name="image_id" id="edit_img_id">
+                <div class="form-group">
+                    <label>Sản phẩm áp dụng</label>
+                    <select name="product_id" id="edit_product_id" required>
+                        <% products.forEach(prod=> { %>
+                            <option value="<%= prod.product_id %>">
+                                <%= prod.product_name %>
+                            </option>
+                            <% }) %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Đường dẫn hình ảnh (URL)</label>
+                    <input type="text" name="image_url" id="edit_image_url" required>
+                </div>
+                <div class="form-group">
+                    <label>Loại hình ảnh hiển thị</label>
+                    <select name="image_type" id="edit_image_type">
+                        <option value="sub">Ảnh phụ chi tiết (sub)</option>
+                        <option value="main">Ảnh đại diện chính sản phẩm (main)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Thứ tự sắp xếp hiển thị</label>
+                    <input type="number" name="display_order" id="edit_display_order">
+                </div>
+                <button type="submit" class="btn-save">Cập nhật hình ảnh</button>
+            </form>
+        </div>
+    </div>
+    <script src="/js/product-image.js"></script>
+</body>
+
+</html>

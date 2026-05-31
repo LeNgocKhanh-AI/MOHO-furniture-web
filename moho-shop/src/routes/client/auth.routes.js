@@ -25,5 +25,33 @@ router.get("/logout", (req, res) => {
     res.redirect("/");
   });
 });
+const passport = require("passport");
+
+router.get(
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  })
+);
+
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/login",
+  }),
+  (req, res) => {
+
+    if (req.user.role === "admin") {
+
+      req.session.admin = req.user;
+
+      return res.redirect("/admin/dashboard");
+    }
+
+    req.session.customer = req.user;
+
+    return res.redirect("/");
+  }
+);
 
 module.exports = router;

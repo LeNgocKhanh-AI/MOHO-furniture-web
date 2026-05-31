@@ -1,0 +1,148 @@
+// DROPDOWN SIDEBAR
+
+const dropdownMenu = document.querySelector(".dropdown-menu");
+
+const dropdownToggle = document.querySelector(".dropdown-toggle");
+
+dropdownToggle.addEventListener("click", () => {
+    dropdownMenu.classList.toggle("active");
+});
+
+// DROPDOWN FEEDBACK
+
+const feedbackMenu = document.querySelector(".dropdown-feedback");
+
+const feedbackToggle = document.querySelector(".dropdown-feedback-toggle");
+
+feedbackToggle.addEventListener("click", () => {
+    feedbackMenu.classList.toggle("active");
+});
+
+// DROPDOWN ORDERS
+
+const ordersMenu = document.querySelector(".dropdown-orders");
+
+const ordersToggle = document.querySelector(".dropdown-orders-toggle");
+
+ordersToggle.addEventListener("click", () => {
+    ordersMenu.classList.toggle("active");
+});
+
+// =========================
+// Dropdown Product
+// =========================
+
+const productDropdown = document.querySelector(".dropdown-product");
+const productToggle = document.querySelector(".dropdown-product-toggle");
+
+if (productToggle) {
+    productToggle.addEventListener("click", () => {
+        productDropdown.classList.toggle("active");
+    });
+}
+
+const modal = document.getElementById("productModal");
+
+const openBtn = document.getElementById("openProductModal");
+
+const closeBtn = document.querySelector(".close-modal");
+
+openBtn.addEventListener("click", () => {
+    modal.style.display = "block";
+});
+
+closeBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+});
+
+window.addEventListener("click", (e) => {
+    if (e.target === modal) {
+        modal.style.display = "none";
+    }
+});
+
+const editModal = document.getElementById("editModal");
+const editForm = document.getElementById("editForm");
+
+if (editModal && editForm) {
+    document.querySelectorAll(".edit-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault(); // QUAN TRỌNG
+
+            editModal.style.display = "block";
+
+            document.getElementById("edit_id").value = btn.dataset.id;
+            document.getElementById("edit_name").value = btn.dataset.name;
+            document.getElementById("edit_category").value = btn.dataset.category;
+            document.getElementById("edit_price").value = btn.dataset.price;
+            document.getElementById("edit_sale").value = btn.dataset.sale;
+            document.getElementById("edit_sku").value = btn.dataset.sku;
+            document.getElementById("edit_stock").value = btn.dataset.stock;
+            document.getElementById("edit_desc").value = btn.dataset.desc;
+            document.getElementById("edit_featured").checked =
+                btn.dataset.featured == 1;
+
+            editForm.action = `/admin/dashboard/product/edit/${btn.dataset.id}`;
+        });
+    });
+
+    const closeBtn = document.querySelector(".close-edit");
+
+    if (closeBtn) {
+        closeBtn.addEventListener("click", () => {
+            editModal.style.display = "none";
+        });
+    }
+
+    window.addEventListener("click", (e) => {
+        if (e.target === editModal) {
+            editModal.style.display = "none";
+        }
+    });
+}
+
+// Logic điều khiển Modal xem chi tiết sản phẩm mới bổ sung
+const viewDetailModal = document.getElementById("viewDetailModal");
+const closeViewBtns = document.querySelectorAll(".close-view-detail");
+
+document.querySelectorAll(".btn-view-detail").forEach((btn) => {
+    btn.addEventListener("click", () => {
+        // Trích xuất dữ liệu từ data attribute gắn trên nút bấm
+        const name = btn.dataset.name;
+        const sku = btn.dataset.sku;
+        const category = btn.dataset.category;
+        const price = parseFloat(btn.dataset.price || 0);
+        const sale = parseFloat(btn.dataset.sale || 0);
+        const stock = btn.dataset.stock;
+        const desc = btn.dataset.desc;
+
+        // Đổ dữ liệu vào các thẻ hiển thị trên Modal
+        document.getElementById("v_name").innerText = name;
+        document.getElementById("v_sku").innerText = sku || "Chưa thiết lập";
+        document.getElementById("v_category").innerText = category;
+        document.getElementById("v_stock").innerText = stock;
+        document.getElementById("v_desc").innerText =
+            desc || "Không có mô tả sản phẩm.";
+        document.getElementById("v_price").innerText =
+            price.toLocaleString("vi-VN") + " đ";
+        document.getElementById("v_sale").innerText =
+            sale.toLocaleString("vi-VN") + " đ";
+
+        // Mở modal hiển thị lên màn hình
+        viewDetailModal.style.display = "block";
+    });
+});
+
+// Đóng modal khi bấm dấu x hoặc nút Đóng
+closeViewBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+        viewDetailModal.style.display = "none";
+    });
+});
+
+// Đóng modal khi bấm trượt ra ngoài vùng chứa
+window.addEventListener("click", (e) => {
+    if (e.target === viewDetailModal) {
+        viewDetailModal.style.display = "none";
+    }
+});

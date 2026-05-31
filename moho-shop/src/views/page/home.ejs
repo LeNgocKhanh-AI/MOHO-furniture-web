@@ -1,94 +1,95 @@
-  <!DOCTYPE html>
-  <html lang="vi">
+<!DOCTYPE html>
+<html lang="vi">
 
-  <head>
+<head>
 
-    <meta charset="UTF-8">
+  <meta charset="UTF-8">
 
-    <title>MOHO</title>
+  <title>MOHO</title>
 
-    <!-- CSS -->
+  <!-- CSS -->
 
-    <link rel="stylesheet" href="/css/header.css">
-    <link rel="stylesheet" href="/css/footer.css">
-    <link rel="stylesheet" href="/css/slide.css">
-    <link rel="stylesheet" href="/css/trangchu.css">
-    <link rel="stylesheet" href="/css/product.css">
-    <link rel="stylesheet" href="/css/review.css">
-    <!-- FONT AWESOME -->
+  <link rel="stylesheet" href="/css/client/header.css">
+  <link rel="stylesheet" href="/css/client/footer.css">
+  <link rel="stylesheet" href="/css/client/slide.css">
+  <link rel="stylesheet" href="/css/client/trangchu.css">
+  <link rel="stylesheet" href="/css/client/product.css">
+  <link rel="stylesheet" href="/css/client/review.css">
+  <link rel="stylesheet" href="/css/client/service-feature.css">
 
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    >
+  <!-- FONT AWESOME -->
 
-  </head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-  <body>
+</head>
 
-    <!-- HEADER -->
+<body>
 
-    <%- include('../partials/header') %>
+  <!-- HEADER -->
+
+  <%- include('../partials/header') %>
 
     <!-- SLIDER -->
 
     <%- include('../partials/slide') %>
 
-    <!-- PRODUCT SECTION -->
+      <!-- PRODUCT SECTION -->
 
-    <section class="product-section">
+      <section class="product-section">
 
-      <div class="container-80">
-
-        <div class="section-header">
-
-          <h2>Giá siêu tốt</h2>
-
-          <a href="#" class="view-more">
-            Xem thêm
-          </a>
-
-        </div>
-
-        <div class="product-grid">
-
-          <% products.forEach(product => { %>
-
-            <%- include('../partials/product', { product }) %>
-
-          <% }) %>
-
-        </div>
-
-      </div>
-
-    </section>
-    <section class="review-section">
-
-      <div class="container-80">
+        <div class="container-80">
 
           <div class="section-header">
 
-              <h2>Khách hàng đánh giá</h2>
+            <h2>Giá siêu tốt</h2>
+
+            <a href="#" class="view-more">
+              Xem thêm
+            </a>
+
+          </div>
+
+          <div class="product-grid">
+
+            <% products.forEach(product=> { %>
+
+              <%- include('../partials/product', { product }) %>
+
+                <% }) %>
+
+          </div>
+
+        </div>
+
+      </section>
+      <section class="review-section">
+
+        <div class="container-80">
+
+          <div class="section-header">
+
+            <h2>Khách hàng đánh giá</h2>
 
           </div>
 
           <%- include('../partials/review', { reviews }) %>
-        
-
-      </div>
-
-  </section>
 
 
-    <!-- JS -->
+        </div>
 
-    <script src="/js/slide.js"></script>
-    <script src="/js/search.js"></script>
-    <script src="/js/cart.js"></script>
-    <script src="/js/auth.js"></script>
+      </section>
+      <%- include('../partials/service-feature') %>
 
 
-  </body>
-  <%- include('../partials/footer') %>
-  </html>
+        <!-- JS -->
+
+        <script src="/js/slide.js"></script>
+        <script src="/js/search.js"></script>
+        <script src="/js/cart.js"></script>
+        <script src="/js/auth.js"></script>
+
+
+</body>
+<%- include('../partials/footer') %>
+
+</html>

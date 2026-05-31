@@ -125,3 +125,23 @@ CREATE TABLE product_review (
     REFERENCES customer(customer_id)
 
 );
+CREATE TABLE cart (
+  cart_id INT AUTO_INCREMENT PRIMARY KEY,
+  customer_id INT UNIQUE,
+  FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
+);
+
+CREATE TABLE cart_item (
+  cart_item_id INT AUTO_INCREMENT PRIMARY KEY,
+  cart_id INT,
+  product_id INT,
+  quantity INT,
+  FOREIGN KEY (cart_id) REFERENCES cart(cart_id),
+  FOREIGN KEY (product_id) REFERENCES product(product_id)
+);
+ALTER TABLE customer 
+ADD COLUMN customer_google_id VARCHAR(255) NULL UNIQUE,
+ADD COLUMN customer_avatar VARCHAR(500) NULL;
+
+-- Create index for faster lookups
+CREATE INDEX idx_customer_google_id ON customer(customer_google_id);
