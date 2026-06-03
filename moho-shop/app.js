@@ -1,103 +1,3 @@
-// const express = require("express");
-// const path = require("path");
-// const session = require("express-session");
-
-// const passport =
-//   require("./src/config/passport");
-
-// const app = express();
-
-// /* =========================
-//    BODY PARSER
-// ========================= */
-
-// app.use(express.json());
-
-// app.use(express.urlencoded({
-//   extended: true
-// }));
-
-// /* =========================
-//    VIEW ENGINE
-// ========================= */
-
-// app.set("view engine", "ejs");
-
-// app.set(
-//   "views",
-//   path.join(__dirname, "src/views")
-// );
-
-// /* =========================
-//    STATIC FILES
-// ========================= */
-
-// app.use(
-//   express.static(
-//     path.join(__dirname, "src/public")
-//   )
-// );
-
-// /* =========================
-//    SESSION
-// ========================= */
-
-// app.use(
-//   session({
-
-//     secret: "moho_secret_key",
-
-//     resave: false,
-
-//     saveUninitialized: false,
-
-//     cookie: {
-//       maxAge: 1000 * 60 * 60 * 24,
-//     },
-//   })
-// );
-
-// /* =========================
-//    PASSPORT
-// ========================= */
-
-// app.use(passport.initialize());
-
-// /* =========================
-//    SHARE SESSION TO EJS
-// ========================= */
-
-// app.use((req, res, next) => {
-
-//   res.locals.session =
-//     req.session;
-
-//   next();
-// });
-
-// /* =========================
-//    ROUTES
-// ========================= */
-
-// const homeRoutes =
-//   require("./src/routes/client/home.routes");
-
-// const authRoutes =
-//   require("./src/routes/client/auth.routes");
-// const cartRoutes =
-//   require("./src/routes/client/cart.routes");
-
-// app.use("/", homeRoutes);
-
-// app.use("/", authRoutes);
-// app.use("/cart", cartRoutes); // thêm
-
-
-// /* =========================
-//    EXPORT
-// ========================= */
-
-// module.exports = app;
 const express = require("express");
 const path = require("path");
 const session = require("express-session");
@@ -127,23 +27,33 @@ app.use(express.static(path.join(__dirname, "src/public")));
    SESSION + PASSPORT
 ========================= */
 app.use(
-  session({
-    secret: "moho_secret_key",
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 60 * 24 },
-  })
+   session({
+      secret: "moho_secret_key",
+      resave: false,
+      saveUninitialized: false,
+      cookie: { maxAge: 1000 * 60 * 60 * 24 },
+   }),
 );
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 /* =========================
-   SHARE SESSION
+   SHARE & ĐỒNG BỘ SESSION (ĐÃ SỬA)
 ========================= */
 app.use((req, res, next) => {
-  res.locals.session = req.session;
-  next();
+   // Đồng bộ dữ liệu từ Passport (req.user) sang Session tùy biến của dự án
+   if (req.user) {
+      if (req.user.role === "admin") {
+         req.session.admin = req.user;
+      } else if (req.user.role === "customer") {
+         req.session.customer = req.user;
+      }
+   }
+
+   res.locals.session = req.session;
+   res.locals.user = req.user || null; // Giúp các file EJS hiển thị được avatar/tên user công khai
+   next();
 });
 
 /* =========================
@@ -160,9 +70,6 @@ app.use("/cart", cartRoutes);
 /* =========================
    ADMIN ROUTES (CLEAN)
 ========================= */
-
-
-
 // import routes Dasboard
 const dashboardRoute = require("./src/routes/admin/dashboard.routes");
 
@@ -182,6 +89,7 @@ const productReviewRoutes = require("./src/routes/admin/product-review.routes");
 const feedbackRoutes = require("./src/routes/admin/feedback.routes");
 
 const customerRoutes = require("./src/routes/admin/customer.routes");
+
 // import routes order
 const orderRoutes = require("./src/routes/admin/order.routes");
 
@@ -191,8 +99,14 @@ const orderDetailRoutes = require("./src/routes/admin/orderdetail.routes");
 // import routes admin
 const adminUserRoutes = require("./src/routes/admin/adminaccount.routes");
 
-/* DASHBOARD */
+const blogRoutes = require("./src/routes/client/blog.routes");
 
+const postAdminRoutes = require("./src/routes/admin/post.routes");
+
+const checkoutRoutes = require("./src/routes/client/checkout.routes");
+const paymentRoutes = require("./src/routes/client/payment.routes");
+
+/* DASHBOARD MIDDLEWARES */
 
 // dùng routes dashboard
 app.use("/admin", dashboardRoute);
@@ -248,5 +162,18 @@ app.use("/admin/dashboard", adminUserRoutes);
 
 // routest admin
 app.use("/admin/dashboard/admin-users", adminUserRoutes);
+
+app.use("/news", blogRoutes);
+
+// routest admin
+app.use("/admin/dashboard", postAdminRoutes);
+
+app.use("/admin/dashboard/posts", postAdminRoutes);
+/* =========================
+   CHECKOUT & PAYMENT ROUTES (ĐÃ SỬA)
+========================= */
+app.use("/checkout", checkoutRoutes);
+app.use("/", paymentRoutes); // Đảm bảo xử lý đúng gốc /checkout/bank-transfer
+app.use("/payment", paymentRoutes);
 
 module.exports = app;

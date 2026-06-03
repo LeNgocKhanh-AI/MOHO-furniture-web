@@ -248,3 +248,6 @@ VALUES
     '/images/reviews/review10.jpg',
     false
 );
+UPDATE administrator
+SET admin_password =
+'$2b$10$9gbsLYxd54i0MF.5uLCEeO414JhM5lRLptHpIp1mZYpDoi4WphQpO';

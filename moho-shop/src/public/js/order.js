@@ -1,48 +1,26 @@
-// DROPDOWN SIDEBAR
+// Gom toàn bộ các toggle menu lại để xử lý chung một cách thông minh
+const allDropdownToggles = document.querySelectorAll(
+    [
+        ".dropdown-toggle",
+        ".dropdown-feedback-toggle",
+        ".dropdown-orders-toggle",
+        ".dropdown-product-toggle",
+    ].join(","),
+);
 
-const dropdownMenu = document.querySelector(".dropdown-menu");
-
-const dropdownToggle = document.querySelector(".dropdown-toggle");
-
-dropdownToggle.addEventListener("click", () => {
-    dropdownMenu.classList.toggle("active");
-});
-
-// DROPDOWN FEEDBACK
-
-const feedbackMenu = document.querySelector(".dropdown-feedback");
-
-const feedbackToggle = document.querySelector(".dropdown-feedback-toggle");
-
-feedbackToggle.addEventListener("click", () => {
-    feedbackMenu.classList.toggle("active");
-});
-
-// DROPDOWN ORDERS
-
-const ordersMenu = document.querySelector(".dropdown-orders");
-
-const ordersToggle = document.querySelector(".dropdown-orders-toggle");
-
-ordersToggle.addEventListener("click", () => {
-    ordersMenu.classList.toggle("active");
-});
-
-// =========================
-// Dropdown Product
-// =========================
-
-const productDropdown = document.querySelector(".dropdown-product");
-const productToggle = document.querySelector(".dropdown-product-toggle");
-
-if (productToggle) {
-    productToggle.addEventListener("click", () => {
-        productDropdown.classList.toggle("active");
+allDropdownToggles.forEach((toggle) => {
+    toggle.addEventListener("click", function () {
+        // Tìm phần tử cha trực tiếp (thẻ <li>) của nút vừa click và bật/tắt class 'active'
+        const parentMenu = this.parentElement;
+        if (parentMenu) {
+            parentMenu.classList.toggle("active");
+        }
     });
-}
+});
 
-// ... Giữ nguyên toàn bộ code xử lý Dropdown Sidebar cũ của bạn ...
-
+// ==========================================
+// XỬ LÝ LOGIC POPUP SẢN PHẨM ĐƠN HÀNG
+// ==========================================
 document.addEventListener("DOMContentLoaded", () => {
     const orderItemsModal = document.getElementById("orderItemsModal");
     const productDetailModal = document.getElementById("productDetailModal");
@@ -51,9 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
         "popupPaginationContainer",
     );
 
-    let orderProductsArray = []; // Nơi chứa tạm danh sách sản phẩm lấy từ API
+    let orderProductsArray = []; // Nơi chứa danh sách sản phẩm từ API
     let currentPopupPage = 1; // Trang hiện tại của popup
-    const itemsPerPage = 3; // Định mức đúng 3 sản phẩm trên một trang (để xếp vừa 1 dòng)
+    const itemsPerPage = 3; // Hiển thị 3 sản phẩm trên 1 trang
 
     // 1. Khi nhấn nút "Xem chi tiết các sản phẩm" trên bảng đơn hàng chính
     document.querySelectorAll(".btn-open-order-modal").forEach((button) => {
@@ -61,28 +39,27 @@ document.addEventListener("DOMContentLoaded", () => {
             const orderId = button.dataset.id;
             document.getElementById("popupOrderIdText").innerText = "#ORD" + orderId;
             popupGridContainer.innerHTML =
-                "<p style='grid-column: span 3; text-align:center;'>Đang tải dữ liệu món ăn...</p>";
+                "<p style='grid-column: span 3; text-align:center;'>Đang tải dữ liệu đơn hàng...</p>";
             orderItemsModal.style.display = "block";
 
             try {
-                // Gọi AJAX ngầm lên API backend để lấy danh sách sản phẩm
+                // 🔥 Đã sửa đường dẫn chuẩn đồng bộ theo cấu trúc Router mới trên cổng 4000 của bạn
                 const response = await fetch(
                     `/admin/dashboard/orders/api/items?order_id=${orderId}`,
                 );
                 orderProductsArray = await response.json();
 
-                // Luôn đặt về trang 1 khi mở đơn hàng mới và tiến hành render vẽ giao diện
                 currentPopupPage = 1;
                 renderPopupGrid();
             } catch (error) {
-                pconsole.error("Lỗi chi tiết tại Frontend:", error); // <-- Thêm dòng này để xem lỗi gốc là gì
+                console.error("Lỗi chi tiết tại Frontend:", error); // 🔥 Đã sửa chữ pconsole thành console chuẩn
                 popupGridContainer.innerHTML =
                     "<p style='color:red; grid-column: span 3; text-align:center;'>Lỗi không tải được sản phẩm.</p>";
             }
         });
     });
 
-    // 2. Hàm cắt mảng dữ liệu để vẽ đúng 3 sản phẩm lên 1 dòng tương ứng với số trang
+    // 2. Hàm phân trang và render giao diện dạng lưới ô vuông
     function renderPopupGrid() {
         if (orderProductsArray.length === 0) {
             popupGridContainer.innerHTML =
@@ -91,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Thuật toán cắt mảng lấy vị trí phần tử theo phân trang khách yêu cầu
         const start = (currentPopupPage - 1) * itemsPerPage;
         const end = start + itemsPerPage;
         const displayItems = orderProductsArray.slice(start, end);
@@ -105,9 +81,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 const priceFormatted =
                     Number(prod.unit_price).toLocaleString("vi-VN") + " đ";
 
+                // 🔥 Xử lý thẻ trạng thái đè góc ảnh dựa theo logic đảo ngược (0: Đăng bán, 1: Ẩn)
+                let statusBadgeHtml = "";
+                if (prod.is_featured == 0) {
+                    statusBadgeHtml = `<span style="position: absolute; top: 8px; left: 8px; background: rgba(46, 204, 113, 0.95); color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; z-index: 10;"><i class="fa-solid fa-eye"></i> Đang đăng bán</span>`;
+                } else {
+                    statusBadgeHtml = `<span style="position: absolute; top: 8px; left: 8px; background: rgba(231, 76, 60, 0.95); color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; z-index: 10;"><i class="fa-solid fa-eye-slash"></i> Đang ẩn</span>`;
+                }
+
                 return `
-        <div class="popup-product-card">
-          <img src="${imgPath}" class="popup-product-img" alt="${prod.product_name}">
+        <div class="popup-product-card" style="position: relative;">
+          ${statusBadgeHtml} <img src="${imgPath}" class="popup-product-img" alt="${prod.product_name}">
           <div class="popup-product-info">
             <h4 class="popup-product-name" title="${prod.product_name}">${prod.product_name}</h4>
             <div>
@@ -126,11 +110,10 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .join("");
 
-        // Đếm tổng số trang có thể có của Form popup
         const totalPopupPages = Math.ceil(orderProductsArray.length / itemsPerPage);
         buildPopupPaginationControls(totalPopupPages);
 
-        // Kích hoạt sự kiện bấm nút "Xem chi tiết" sâu bên trong từng thẻ sản phẩm nhỏ (Bật Modal thứ 2)
+        // Kích hoạt nút xem chi tiết sâu hơn của sản phẩm (Bật Modal nhỏ tầng 2)
         document.querySelectorAll(".btn-popup-detail").forEach((detailBtn) => {
             detailBtn.addEventListener("click", () => {
                 document.getElementById("dt_name").innerText = detailBtn.dataset.name;
@@ -144,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 3. Hàm xây dựng thanh điều hướng trang tiến lùi nằm dưới đáy Popup
     function buildPopupPaginationControls(totalPages) {
         if (totalPages <= 1) {
-            popupPaginationContainer.innerHTML = ""; // Nếu tổng số sản phẩm từ 3 món đổ xuống thì không hiện nút làm gì cho rối mắt
+            popupPaginationContainer.innerHTML = "";
             return;
         }
 
@@ -154,7 +137,6 @@ document.addEventListener("DOMContentLoaded", () => {
       <button type="button" class="btn-mod-page" id="popupNextBtn" ${currentPopupPage === totalPages ? "disabled" : ""}>Sau →</button>
     `;
 
-        // Lắng nghe sự kiện nút lùi trang
         document.getElementById("popupPrevBtn").addEventListener("click", () => {
             if (currentPopupPage > 1) {
                 currentPopupPage--;
@@ -162,7 +144,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Lắng nghe sự kiện nút tiến trang
         document.getElementById("popupNextBtn").addEventListener("click", () => {
             if (currentPopupPage < totalPages) {
                 currentPopupPage++;
@@ -182,7 +163,6 @@ document.addEventListener("DOMContentLoaded", () => {
             productDetailModal.style.display = "none";
         });
 
-    // Tắt modal khi click chuột ra ngoài rìa màn hình trống
     window.addEventListener("click", (e) => {
         if (e.target === orderItemsModal) orderItemsModal.style.display = "none";
         if (e.target === productDetailModal)

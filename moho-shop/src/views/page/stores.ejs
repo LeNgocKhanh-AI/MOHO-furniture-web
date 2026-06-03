@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hệ thống cửa hàng - MOHO</title>
+    <link rel="stylesheet" href="/css/client/header.css" />
+    <link rel="stylesheet" href="/css/client/footer.css" />
+    <link rel="stylesheet" href="/css/client/storepage.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body>
+    <%- include("../partials/header") %>
+
+    <div class="store-banner">
+      <h1>Hệ thống cửa hàng - Hotline: 0971141140</h1>
+      <div class="breadcrumb">
+        <a href="/">Trang chủ</a> <span>/</span>
+        <span>Hệ thống cửa hàng - Hotline: 0971141140</span>
+      </div>
+    </div>
+
+    <div class="store-container">
+      <div class="store-left">
+        <div class="filter-box">
+          <h2>Tìm cửa hàng</h2>
+
+          <div class="select-group">
+            <label>Chọn tỉnh thành</label>
+            <select id="provinceSelect">
+              <option value="all">- Chọn Tỉnh thành -</option>
+              <option value="hcm">Thành phố Hồ Chí Minh</option>
+              <option value="hanoi">Hà Nội</option>
+            </select>
+          </div>
+
+          <div class="select-group" style="margin-top: 15px">
+            <label>Chọn cửa hàng</label>
+            <select id="storeSelect">
+              <option value="all">- Chọn cửa hàng -</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="showroom-list" id="showroomList">
+          <div
+            class="showroom-item active"
+            data-province="hcm"
+            data-map="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.474928929131!2d106.6238356757041!3d10.851431457805118!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752b0288849643%3A0x6b63ca52f1e604f8!2zVHLGsOG7nW5nIENhbyDEkeG6s25nIEZQVCBQb2x5dGVjaG5pYw!5e0!3m2!1svi!2s!4v1710000000000"
+          >
+            <h3>
+              <i class="fa-solid fa-location-dot"></i> Showroom MOHO Dĩ An
+            </h3>
+            <p>
+              B1.01.08, Bcons City tháp Green Emerald, Phường Đông Hòa, TP.HCM
+            </p>
+            <p>Thời gian hoạt động: <b>8h00 - 20h00</b></p>
+            <p>Điện thoại: <b>0888 919 020</b></p>
+            <a href="#" class="view-map-link">Xem bản đồ</a>
+          </div>
+
+          <div
+            class="showroom-item"
+            data-province="hanoi"
+            data-map="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.863855881424!2d105.78010377583623!3d21.038127787453!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab3b4220c3b1%3A0x90434313b632943e!2zVHLGsOG7nW5nIENhbyDEkeG6s25nIEZQVCBQb2x5dGVjaG5pYyBIw6AgTuG7mWk!5e0!3m2!1svi!2s!4v1710000000000"
+          >
+            <h3>
+              <i class="fa-solid fa-location-dot"></i> Showroom MOHO Vinhomes
+              Ocean Park 3
+            </h3>
+            <p>
+              128 Đại lộ Bốn Mùa, Vinhomes Ocean Park 3, Nghĩa Trụ, Văn Giang,
+              Hưng Yên
+            </p>
+            <p>Thời gian hoạt động: <b>7h30 - 19h30</b></p>
+            <p>Điện thoại: <b>0888 919 020</b></p>
+            <a href="#" class="view-map-link">Xem bản đồ</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="store-right">
+        <iframe
+          id="mapIframe"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.474928929131!2d106.6238356757041!3d10.851431457805118!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752b0288849643%3A0x6b63ca52f1e604f8!2zVHLGsOG7nW5nIENhbyDEkeG6s25nIEZQVCBQb2x5dGVjaG5pYw!5e0!3m2!1svi!2s!4v1710000000000"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        >
+        </iframe>
+      </div>
+    </div>
+
+    <%- include("../partials/footer") %>
+    <script src="/js/search.js"></script>
+    <script src="/js/store.js"></script>
+    <script src="/js/cart.js"></script>
+    <script src="/js/auth.js"></script>
+  </body>
+</html>

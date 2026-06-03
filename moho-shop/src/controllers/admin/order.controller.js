@@ -43,6 +43,7 @@ const getItemsApi = async (req, res) => {
         p.product_name, 
         p.product_sku,
         p.product_description,
+        p.is_featured,
         (
           SELECT pi.image_url 
           FROM product_image pi 

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= isDetailPage ? post.title : currentCategory.name %> - MOHO</title>
+    <link rel="stylesheet" href="/css/client/header.css">
+    <link rel="stylesheet" href="/css/client/footer.css">
+   
+    <link rel="stylesheet" href="/css/client/blog-custom.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+    <%- include("../partials/header") %>
+
+    <div class="moho-blog-container">
+        
+        <aside class="moho-blog-sidebar">
+            
+            <div class="sidebar-block">
+                <h3 class="block-title">BÀI VIẾT MỚI NHẤT</h3>
+                <div class="recent-list">
+                    <% recentPosts.forEach(rp => { %>
+                        <div class="recent-item">
+                            <a href="/news/<%= isDetailPage ? activeCategorySlug : currentCategory.slug %>/<%= rp.slug %>" class="recent-img">
+                                <img src="<%= rp.thumbnail %>" alt="<%= rp.title %>">
+                            </a>
+                            <div class="recent-info">
+                                <h4>
+                                    <a href="/news/<%= isDetailPage ? activeCategorySlug : currentCategory.slug %>/<%= rp.slug %>"><%= rp.title %></a>
+                                </h4>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+
+            <div class="sidebar-block">
+                <h3 class="block-title">DANH MỤC BLOG</h3>
+                <ul class="category-menu">
+                    <% allCategories.forEach(cat => { %>
+                        <li class="<%= (!isDetailPage && cat.id === currentCategory.id) || (isDetailPage && cat.slug === activeCategorySlug) ? 'active' : '' %>">
+                            <a href="/news/<%= cat.slug %>"><%= cat.name %></a>
+                        </li>
+                    <% }) %>
+                </ul>
+            </div>
+
+        </aside>
+
+        <main class="moho-blog-content">
+            
+            <% if (!isDetailPage) { %>
+                <h1 class="page-main-title"><%= currentCategory.name %></h1>
+                
+                <div class="articles-grid">
+                    <% posts.forEach(p => { %>
+                        <article class="article-card">
+                            <div class="card-thumb">
+                                <a href="/news/<%= currentCategory.slug %>/<%= p.slug %>">
+                                    <img src="<%= p.thumbnail %>" alt="<%= p.title %>">
+                                </a>
+                            </div>
+                            <div class="card-body">
+                                <span class="card-tag"><%= currentCategory.name %></span>
+                                <h2 class="card-title">
+                                    <a href="/news/<%= currentCategory.slug %>/<%= p.slug %>"><%= p.title %></a>
+                                </h2>
+                                <p class="card-summary"><%= p.summary %></p>
+                            </div>
+                        </article>
+                    <% }) %>
+                </div>
+
+            <% } else { %>
+                <h1 class="detail-post-title"><%= post.title %></h1>
+                
+                <div class="detail-post-body">
+                    <%- post.content %>
+                </div>
+
+            <% } %>
+
+        </main>
+
+    </div>
+ <script src="/js/search.js"></script>
+        <script src="/js/cart.js"></script>
+        <script src="/js/auth.js"></script>
+    <%- include("../partials/footer") %>
+
+</body>
+</html>

@@ -1,0 +1,291 @@
+/* ==========================================================
+   1. KHUNG BỐ CỤC CHÍNH (FLEXBOX)
+   ========================================================== */
+.moho-blog-container {
+    display: flex;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 15px;
+    gap: 40px;
+    /* Tạo khoảng cách thông thoáng giữa cột trái và cột phải */
+    font-family: "Arial", sans-serif;
+}
+
+/* ==========================================================
+   2. ⬅️ STYLE CHO CỘT TRÁI (SIDEBAR) - CHIẾM 25%
+   ========================================================== */
+.moho-blog-sidebar {
+    width: 25%;
+    flex-shrink: 0;
+
+    /* 🔥 THÊM 3 DÒNG NÀY ĐỂ TẠO HIỆU ỨNG GHÌM MÀN HÌNH 🔥 */
+    position: sticky;
+    top: 20px;
+    /* Khoảng cách từ đỉnh sidebar đến mép trên trình duyệt khi dính (chỉnh tùy ý) */
+    align-self: flex-start;
+    /* Bắt buộc phải có để thuộc tính sticky hoạt động mượt mà trong Flexbox */
+}
+
+.sidebar-block {
+    margin-bottom: 35px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 4px;
+}
+
+.block-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #111;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #333;
+}
+
+/* Khối 8 bài viết mới nhất */
+.recent-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.recent-item {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.recent-img {
+    width: 70px;
+    height: 70px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.recent-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.recent-item:hover .recent-img img {
+    transform: scale(1.08);
+}
+
+.recent-info h4 {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.recent-info h4 a {
+    color: #333;
+    text-decoration: none;
+}
+
+.recent-info h4 a:hover {
+    color: #795548;
+    /* Màu nâu đặc trưng của gỗ MOHO */
+}
+
+/* Khối Danh mục Blog */
+.category-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.category-menu li {
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.category-menu li a {
+    color: #555;
+    text-decoration: none;
+    font-size: 14px;
+    display: block;
+    transition: all 0.2s ease;
+}
+
+/* Style cho trạng thái Active khi đang ở danh mục đó */
+.category-menu li.active a,
+.category-menu li a:hover {
+    color: #000;
+    font-weight: 700;
+    padding-left: 5px;
+    /* Hiệu ứng nhích nhẹ sang phải khi hover */
+}
+
+/* ==========================================================
+   3. ➡️ STYLE CHO CỘT PHẢI (TRANG DANH SÁCH BÀI VIẾT) - CHIẾM 75%
+   ========================================================== */
+.moho-blog-content {
+    width: 75%;
+}
+
+.page-main-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #111;
+    margin-top: 0;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+}
+
+/* Bố cục danh sách bài viết xếp dọc hàng ngang */
+.articles-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.article-card {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.card-thumb {
+    width: 280px;
+    height: 180px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.card-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.article-card:hover .card-thumb img {
+    transform: scale(1.04);
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card-tag {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #888;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.card-title {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin: 0 0 12px 0;
+}
+
+.card-title a {
+    color: #111;
+    text-decoration: none;
+}
+
+.card-title a:hover {
+    color: #795548;
+}
+
+.card-summary {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+
+    overflow: hidden;
+}
+
+/* ==========================================================
+   4. 📖 STYLE CHO TRANG CHI TIẾT BÀI VIẾT (ĂN THEO THẺ HTML TỪ DB)
+   ========================================================== */
+.detail-post-title {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: #111;
+    margin-top: 0;
+    margin-bottom: 30px;
+}
+
+/* Định dạng các thẻ HTML sinh ra tự động từ trường <%- post.content %> */
+.detail-post-body {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+}
+
+/* Tự động căn giữa và bo viền nhẹ cho 5 cái ảnh trong bài chi tiết */
+.detail-post-body img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 30px auto;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Định dạng cho 5 cái câu hỏi h3 */
+.detail-post-body h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111;
+    margin-top: 35px;
+    margin-bottom: 15px;
+}
+
+/* Định dạng cho các câu trả lời dạng thẻ p */
+.detail-post-body p {
+    margin-bottom: 20px;
+    text-align: justify;
+    /* Căn đều 2 bên cho chữ thẳng đẹp giống báo chí */
+}
+
+/* ==========================================================
+   5. ĐÁP ỨNG GIAO DIỆN DI ĐỘNG (RESPONSIVE)
+   ========================================================== */
+@media (max-width: 768px) {
+    .moho-blog-container {
+        flex-direction: column-reverse;
+        /* Đẩy sidebar xuống dưới khi xem trên điện thoại */
+        gap: 30px;
+    }
+
+    .moho-blog-sidebar,
+    .moho-blog-content {
+        width: 100%;
+    }
+
+    .article-card {
+        flex-direction: column;
+        /* Trang danh sách chuyển thành hàng dọc trên mobile */
+    }
+
+    .card-thumb {
+        width: 100%;
+        height: 200px;
+    }
+}

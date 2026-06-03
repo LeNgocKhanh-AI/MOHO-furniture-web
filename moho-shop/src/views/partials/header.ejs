@@ -1,8 +1,10 @@
 <header class="main-header">
   <div class="container">
-    <div class="logo">
-      <img src="/images/banners/LogoMoho.png" alt="MOHO Logo" />
-    </div>
+<div class="logo">
+  <a href="/">
+    <img src="/images/banners/LogoMoho.png" alt="MOHO Logo" style="cursor: pointer;" />
+  </a>
+</div>
 
     <div class="search-bar">
 
@@ -187,27 +189,44 @@
 
         <div class="mini-cart-footer">
           <a href="/cart">Xem giỏ hàng</a>
-          <button>Thanh toán</button>
+          <a href="/cart/checkout">Thanh toán</a>
         </div>
       </div>
     </div>
   </div>
 
-  <nav class="main-nav">
+<nav class="main-nav">
     <div class="main-nav-container">
       <ul>
-        <li>
-          <a href="/">Sản phẩm <i class="fa fa-chevron-down"></i></a>
+        <li class="dropdown-client">
+          <a href="/" class="dropdown-client-toggle">
+            Sản phẩm <i class="fa fa-chevron-down arrow-client-menu"></i>
+          </a>
+          <ul class="submenu-client">
+            <li><a href="/products/category/sofa">Sofa</a></li>
+            <li><a href="/products/category/table">Table</a></li>
+            <li><a href="/products/category/chair">Chair</a></li>
+            <li><a href="/products/category/bench">Bench</a></li>
+          </ul>
         </li>
+        
         <li><a href="#">Thiết kế - Thi công</a></li>
         <li>
           <a href="#">Khuyến mãi <i class="fa fa-chevron-down"></i></a>
         </li>
-        <li>
-          <a href="#">Tin tức <i class="fa fa-chevron-down"></i></a>
-        </li>
-        <li><a href="#">Về MOHO</a></li>
-        <li><a href="#">Cửa hàng</a></li>
+<li class="dropdown-client">
+  <a href="/news/tips" class="dropdown-client-toggle">
+    Tin tức <i class="fa fa-chevron-down arrow-client-menu"></i>
+  </a>
+  <ul class="submenu-client">
+    <li><a href="/news/tips">Tips</a></li>
+    <li><a href="/news/media">Media</a></li>
+    <li><a href="/news/news">News</a></li>
+    <li><a href="/news/people">People</a></li>
+  </ul>
+</li>
+        <li><a href="/about">Về MOHO</a></li>
+        <li><a href="/stores">Cửa hàng</a></li>
       </ul>
     </div>
   </nav>

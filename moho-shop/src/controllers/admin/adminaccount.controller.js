@@ -9,7 +9,7 @@ const index = async (req, res) => {
         const totalItems = await adminUserService.countAdmins();
         const totalPages = Math.ceil(totalItems / limit);
 
-        res.render("admin/admin_users", {
+        res.render("admin/adminaccount", {
             admins,
             currentPage: page,
             totalPages,

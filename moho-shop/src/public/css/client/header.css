@@ -738,3 +738,185 @@
 
 
 /* ===== USER DROPDOWN (LOGOUT) ===== */
+/* ==========================================
+   FIX TRIỆT ĐỂ DROPDOWN DỌC SẢN PHẨM MOHO
+   ========================================== */
+
+/* Thẻ cha chứa menu sản phẩm */
+.main-nav-container>ul>li.dropdown-client {
+  position: relative;
+}
+
+/* Icon mũi tên */
+.arrow-client-menu {
+  font-size: 11px;
+  margin-left: 4px;
+  transition: transform 0.2s ease;
+}
+
+/* Khung Menu con đổ xuống */
+.main-nav-container .submenu-client {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #ffffff;
+  min-width: 200px;
+  /* Độ rộng cố định cho menu dọc */
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 0;
+  list-style: none;
+  border-radius: 4px;
+  text-align: left;
+
+  /* 🔥 QUAN TRỌNG: Đè bẹp Flexbox của menu cha và ép xếp dọc */
+  display: block !important;
+  flex-direction: column !important;
+
+  /* Trạng thái ẩn */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 999;
+}
+
+/* 🔥 ÉP CÁC THẺ LI CON PHẢI XẾP THÀNH HÀNG DỌC (ĐÈ INLINE/FLEX) */
+.main-nav-container .submenu-client li {
+  display: block !important;
+  /* Bắt buộc xuống dòng */
+  width: 100% !important;
+  /* Chiếm trọn bề ngang */
+  float: none !important;
+  /* Chống tràn float nếu có */
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Đường kẻ mảnh ngăn cách giữa các mục dọc */
+.main-nav-container .submenu-client li:not(:last-child) {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+/* Định dạng chữ bên trong menu dọc */
+.main-nav-container .submenu-client li a {
+  display: block !important;
+  /* Biến vùng click thành dạng khối */
+  width: 100%;
+  padding: 12px 20px !important;
+  /* Tạo khoảng cách thoáng theo chiều dọc */
+  color: #555555 !important;
+  font-size: 15px;
+  font-weight: 400;
+  text-decoration: none;
+  box-sizing: border-box;
+  /* Đảm bảo padding không làm phình khung */
+  transition: all 0.15s ease;
+}
+
+/* Hiệu ứng di chuột đổi chữ sang cam thương hiệu */
+.main-nav-container .submenu-client li a:hover {
+  background-color: #fafafa;
+  color: #ff6b00 !important;
+  padding-left: 24px !important;
+  /* Đẩy chữ sang phải nhẹ nhàng khi hover */
+}
+
+/* Hiển thị menu khi hover vào mục cha */
+.main-nav-container>ul>li.dropdown-client:hover .submenu-client {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Xoay mũi tên lên */
+.main-nav-container>ul>li.dropdown-client:hover .arrow-client-menu {
+  transform: rotate(180deg);
+}
+
+/* --- ĐỒNG BỘ DROPDOWN TIN TỨC VÀ SẢN PHẨM --- */
+.nav-item.dropdown {
+  position: relative;
+  /* Giữ vị trí cố định để menu con đổ ngay bên dưới */
+}
+
+/* Icon mũi tên chỉ xuống kế bên chữ Tin Tức */
+.dropdown-icon {
+  font-size: 10px;
+  margin-left: 3px;
+  color: #666;
+  transition: transform 0.2s ease;
+}
+
+/* --- THU GỌN VÀ CHUẨN HÓA DROPDOWN TIN TỨC --- */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 140px;
+  /* Thu hẹp độ rộng hộp vừa vặn với chữ ngắn */
+  background-color: #ffffff;
+  border: 1px solid #eaeaea;
+  /* Viền siêu mờ */
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  padding: 5px 0 !important;
+  /* Thu nhỏ khoảng cách đệm trên dưới của cả hộp */
+  margin: 5px 0 0 0;
+  list-style: none;
+  z-index: 9999;
+
+  display: flex !important;
+  flex-direction: column !important;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(5px);
+  transition: all 0.2s ease;
+}
+
+/* Ép các thẻ li con ôm sát, không chiếm khoảng trống thừa */
+.dropdown-menu li {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  /* Triệt tiêu hoàn toàn min-height hoặc height cố định từ menu cha */
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Định dạng chữ: Giảm padding để thu hẹp chiều cao mỗi dòng */
+.dropdown-menu li a {
+  display: block !important;
+  padding: 8px 18px !important;
+  /* Giảm đáng kể từ 12px xuống 8px để menu gọn gàng */
+  line-height: 1.4 !important;
+  /* Kiểm soát độ cao của dòng chữ */
+  color: #444444;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
+  transition: all 0.15s ease;
+}
+
+/* Hiệu ứng hover mềm mại */
+.dropdown-menu li a:hover {
+  background-color: #f8f9fa;
+  color: #ef5b2a;
+}
+
+/* 🔥 KÍCH HOẠT HIỆN MENU KHI HOVER HOẶC CLICK CLICK */
+.nav-item.dropdown:hover .dropdown-menu,
+.nav-item.dropdown.show .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Xoay nhẹ mũi tên đi lên khi mở menu */
+.nav-item.dropdown:hover .dropdown-icon,
+.nav-item.dropdown.show .dropdown-icon {
+  transform: rotate(180deg);
+}

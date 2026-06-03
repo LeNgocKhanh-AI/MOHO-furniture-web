@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Câu chuyện thương hiệu - MOHO</title>
+    <!-- CSS CHUNG VÀ CSS RIÊNG -->
+    <link rel="stylesheet" href="/css/client/header.css" />
+    <link rel="stylesheet" href="/css/client/footer.css" />
+    <link rel="stylesheet" href="/css/client/aboutpage.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- HEADER -->
+    <%- include("../partials/header") %>
+
+    <!-- CONTAINER CHÍNH GỌN GÀNG CĂN GIỮA -->
+    <div class="about-container">
+      <!-- Thanh điều hướng Breadcrumb và Tiêu đề trang giống mẫu -->
+      <div class="about-breadcrumb">
+        <a href="/">Trang chủ</a> <span>/</span>
+        <span class="current">Giới Thiệu Về Nội Thất MOHO</span>
+      </div>
+
+      <h1 class="about-title">Giới Thiệu Về Nội Thất MOHO</h1>
+
+      <!-- Khối chứa chuỗi 3 bức ảnh câu chuyện thương hiệu -->
+      <div class="brand-story-images">
+        <img
+          src="https://cdn.hstatic.net/200000065946/file/gioi_thieu_ve_moho_black-01_4dd4c808cf174e2f835e9d223fbe8897_2048x2048.png"
+          alt="Câu chuyện thương hiệu MOHO phần 1"
+        />
+        <img
+          src="https://cdn.hstatic.net/200000065946/file/gioi_thieu_ve_moho_black_2-1_1753278fe44e497e83759330c6d7651c_master.png"
+          alt="Câu chuyện thương hiệu MOHO phần 2"
+        />
+        <img
+          src="https://cdn.hstatic.net/200000065946/file/gioi_thieu_ve_moho_black-03_86dbee7326d94676a8bf05a50fbb07f1_master.png"
+          alt="Câu chuyện thương hiệu MOHO phần 3"
+        />
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <%- include("../partials/footer") %>
+    <script src="/js/search.js"></script>
+    <script src="/js/cart.js"></script>
+    <script src="/js/auth.js"></script>
+  </body>
+</html>

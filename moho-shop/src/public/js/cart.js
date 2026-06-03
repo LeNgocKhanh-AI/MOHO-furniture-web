@@ -253,19 +253,15 @@ function renderCartPage() {
         container.innerHTML += `
         <div class="cart-item">
 
-            <!-- TOP RIGHT X -->
             <button class="remove-btn"
                 onclick="removeFromCart(${item.product_id})">×</button>
 
-            <!-- IMAGE -->
             <img src="${item.image_url || '/images/no-image.jpg'}">
 
-            <!-- INFO -->
             <div class="cart-info">
 
                 <h3 class="product-name">${item.product_name}</h3>
 
-                <!-- PRICE -->
                 <div class="cart-price">
                     <span class="sale-price">
                         ${price.toLocaleString()}đ
@@ -276,7 +272,6 @@ function renderCartPage() {
                     </span>
                 </div>
 
-                <!-- QTY -->
                 <div class="qty-box">
                     <button onclick="updateQuantity(${item.product_id}, ${qty - 1})">-</button>
 
@@ -287,7 +282,6 @@ function renderCartPage() {
 
             </div>
 
-            <!-- SUBTOTAL BOTTOM RIGHT -->
             <div class="subtotal">
                 ${subtotal.toLocaleString()}đ
             </div>
@@ -305,3 +299,26 @@ function renderCartPage() {
         <b>${total.toLocaleString()}đ</b>
     `;
 }
+
+/* =========================
+   GO CHECKOUT (CHUYỂN THẲNG SANG ĐẶT HÀNG)
+========================= */
+function goCheckout() {
+    // Không check login nữa, cho phép vào thẳng trang thanh toán luôn
+    // Lưu ý: Đổi lại link dưới đây thành "/checkout" nếu route backend của bạn định nghĩa như vậy
+    window.location.href = "/checkout";
+}
+/* =========================
+   ĐỒNG BỘ NÚT THANH TOÁN MINICART
+========================= */
+document.addEventListener("DOMContentLoaded", () => {
+    // Tìm nút "Thanh toán" nằm bên trong cấu trúc MiniCart Footer trên Header
+    const miniCartCheckoutBtn = document.querySelector('.mini-cart-footer a[href="/cart/checkout"]');
+
+    if (miniCartCheckoutBtn) {
+        miniCartCheckoutBtn.addEventListener("click", (e) => {
+            e.preventDefault(); // Chặn hành vi nhảy trang mặc định của thẻ <a>
+            goCheckout();       // Gọi hàm goCheckout() để xử lý đồng bộ với trang giỏ hàng lớn
+        });
+    }
+});

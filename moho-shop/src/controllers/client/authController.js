@@ -1,5 +1,4 @@
 const bcrypt = require("bcrypt");
-
 const authModel = require("../../services/auth");
 
 /* ===== REGISTER ===== */
@@ -18,7 +17,6 @@ exports.register = async (req, res) => {
         email,
         password: hashedPassword,
       },
-
       (err, result) => {
         if (err) {
           return res.json({
@@ -49,7 +47,7 @@ exports.login = (req, res) => {
   /* ===== ADMIN ===== */
 
   authModel.loginAdmin(email, async (err, adminResult) => {
-    if (adminResult.length > 0) {
+    if (adminResult && adminResult.length > 0) {
       const admin = adminResult[0];
 
       const match = await bcrypt.compare(
@@ -75,9 +73,8 @@ exports.login = (req, res) => {
 
     authModel.loginCustomer(
       email,
-
       async (err, customerResult) => {
-        if (customerResult.length === 0) {
+        if (!customerResult || customerResult.length === 0) {
           return res.json({
             success: false,
             message: "Sai email hoặc mật khẩu",
@@ -98,18 +95,18 @@ exports.login = (req, res) => {
           });
         }
 
+        // Lưu thông tin vào Session của Client
         req.session.customer = {
           customer_id: customer.customer_id,
-
           customer_email: customer.customer_email,
-
-          customer_firstname:
-            customer.customer_firstname,
+          customer_firstname: customer.customer_firstname,
         };
 
-        res.json({
+        // Trả về kết quả kèm thêm biến điều hướng 'redirect' cho trang lớn nhận biết
+        return res.json({
           success: true,
           role: "customer",
+          redirect: "/"
         });
       }
     );

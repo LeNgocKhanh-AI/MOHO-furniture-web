@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trạng thái đơn hàng - Nội Thất MOHO</title>
+  <link rel="stylesheet" href="/css/client/payment-confirm.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <div class="status-wrapper">
+    <main class="status-container">
+      
+      <!-- CỘT TRÁI: THÔNG TIN TRẠNG THÁI & THANH TOÁN -->
+      <div class="status-col-left">
+        
+        <!-- Khối 1: Trạng thái thanh toán & Đặt hàng -->
+        <div class="status-card border-highlight">
+          <div class="status-row-top">
+            <span class="badge-waiting"><i class="fa-regular fa-credit-card"></i> Chờ thanh toán</span>
+            <span class="order-code-text">Đơn hàng <%= order.order_id %> <i class="fa-regular fa-copy icon-copy" onclick="navigator.clipboard.writeText('<%= order.order_id %>')"></i></span>
+          </div>
+          <hr class="card-divider">
+          <div class="status-row-bottom">
+            <span class="status-success-text"><i class="fa-regular fa-circle-check"></i> Đặt hàng thành công</span>
+            <span class="time-ago">vài giây trước</span>
+          </div>
+        </div>
+
+        <!-- Khối 2: Chi tiết số tiền cần trả -->
+        <div class="status-card">
+          <div class="payment-info-row">
+            <span class="badge-waiting-small">Chờ thanh toán</span>
+          </div>
+          <div class="bill-detail-item">
+            <span>Tổng đơn</span>
+            <strong class="text-dark"><%= Number(order.total_amount).toLocaleString('vi-VN') %>đ</strong>
+          </div>
+          <div class="bill-detail-item">
+            <span>Cần thanh toán</span>
+            <strong class="text-dark"><%= Number(order.total_amount).toLocaleString('vi-VN') %>đ</strong>
+          </div>
+          <div class="bill-detail-item">
+            <span>Phương thức</span>
+            <span class="text-right">
+              <%= order.payment_method === 'bank' ? 'Thanh toán chuyển khoản qua ngân hàng' : 
+                  order.payment_method === 'vnpay' ? 'Thanh toán online qua cổng VNPay' : 
+                  order.payment_method === 'momo' ? 'Thanh toán online qua ví MoMo' : 'Thanh toán khi giao hàng (COD)' %>
+            </span>
+          </div>
+          
+          <!-- Nút thanh toán động tùy thuộc vào phương thức họ chọn -->
+          <div class="action-pay-box">
+            <% if(order.payment_method === 'bank') { %>
+              <a href="/checkout/bank-transfer/<%= order.order_id %>" class="btn-main-pay">Thanh toán</a>
+            <% } else if(order.payment_method === 'vnpay') { %>
+              <a href="/checkout/vnpay-payment/<%= order.order_id %>" class="btn-main-pay">Thanh toán qua VNPay</a>
+            <% } else { %>
+              <a href="/" class="btn-main-pay">Tiếp tục mua sắm</a>
+            <% } %>
+          </div>
+        </div>
+
+        <!-- Khối 3: Trạng thái chuẩn bị hàng -->
+        <div class="status-card">
+          <div class="shipping-status-top">
+            <span class="badge-shipping"><i class="fa-solid fa-truck-ramp-box"></i> Đang chuẩn bị hàng</span>
+          </div>
+          <p class="shipping-note-text">
+            Các tỉnh thành không thuộc khu vực miễn phí giao hàng & lắp đặt, phí giao hàng sẽ được MOHO liên hệ báo sau.
+          </p>
+        </div>
+
+        <!-- Khối 4: Địa chỉ nhận hàng -->
+        <div class="status-card">
+          <h3 class="card-title">Địa chỉ nhận hàng</h3>
+          <div class="address-info-content">
+            <p class="address-name-phone"><strong><%= order.customer_name %></strong> &nbsp;&nbsp; <%= order.customer_phone %></p>
+            <p><%= order.customer_email %></p>
+            <p class="address-detail"><%= order.shipping_address %></p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CỘT PHẢI: GIỎ HÀNG VÀ TÓM TẮT ĐƠN HÀNG -->
+      <div class="status-col-right">
+        
+        <!-- Giỏ hàng thu nhỏ -->
+        <div class="status-card">
+          <h3 class="card-title">Giỏ hàng</h3>
+          <div class="product-summary-list">
+            <% if(locals.orderItems && orderItems.length > 0) { 
+                orderItems.forEach(item => { %>
+              <div class="product-summary-item">
+                <div class="prod-img-box">
+                  <img src="<%= item.image_url || 'https://placehold.co/100x100?text=MOHO' %>" alt="<%= item.product_name %>">
+                </div>
+                <div class="prod-info-box">
+                  <h4 class="prod-name"><%= item.product_name %></h4>
+                  <p class="prod-variant">Mặc định</p>
+                  <div class="prod-price-row">
+                    <span class="price-old-strike"><%= Number(item.price).toLocaleString('vi-VN') %>đ</span>
+                    <span class="price-current-red"><%= Number(item.unit_price).toLocaleString('vi-VN') %>đ</span>
+                  </div>
+                </div>
+                <div class="prod-qty">x<%= item.quantity %></div>
+              </div>
+            <% }) } %>
+          </div>
+          
+          <!-- Phần giảm giá nếu có -->
+          <div class="discount-alert-box">
+            <span>Bạn đã được giảm <strong class="text-red">4,000,000đ</strong> <i class="fa-solid fa-chevron-down"></i></span>
+          </div>
+        </div>
+
+        <!-- Tóm tắt đơn hàng -->
+        <div class="status-card">
+          <h3 class="card-title">Tóm tắt đơn hàng</h3>
+          <div class="summary-row">
+            <span>Tổng tiền hàng</span>
+            <span><%= Number(order.total_amount).toLocaleString('vi-VN') %>đ</span>
+          </div>
+          <div class="summary-row">
+            <span>Phí vận chuyển</span>
+            <span class="text-green">Miễn phí</span>
+          </div>
+          <hr class="card-divider">
+          <div class="summary-row total-row-bold">
+            <strong>Tổng thanh toán</strong>
+            <strong class="total-large"><%= Number(order.total_amount).toLocaleString('vi-VN') %>đ</strong>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+</body>
+</html>

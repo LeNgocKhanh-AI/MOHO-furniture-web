@@ -1,0 +1,316 @@
+:root {
+    --bg-global: #f4f4f4;
+    --card-bg: #ffffff;
+    --text-main: #333333;
+    --text-muted: #777777;
+    --border-color: #f0f0f0;
+    --badge-yellow-bg: #fffbe6;
+    --badge-yellow-border: #ffe58f;
+    --badge-yellow-text: #d46b08;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: var(--bg-global);
+    color: var(--text-main);
+    padding: 30px 10px;
+}
+
+.status-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.status-container {
+    display: flex;
+    gap: 20px;
+}
+
+/* Chia tỷ lệ 2 cột */
+.status-col-left {
+    flex: 1.3;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.status-col-right {
+    flex: 0.9;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Các hộp bọc màu trắng bo góc */
+.status-card {
+    background-color: var(--card-bg);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.border-highlight {
+    border: 1px solid var(--badge-yellow-border);
+    background-color: #fffdf5;
+}
+
+/* Định dạng các badge màu vàng nhạt */
+.badge-waiting {
+    background-color: var(--badge-yellow-bg);
+    color: var(--badge-yellow-text);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.badge-waiting-small {
+    background-color: var(--badge-yellow-bg);
+    color: var(--badge-yellow-text);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+.badge-shipping {
+    background-color: var(--badge-yellow-bg);
+    color: var(--badge-yellow-text);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+/* Hàng trên / Hàng dưới ở khối 1 */
+.status-row-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-code-text {
+    color: #40a9ff;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.icon-copy {
+    margin-left: 4px;
+    font-size: 13px;
+}
+
+.card-divider {
+    border: 0;
+    border-top: 1px solid var(--border-color);
+    margin: 15px 0;
+}
+
+.status-row-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-success-text {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.time-ago {
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+/* Chi tiết hóa đơn */
+.bill-detail-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 15px;
+    color: var(--text-muted);
+}
+
+.text-dark {
+    color: #000000;
+    font-weight: 600;
+}
+
+.text-right {
+    text-align: right;
+    color: var(--text-main);
+    max-width: 60%;
+}
+
+/* Khối nút bấm */
+.action-pay-box {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.btn-main-pay {
+    display: inline-block;
+    width: 50%;
+    text-align: center;
+    background-color: #e8e8e8;
+    color: #333333;
+    padding: 12px 0;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 15px;
+    transition: background 0.2s;
+}
+
+.btn-main-pay:hover {
+    background-color: #dadada;
+}
+
+/* Ghi chú giao hàng */
+.shipping-note-text {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+    margin-top: 12px;
+}
+
+/* Tiêu đề chung các thẻ */
+.card-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+/* Khối địa chỉ */
+.address-info-content p {
+    font-size: 14px;
+    color: var(--text-main);
+    margin-bottom: 6px;
+}
+
+.address-info-content .address-name-phone {
+    font-size: 15px;
+}
+
+.address-info-content .address-detail {
+    color: var(--text-muted);
+    margin-top: 8px;
+}
+
+/* Danh sách sản phẩm bên giỏ hàng cột phải */
+.product-summary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.product-summary-item {
+    display: flex;
+    gap: 12px;
+    position: relative;
+}
+
+.prod-img-box img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.prod-info-box {
+    flex: 1;
+}
+
+.prod-name {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.prod-variant {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.prod-price-row {
+    display: flex;
+    flex-direction: column;
+}
+
+.price-old-strike {
+    font-size: 12px;
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+.price-current-red {
+    font-size: 14px;
+    color: #ff4d4f;
+    font-weight: 600;
+}
+
+.prod-qty {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+/* Phần báo giảm giá */
+.discount-alert-box {
+    margin-top: 15px;
+    border-top: 1px dashed var(--border-color);
+    padding-top: 15px;
+    font-size: 13px;
+    text-align: right;
+    color: var(--text-muted);
+}
+
+.text-red {
+    color: #ff4d4f;
+}
+
+/* Tóm tắt dòng tiền hàng */
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.text-green {
+    color: #52c41a;
+}
+
+.total-row-bold {
+    color: var(--text-main);
+    padding-top: 5px;
+}
+
+.total-large {
+    font-size: 18px;
+    color: #000000;
+}
+
+/* Responsive di động */
+@media (max-width: 768px) {
+    .status-container {
+        flex-direction: column;
+    }
+
+    .btn-main-pay {
+        width: 100%;
+    }
+}

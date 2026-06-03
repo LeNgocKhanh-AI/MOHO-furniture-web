@@ -132,7 +132,10 @@
 
                 </button>
 
-                <button class="btn-buy">
+                <button class="btn-buy"
+   onclick="buyNow(
+'<%= product.product_id %>'
+)">
 
                     MUA NGAY
 
@@ -207,7 +210,11 @@
         // 🔥 FIX QUAN TRỌNG: reload UI ngay
         await loadCart();
     }
+    function buyNow(id){
 
+    window.location =
+    "/checkout/buy-now/" + id;
+}
 
 
 

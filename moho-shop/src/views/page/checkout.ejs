@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nội Thất MOHO - Đặt hàng</title>
+  <link rel="stylesheet" href="/css/client/checkout.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+  <div class="checkout-wrapper">
+    <header class="checkout-header">
+      <div class="checkout-container">
+        <a href="/"><img src="/images/banners/LogoMoho.png" alt="MOHO Logo" class="checkout-logo"></a>
+      </div>
+    </header>
+
+    <main class="checkout-container checkout-main">
+      <div class="checkout-col-left">
+
+        <div class="checkout-section">
+          <div class="section-title-row">
+            <h3>Tài khoản</h3>
+            <% if(locals.session && session.customer) { %>
+              <a href="/logout" class="txt-logout">Đăng xuất</a>
+            <% } else { %>
+              <a href="/login" class="txt-logout" style="color: #007bff;">Đăng nhập</a>
+            <% } %>
+          </div>
+          <div class="account-info-box">
+            <% if(locals.session && session.customer) { %>
+              <div class="avatar-fallback">
+                <%= session.customer.customer_firstname ? session.customer.customer_firstname.charAt(0).toUpperCase() : "?" %>
+              </div>
+              <div class="account-meta">
+                <strong><%= session.customer.customer_lastname || "" %> <%= session.customer.customer_firstname || "" %></strong>
+                <span><%= session.customer.customer_email || "" %></span>
+              </div>
+            <% } else { %>
+              <div class="avatar-fallback" style="background-color: #6c757d;">
+                <i class="fa-solid fa-user-secret"></i>
+              </div>
+              <div class="account-meta">
+                <strong>Khách vãng lai (Đặt hàng nhanh)</strong>
+                <span>Bạn có thể đăng nhập tài khoản để tích điểm và theo dõi đơn hàng</span>
+              </div>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="checkout-section">
+          <h3>Thông tin giao hàng</h3>
+          <form id="checkoutForm" action="/checkout/submit" method="POST">
+            <div class="input-group">
+              <input type="text" name="fullName" placeholder="Họ và tên" value="<%= (locals.session && session.customer) ? `${session.customer.customer_lastname || ''} ${session.customer.customer_firstname || ''}`.trim() : '' %>" required>
+            </div>
+
+            <div class="input-group input-with-flag">
+              <input type="tel" name="phone" value="<%= (locals.session && session.customer && session.customer.customer_phone) ? session.customer.customer_phone : '' %>" required placeholder="Nhập số điện thoại">
+              <span class="flag-vn">🇻🇳</span>
+            </div>
+
+            <div class="input-group">
+              <input type="text" name="country" value="Vietnam" readonly placeholder="Quốc gia">
+            </div>
+
+            <div class="input-group">
+              <input type="text" name="address" required placeholder="Địa chỉ cụ thể (Số nhà, tên đường, phường/xã, quận/huyện)">
+            </div>
+
+            <div class="address-select-group row-select">
+              <select id="province" name="province" required>
+                <option value="">Tỉnh / Thành phố</option>
+              </select>
+
+              <select id="district" name="district" required>
+                <option value="">Quận / Huyện</option>
+              </select>
+
+              <select id="ward" name="ward" required>
+                <option value="">Phường / Xã</option>
+              </select>
+            </div>
+          </form>
+        </div>
+
+        <div class="checkout-section">
+          <h3>Phương thức giao hàng</h3>
+          <div class="input-group disabled-light">
+            <div id="shippingMethodBox">
+              <div id="shippingPlaceholder">
+                Nhập địa chỉ để xem phương thức giao hàng
+              </div>
+
+              <div id="shippingOption" style="display:none;">
+                <label class="payment-method-item">
+                  <input type="radio" checked disabled>
+                  <div class="method-details">
+                    <i class="fa-solid fa-truck"></i>
+                    <div>
+                      <strong>Giao hàng tiêu chuẩn</strong><br>
+                      Các tỉnh thành không thuộc khu vực miễn phí giao hàng và lắp đặt.
+                      Phí giao hàng sẽ được MOHO liên hệ báo sau.
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="checkout-section">
+          <h3>Phương thức thanh toán</h3>
+          <div class="payment-methods-list">
+
+            <label class="payment-method-item">
+              <input type="radio" name="paymentMethod" value="bank" checked form="checkoutForm">
+              <div class="method-details">
+                <i class="fa-solid fa-money-bill-transfer icon-pay"></i>
+                <span>Thanh toán chuyển khoản qua ngân hàng</span>
+              </div>
+            </label>
+
+            <div id="bankInfo" style="display:none; margin-top:10px; padding:12px; border:1px solid #eee; border-radius:8px;">
+              <p><b>Thông tin chuyển khoản</b></p>
+              <p>Số tài khoản: 123456789</p>
+              <p>Ngân hàng: Viettinbank</p>
+              <img src="/images/icons/qr.jpg" style="width:150px; margin-top:10px;">
+            </div>
+
+            <label class="payment-method-item">
+              <input type="radio" name="paymentMethod" value="pos" form="checkoutForm">
+              <div class="method-details">
+                <i class="fa-solid fa-credit-card icon-pay"></i>
+                <span>Thanh toán quẹt thẻ khi giao hàng (POS)</span>
+              </div>
+            </label>
+
+            <label class="payment-method-item active-border">
+              <input type="radio" name="paymentMethod" value="vnpay" form="checkoutForm">
+              <div class="method-details">
+                <img src="https://sandbox.vnpayment.vn/paymentv2/Images/brands/logo.svg" alt="VNPay" class="img-pay-logo">
+                <div>
+                  <span>Thanh toán online qua cổng VNPay (ATM/Visa/MasterCard/JCB/QR Pay)</span>
+                </div>
+              </div>
+            </label>
+
+            <label class="payment-method-item">
+              <input type="radio" name="paymentMethod" value="momo" form="checkoutForm">
+              <div class="method-details">
+                <img src="https://th.bing.com/th/id/ODF.IMhBumDYhQW-Xk-WwbkW1g?w=32&h=32&qlt=90&pcl=fffffc&o=6&pid=1.2" alt="MoMo" class="img-pay-logo-small">
+                <span>Thanh toán online qua ví MoMo</span>
+              </div>
+            </label>
+
+          </div>
+        </div>
+
+        <div class="checkout-section">
+          <div class="input-group">
+            <textarea name="orderNote" placeholder="Ghi chú đơn hàng" rows="3" form="checkoutForm"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="checkout-col-right">
+        <div class="sticky-cart-summary">
+          <h3>Giỏ hàng</h3>
+
+          <div class="checkout-cart-list">
+            <% 
+              let totalAmount = 0; 
+              if(locals.cartItems && cartItems.length > 0) { 
+                cartItems.forEach(item => {
+                  let itemPrice = item.product_sale_price ? item.product_sale_price : item.product_price;
+                  totalAmount += (itemPrice * item.quantity);
+            %>
+              <div class="checkout-cart-item">
+                <div class="item-img-wrapper">
+                  <img src="<%= item.image_url || 'https://placehold.co/100x100?text=MOHO' %>" alt="<%= item.product_name %>">
+                </div>
+                <div class="item-info">
+                  <h4 class="item-name"><%= item.product_name %></h4>
+                  <div class="item-price-row">
+                    <span class="price-current"><%= Number(itemPrice).toLocaleString('vi-VN') %>đ</span>
+                    <% if(item.product_sale_price) { %>
+                      <span class="price-old"><%= Number(item.product_price).toLocaleString('vi-VN') %>đ</span>
+                    <% } %>
+                  </div>
+                </div>
+                <div class="item-qty-badge">x<%= item.quantity %></div>
+              </div>
+            <% }) } else { %>
+              <p>Chưa có sản phẩm nào trong giỏ hàng để thanh toán.</p>
+            <% } %>
+          </div>
+
+          <div class="coupon-section">
+            <div class="coupon-toggle">
+              <i class="fa-solid fa-ticket"></i>
+              <span>Chọn mã</span>
+              <i class="fa-solid fa-chevron-right arrow-right"></i>
+            </div>
+            <div class="coupon-input-row">
+              <input type="text" id="couponInput" placeholder="Nhập mã khuyến mãi">
+              <button type="button" class="btn-apply-coupon">Áp dụng</button>
+            </div>
+          </div>
+
+          <div class="summary-bill-box">
+            <div class="bill-row">
+              <span>Tổng tiền hàng</span>
+              <span><%= Number(totalAmount).toLocaleString('vi-VN') %>đ</span>
+            </div>
+            <div class="bill-row">
+              <span>Phí vận chuyển</span>
+              <span>-</span>
+            </div>
+            <hr class="bill-hr">
+            <div class="bill-row total-row">
+              <strong>Tổng thanh toán</strong>
+              <strong class="total-price-text"><%= Number(totalAmount).toLocaleString('vi-VN') %>đ</strong>
+            </div>
+          </div>
+
+          <button type="submit" form="checkoutForm" class="btn-submit-order">Đặt hàng</button>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="/js/checkout-address.js"></script>
+</body>
+
+</html>

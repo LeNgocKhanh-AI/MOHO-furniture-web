@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thanh toán chuyển khoản - Nội Thất MOHO</title>
+  <link rel="stylesheet" href="/css/client/payment-confirm.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* Custom thêm một chút cho phần cổng thanh toán ngân hàng */
+    .bank-details-box { background: #fff; border-radius: 12px; padding: 20px; border: 1px solid #e8e8e8; margin-top: 15px; }
+    .qr-container { text-align: center; margin-bottom: 20px; padding: 15px; background: #fafafa; border-radius: 8px; }
+    .bank-info-list { display: flex; flex-direction: column; gap: 12px; }
+    .bank-info-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #f8f9fa; border-radius: 6px; border: 1px solid #eee; }
+    .bank-info-item.warning-box { background: #fffbe6; border-color: #ffe58f; }
+    .btn-copy-small { background: #fff; border: 1px solid #ccc; padding: 3px 8px; border-radius: 4px; font-size: 12px; cursor: pointer; }
+    .btn-copy-small:hover { border-color: #222; background: #eee; }
+    .loader-text { text-align: center; color: #d46b08; font-size: 14px; margin-top: 15px; font-weight: 500; }
+  </style>
+</head>
+<body>
+
+  <div class="status-wrapper">
+    <main class="status-container">
+      
+      <div class="status-col-left">
+        
+        <div class="status-card border-highlight">
+          <div class="status-row-top">
+            <span class="badge-waiting" style="background: #d46b08;"><i class="fa-solid fa-money-bill-transfer"></i> Hướng dẫn chuyển khoản</span>
+            <span class="order-code-text">Đơn hàng <%= order.order_id %></span>
+          </div>
+          <p style="font-size: 13px; color: #666; margin-top: 8px;">Vui lòng mở ứng dụng ngân hàng quét mã QR hoặc nhập đúng thông tin bên dưới.</p>
+        </div>
+
+        <div class="bank-details-box">
+          <div class="qr-container">
+            <img src="https://api.vietqr.io/image/970415-108879773062-Q6Z7XmE.jpg?amount=<%= order.total_amount / 100 %>&addInfo=MOHO%20<%= order.order_id %>&accountName=CONG%20TY%20NOI%20THAT%20MOHO" alt="Mã QR Thanh Toán" style="width: 200px; height: 200px; border-radius: 8px;">
+            <p style="font-size: 12px; color: #888; margin-top: 8px;"><i class="fa-solid fa-qrcode"></i> Quét QR để tự động điền số tiền & nội dung</p>
+          </div>
+
+          <div class="bank-info-list">
+            <div class="bank-info-item">
+              <span style="color:#777;">Ngân hàng</span>
+              <strong>VietinBank (Công Thương)</strong>
+            </div>
+            <div class="bank-info-item">
+              <span style="color:#777;">Số tài khoản</span>
+              <div>
+                <strong id="stk">108879773062</strong>
+                <button class="btn-copy-small" onclick="copyValue('stk')">Copy</button>
+              </div>
+            </div>
+            <div class="bank-info-item">
+              <span style="color:#777;">Số tiền cần chuyển</span>
+              <div>
+                <strong style="color: #ff4d4f;" id="amount"><%= Number(order.total_amount).toLocaleString('vi-VN') %>đ</strong>
+                <span id="rawAmount" style="display:none;"><%= order.total_amount %></span>
+                <button class="btn-copy-small" onclick="copyValue('rawAmount')">Copy</button>
+              </div>
+            </div>
+            <div class="bank-info-item warning-box">
+              <span style="color:#d46b08; font-weight: bold;">Nội dung chuyển khoản</span>
+              <div>
+                <strong style="color: #d46b08;" id="content">MOHO <%= order.order_id %></strong>
+                <button class="btn-copy-small" onclick="copyValue('content')">Copy</button>
+              </div>
+            </div>
+          </div>
+          
+          <button id="btnFinish" class="btn-main-pay" style="width:100%; margin-top:20px; background:#6c757d; text-align:center; cursor: not-allowed;" disabled>
+            <i class="fa-solid fa-spinner fa-spin"></i> Hệ thống đang chờ bạn thanh toán...
+          </button>
+          
+          <div class="loader-text" id="statusNote"><i class="fa-solid fa-hourglass-half"></i> Đang kiểm tra biến động số dư định kỳ...</div>
+
+          <button type="button" id="btnFakeBankTrigger" style="width: 100%; margin-top: 15px; background: none; border: 1px dashed #ccc; color: #ccc; font-size: 11px; cursor: pointer; padding: 5px 0; border-radius: 6px;">
+            [Demo] Click nhanh để giả lập Ngân hàng báo đã nhận tiền (Dành cho báo cáo)
+          </button>
+        </div>
+
+      </div>
+
+      <div class="status-col-right">
+        
+        <div class="status-card">
+          <h3 class="card-title">Giỏ hàng</h3>
+          <div class="product-summary-list">
+            <% if(locals.orderItems && orderItems.length > 0) { 
+                orderItems.forEach(item => { %>
+              <div class="product-summary-item">
+                <div class="prod-img-box">
+                  <img src="<%= item.image_url || 'https://placehold.co/100x100?text=MOHO' %>" alt="<%= item.product_name %>">
+                </div>
+                <div class="prod-info-box">
+                  <h4 class="prod-name"><%= item.product_name %></h4>
+                  <p class="prod-variant">Mặc định</p>
+                  <div class="prod-price-row">
+                    <span class="price-current-red"><%= Number(item.unit_price).toLocaleString('vi-VN') %>đ</span>
+                  </div>
+                </div>
+                <div class="prod-qty">x<%= item.quantity %></div>
+              </div>
+            <% }) } %>
+          </div>
+        </div>
+
+        <div class="status-card">
+          <h3 class="card-title">Tóm tắt đơn hàng</h3>
+          <div class="summary-row">
+            <span>Tổng tiền hàng</span>
+            <span><%= Number(order.total_amount).toLocaleString('vi-VN') %>đ</span>
+          </div>
+          <div class="summary-row">
+            <span>Phí vận chuyển</span>
+            <span class="text-green">Miễn phí</span>
+          </div>
+          <hr class="card-divider">
+          <div class="summary-row total-row-bold">
+            <strong>Tổng thanh toán</strong>
+            <strong class="total-large"><%= Number(order.total_amount).toLocaleString('vi-VN') %>đ</strong>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    function copyValue(id) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text.replace('đ', '').trim());
+      alert("Đã sao chép: " + text);
+    }
+
+    const orderId = "<%= order.order_id %>";
+
+    function handlePaymentSuccess() {
+        const btn = document.getElementById('btnFinish');
+        const statusNote = document.getElementById('statusNote');
+        
+        btn.removeAttribute('disabled');
+        btn.style.background = "#52c41a"; 
+        btn.style.cursor = "pointer";
+        btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Thanh toán thành công!';
+        
+        if(statusNote) {
+            statusNote.innerHTML = '<span style="color: #52c41a;"><i class="fa-solid fa-circle-check"></i> Đã nhận đủ tiền! Đang chuyển hướng...</span>';
+        }
+        
+        setTimeout(function() {
+            window.location.href = "/"; // Đẩy khách về trang chủ sau khi thành công
+        }, 2500);
+    }
+
+    // 🔥 LUỒNG CHECK DATABASE TỰ ĐỘNG (ĐÃ SỬA LỖI ĐỒNG BỘ)
+    const checkInterval = setInterval(function() {
+        fetch(`/checkout/check-status/${orderId}`)
+            .then(res => res.json())
+            .then(data => {
+                // Sửa từ data.payment_status thành data.status và so sánh với 'paid' viết thường
+                if (data.status === 'paid') { 
+                    clearInterval(checkInterval);
+                    handlePaymentSuccess();
+                }
+                
+                // Tiện tay xử lý luôn nếu đơn hàng bị hệ thống đếm ngược hủy ngầm ('failed')
+                if (data.status === 'failed') {
+                    clearInterval(checkInterval);
+                    const statusNote = document.getElementById('statusNote');
+                    if (statusNote) {
+                        statusNote.innerHTML = '<span style="color: #ff4d4f;"><i class="fa-solid fa-circle-xmark"></i> Đơn hàng đã bị hủy do hết hạn 5 phút.</span>';
+                    }
+                    alert("Đơn hàng của bạn đã bị hủy do quá thời gian 5 phút chưa nhận được thanh toán.");
+                    window.location.href = "/";
+                }
+            })
+            .catch(err => console.error("Lỗi đồng bộ dữ liệu đơn hàng:", err));
+    }, 3000);
+
+    // Luồng bấm nút ảo dành cho demo báo cáo
+    document.getElementById('btnFakeBankTrigger').addEventListener('click', function() {
+        fetch(`/checkout/fake-success/${orderId}`, { method: 'POST' })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    clearInterval(checkInterval);
+                    handlePaymentSuccess();
+                }
+            })
+            .catch(err => alert("Vui lòng đảm bảo bạn đã tạo Router POST '/checkout/fake-success/:id'!"));
+    });
+
+    document.getElementById('btnFinish').addEventListener('click', function() {
+        window.location.href = "/";
+    });
+  </script>
+</body>
+</html>
