@@ -88,10 +88,14 @@ const deleteProduct = async (req, res) => {
     }
 };
 
+
+
+// Rồi thêm vào module.exports
 module.exports = {
     index,
     create,
     editForm,
     update,
     deleteProduct,
+
 };

@@ -88,3 +88,8 @@ input.addEventListener("keydown", function (e) {
     window.location.href = `/search?q=${encodeURIComponent(keyword)}`;
   }
 });
+// Thêm vào file JS của bạn
+dropdown.addEventListener("mousedown", function (e) {
+  // Ngăn chặn input bị mất focus (blur) khiến dropdown biến mất quá nhanh
+  e.preventDefault();
+});

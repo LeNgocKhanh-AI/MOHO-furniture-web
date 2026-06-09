@@ -13,7 +13,7 @@
 .product-item {
   background: #fff;
 
-  
+
 
   overflow: hidden;
 
@@ -113,30 +113,57 @@
 
   color: #666;
 }
-.product-rating{
 
-    display:flex;
+.product-rating {
 
-    align-items:center;
+  display: flex;
 
-    gap:3px;
+  align-items: center;
 
-    font-size:14px;
+  gap: 3px;
+
+  font-size: 14px;
 }
 
-.product-rating i{
+.product-rating i {
 
-    color:#ccc;
+  color: #ccc;
 }
 
-.product-rating .active{
+.product-rating .active {
 
-    color:orange;
+  color: orange;
 }
 
-.rating-number{
+.rating-number {
 
-    margin-left:5px;
+  margin-left: 5px;
 
-    color:#666;
+  color: #666;
+}
+
+/* Căn chỉnh checkbox và label nằm trên một hàng */
+.checkbox-inline {
+  display: flex !important;
+  /* Ép nằm trên 1 hàng */
+  align-items: center !important;
+  /* Căn giữa theo chiều dọc */
+  gap: 10px !important;
+  /* Khoảng cách giữa ô tick và chữ */
+  flex-direction: row !important;
+  /* Đảm bảo hướng là hàng ngang */
+}
+
+/* Đảm bảo ô input không bị biến dạng */
+.checkbox-inline input[type="checkbox"] {
+  margin: 0 !important;
+  width: 20px;
+  height: 20px;
+}
+
+.checkbox-inline label {
+  margin: 0 !important;
+  display: inline-block !important;
+  /* Thay vì inline */
+  width: auto !important;
 }

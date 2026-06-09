@@ -17,4 +17,6 @@ router.post("/edit/:id", productController.update);
 // xóa
 router.get("/delete/:id", productController.deleteProduct);
 
+
+
 module.exports = router;

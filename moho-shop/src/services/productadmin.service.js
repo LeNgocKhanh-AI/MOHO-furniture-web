@@ -49,7 +49,7 @@ const createProduct = async (data) => {
       product_price,
       product_sale_price,
       product_sku,
-      product_stock_quantity,
+  
       product_description,
       is_featured
     )
@@ -69,7 +69,7 @@ const createProduct = async (data) => {
 
       data.product_sku,
 
-      data.product_stock_quantity,
+
 
       data.product_description,
 
@@ -98,7 +98,7 @@ const updateProduct = async (id, data) => {
       product_price = ?,
       product_sale_price = ?,
       product_sku = ?,
-      product_stock_quantity = ?,
+   
       product_description = ?,
       is_featured = ?
     WHERE product_id = ?
@@ -112,7 +112,7 @@ const updateProduct = async (id, data) => {
       data.product_price,
       data.product_sale_price || 0,
       data.product_sku,
-      data.product_stock_quantity,
+
       data.product_description,
       data.is_featured ? 1 : 0,
       id,
@@ -129,12 +129,10 @@ const deleteProduct = async (id) => {
   await db.promise().query(query, [id]);
 };
 
+
+
+
 module.exports = {
-  getProducts,
-  getCategories,
-  createProduct,
-  getProductById,
-  updateProduct,
-  deleteProduct,
-  getTotalProducts,
+  getProducts, getCategories, createProduct, getProductById,
+  updateProduct, deleteProduct, getTotalProducts
 };

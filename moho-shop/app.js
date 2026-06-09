@@ -9,8 +9,8 @@ const app = express();
 /* =========================
    BODY PARSER
 ========================= */
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 /* =========================
    VIEW ENGINE
@@ -62,6 +62,9 @@ app.use((req, res, next) => {
 const homeRoutes = require("./src/routes/client/home.routes");
 const authRoutes = require("./src/routes/client/auth.routes");
 const cartRoutes = require("./src/routes/client/cart.routes");
+const adviceRoutes = require("./src/routes/client/advice.routes");
+
+app.use("/advice", adviceRoutes);
 
 app.use("/", homeRoutes);
 app.use("/", authRoutes);
@@ -104,7 +107,12 @@ const blogRoutes = require("./src/routes/client/blog.routes");
 const postAdminRoutes = require("./src/routes/admin/post.routes");
 
 const checkoutRoutes = require("./src/routes/client/checkout.routes");
+
 const paymentRoutes = require("./src/routes/client/payment.routes");
+
+const productSizeRoutes = require("./src/routes/admin/product-size.routes");
+
+
 
 /* DASHBOARD MIDDLEWARES */
 
@@ -169,6 +177,8 @@ app.use("/news", blogRoutes);
 app.use("/admin/dashboard", postAdminRoutes);
 
 app.use("/admin/dashboard/posts", postAdminRoutes);
+
+app.use("/admin/dashboard/product-sizes", productSizeRoutes);
 /* =========================
    CHECKOUT & PAYMENT ROUTES (ĐÃ SỬA)
 ========================= */

@@ -67,4 +67,29 @@ const getItemsApi = async (req, res) => {
             .json({ error: "Lỗi máy chủ nội bộ không thể lấy dữ liệu sản phẩm" });
     }
 };
-module.exports = { index, getItemsApi };
+const deleteOrderApi = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        if (!orderId) {
+            return res
+                .status(400)
+                .json({ success: false, error: "Thiếu mã đơn hàng cần xóa" });
+        }
+
+        const isDeleted = await orderService.deleteOrder(orderId);
+        if (isDeleted) {
+            return res.json({ success: true, message: "Xóa đơn hàng thành công!" });
+        } else {
+            return res
+                .status(404)
+                .json({ success: false, error: "Không tìm thấy đơn hàng để xóa" });
+        }
+    } catch (error) {
+        console.error("❌ LỖI XÓA ĐƠN HÀNG CHI TIẾT:", error);
+        return res
+            .status(500)
+            .json({ success: false, error: "Lỗi máy chủ, không thể xóa đơn hàng" });
+    }
+};
+
+module.exports = { index, getItemsApi, deleteOrderApi };

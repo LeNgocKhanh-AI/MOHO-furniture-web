@@ -54,10 +54,47 @@
         <div class="checkout-section">
           <h3>Thông tin giao hàng</h3>
           <form id="checkoutForm" action="/checkout/submit" method="POST">
-            <div class="input-group">
-              <input type="text" name="fullName" placeholder="Họ và tên" value="<%= (locals.session && session.customer) ? `${session.customer.customer_lastname || ''} ${session.customer.customer_firstname || ''}`.trim() : '' %>" required>
-            </div>
+            <% if(locals.session && session.customer) { %>
 
+<div class="input-group">
+    <input
+        type="text"
+        name="fullName"
+        value="<%= `${session.customer.customer_lastname || ''} ${session.customer.customer_firstname || ''}`.trim() %>"
+        readonly
+        required
+    >
+</div>
+
+<% } else { %>
+
+<div class="input-group">
+    <input
+        type="text"
+        name="lastName"
+        placeholder="Họ"
+        required
+    >
+</div>
+
+<div class="input-group">
+    <input
+        type="text"
+        name="firstName"
+        placeholder="Tên"
+        required
+    >
+</div>
+
+<div class="input-group">
+    <input
+        type="email"
+        name="email"
+        placeholder="Email"
+    >
+</div>
+
+<% } %>
             <div class="input-group input-with-flag">
               <input type="tel" name="phone" value="<%= (locals.session && session.customer && session.customer.customer_phone) ? session.customer.customer_phone : '' %>" required placeholder="Nhập số điện thoại">
               <span class="flag-vn">🇻🇳</span>
@@ -191,6 +228,13 @@
                       <span class="price-old"><%= Number(item.product_price).toLocaleString('vi-VN') %>đ</span>
                     <% } %>
                   </div>
+
+    <!-- THÊM DÒNG NÀY -->
+    <% if(item.size_name) { %>
+        <p style="font-size:12px; color:#888; margin:2px 0;">
+             <%= item.size_name %>
+        </p>
+    <% } %>
                 </div>
                 <div class="item-qty-badge">x<%= item.quantity %></div>
               </div>

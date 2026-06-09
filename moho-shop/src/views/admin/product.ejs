@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/css/admin/admindashboard.css">
     <link rel="stylesheet" href="/css/admin/product.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
 </head>
 
 <body>
@@ -39,6 +40,7 @@
                         <li><a href="/admin/dashboard/product" class="active">Sản phẩm</a></li>
                         <li><a href="/admin/dashboard/category">Loại sản phẩm</a></li>
                         <li><a href="/admin/dashboard/product-images">Hình ảnh sản phẩm</a></li>
+                        <li><a href="/admin/dashboard/product-sizes">Kích thước sản phẩm</a></li>
                     </ul>
                 </li>
 
@@ -70,21 +72,21 @@
                     </ul>
                 </li>
 
-                
-          <li class="dropdown-product">
-            <div class="dropdown-product-toggle">
-              <div class="menu-left">
-                <i class="fa-solid fa-newspaper"></i>
-                <span>Quản lý bài viết</span>
-              </div>
-              <i class="fa-solid fa-chevron-down arrow-product"></i>
-            </div>
-            <ul class="submenu-product">
-              <li>
-                <a href="/admin/dashboard/posts"> Bài viết / Tin tức </a>
-              </li>
-            </ul>
-          </li>
+                <li class="dropdown-product">
+                    <div class="dropdown-product-toggle">
+                        <div class="menu-left">
+                            <i class="fa-solid fa-newspaper"></i>
+                            <span>Quản lý bài viết</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down arrow-product"></i>
+                    </div>
+                    <ul class="submenu-product">
+                        <li>
+                            <a href="/admin/dashboard/posts"> Bài viết / Tin tức </a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="dropdown-menu">
                     <div class="dropdown-toggle">
                         <div class="menu-left">
@@ -114,11 +116,25 @@
                 </div>
 
                 <div class="table-wrapper">
+<div class="search-box" style="margin-bottom:20px;">
+    <input
+        type="text"
+        id="searchProduct"
+        placeholder="Tìm theo ID, tên hoặc SKU..."
+        style="width:300px;padding:10px;border:1px solid #ccc;border-radius:6px;"
+    >
+</div>
 
+<p id="notFound"
+   style="display:none;text-align:center;color:red;font-weight:bold;">
+    Không tìm thấy sản phẩm!
+</p>
                     <div class="product-grid">
                         <% products.forEach(product=> { %>
-                            <div class="product-card">
-
+                            <div class="product-card"
+     data-id="<%= product.product_id %>"
+     data-name="<%= product.product_name.toLowerCase() %>"
+     data-sku="<%= (product.product_sku || '').toLowerCase() %>">
                                 <div class="product-card-img">
                                     <% if (product.product_image) { %>
                                         <img src="<%= product.product_image %>" alt="<%= product.product_name %>"
@@ -126,14 +142,11 @@
                                         <% } else { %>
                                             <img src="https://placehold.co/300x200?text=Chưa+có+ảnh" alt="No image">
                                             <% } %>
-
-                                                <span class="stock-badge">Tồn kho: <%= product.product_stock_quantity %>
-                                                        </span>
+                                                <span class="stock-badge">Tồn kho: <%= product.product_stock_quantity %></span>
                                 </div>
 
                                 <div class="product-card-info">
-                                    <span class="product-sku">Mã hàng: <%= product.product_sku || ('SP' +
-                                            product.product_id) %></span>
+                                    <span class="product-sku">Mã hàng: <%= product.product_sku || ('SP' + product.product_id) %></span>
                                     <h4 class="product-title" title="<%= product.product_name %>">
                                         <%= product.product_name %>
                                     </h4>
@@ -188,14 +201,12 @@
                         <% if (currentPage> 1) { %>
                             <a href="/admin/dashboard/product?page=<%= currentPage - 1 %>">← Trước</a>
                             <% } %>
-
                                 <% for (let i=1; i <=totalPages; i++) { %>
                                     <a href="/admin/dashboard/product?page=<%= i %>"
                                         class="<%= i === currentPage ? 'active' : '' %>">
                                         <%= i %>
                                     </a>
                                     <% } %>
-
                                         <% if (currentPage < totalPages) { %>
                                             <a href="/admin/dashboard/product?page=<%= currentPage + 1 %>">Sau →</a>
                                             <% } %>
@@ -241,15 +252,15 @@
                 </div>
                 <div class="form-group">
                     <label>Số lượng tồn</label>
-                    <input type="number" name="product_stock_quantity">
+                    <input type="number" name="product_stock_quantity" value="0" readonly>
                 </div>
                 <div class="form-group">
                     <label>Mô tả</label>
-                    <textarea name="product_description"></textarea>
+                    <textarea id="create_description" name="product_description"></textarea>
                 </div>
-                <div class="form-group checkbox-group">
+                <div class="checkbox-inline">
                     <input type="checkbox" name="is_featured" id="is_featured" value="1">
-                    <label for="is_featured">Hiển thị lên trang chủ</label>
+                    <label for="is_featured">Không hiển thị lên trang chủ</label>
                 </div>
                 <button type="submit" class="btn-save">Lưu sản phẩm</button>
             </form>
@@ -292,17 +303,15 @@
                 </div>
                 <div class="form-group">
                     <label>Số lượng tồn</label>
-                    <input type="number" name="product_stock_quantity" id="edit_stock">
+                    <input type="number" name="product_stock_quantity" id="edit_stock" readonly>
                 </div>
                 <div class="form-group">
                     <label>Mô tả</label>
-                    <textarea name="product_description" id="edit_desc"></textarea>
+                    <textarea id="edit_description" name="product_description"></textarea>
                 </div>
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" name="is_featured" id="edit_featured" value="1">
-                        Hiển thị lên trang chủ
-                    </label>
+                <div class="checkbox-inline">
+                    <input type="checkbox" name="is_featured" id="is_featured" value="1">
+                    <label for="is_featured">Không hiển thị lên trang chủ</label>
                 </div>
                 <button type="submit" class="btn-save">Cập nhật</button>
             </form>
@@ -319,16 +328,12 @@
                 <p><strong>Tên sản phẩm:</strong> <span id="v_name"></span></p>
                 <p><strong>Mã SKU:</strong> <span id="v_sku"></span></p>
                 <p><strong>Mã danh mục:</strong> <span id="v_category"></span></p>
-                <p><strong>Giá niêm yết:</strong> <span id="v_price"
-                        style="text-decoration: line-through; color: #888;"></span></p>
-                <p><strong>Giá bán hiện tại:</strong> <span id="v_sale"
-                        style="color: #e74c3c; font-weight: bold;"></span></p>
+                <p><strong>Giá niêm yết:</strong> <span id="v_price" style="text-decoration: line-through; color: #888;"></span></p>
+                <p><strong>Giá bán hiện tại:</strong> <span id="v_sale" style="color: #e74c3c; font-weight: bold;"></span></p>
                 <p><strong>Tồn kho hệ thống:</strong> <span id="v_stock" style="font-weight: bold;"></span></p>
                 <div style="margin-top: 10px;">
                     <strong>Mô tả chi tiết:</strong>
-                    <div id="v_desc"
-                        style="background: #f8f9fa; padding: 10px; border-radius: 4px; margin-top: 5px; font-style: italic; white-space: pre-line; max-height: 150px; overflow-y: auto;">
-                    </div>
+                    <div id="v_desc" style="background: #f8f9fa; padding: 10px; border-radius: 4px; margin-top: 5px; font-style: italic; white-space: pre-line; max-height: 150px; overflow-y: auto;"></div>
                 </div>
             </div>
             <div class="modal-footer" style="text-align: right; margin-top: 10px;">
@@ -338,6 +343,20 @@
         </div>
     </div>
 
+    <script>
+        let createEditor;
+        let editEditor;
+
+        ClassicEditor
+            .create(document.querySelector('#create_description'))
+            .then(editor => { createEditor = editor; })
+            .catch(error => { console.error(error); });
+
+        ClassicEditor
+            .create(document.querySelector('#edit_description'))
+            .then(editor => { editEditor = editor; })
+            .catch(error => { console.error(error); });
+    </script>
     <script src="/js/product.js"></script>
 </body>
 

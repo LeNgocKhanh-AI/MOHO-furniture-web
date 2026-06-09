@@ -30,4 +30,5 @@ router.get("/about", (req, res) => {
     res.render("page/about", { session: req.session });
 });
 
+
 module.exports = router;

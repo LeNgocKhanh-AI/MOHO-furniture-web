@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tư Vấn AI | MOHO</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/client/header.css">
+  <link rel="stylesheet" href="/css/client/footer.css">
+  <link rel="stylesheet" href="/css/client/product.css">
+  <link rel="stylesheet" href="/css/client/advicepage.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <div class="ai-page-shell">
+    <!-- ── SIDEBAR ── -->
+    <nav class="ai-sidebar">
+      <div class="sidebar-title">Gợi ý thiết kế</div>
+      <button class="quick-btn" onclick="quickSend('Tư vấn nội thất phòng khách 25m2 phong cách hiện đại')"><span class="icon">🛋️</span>Phòng khách 25m²</button>
+      <button class="quick-btn" onclick="quickSend('Gợi ý sofa góc L phù hợp với phòng khách nhỏ')"><span class="icon">🛋️</span>Sofa góc L</button>
+      <button class="quick-btn" onclick="quickSend('Phòng ngủ phong cách Nhật Bản tối giản cần mua gì')"><span class="icon">🛏️</span>Phòng ngủ Nhật</button>
+      <button class="quick-btn" onclick="quickSend('Thiết kế góc làm việc tại nhà hiện đại')"><span class="icon">💼</span>Home Office</button>
+      <button class="quick-btn" onclick="quickSend('Nội thất phù hợp cho chung cư 40m2')"><span class="icon">🏢</span>Chung cư 40m²</button>
+      <button class="quick-btn" onclick="quickSend('Trang trí phòng trẻ em an toàn và vui tươi')"><span class="icon">🧸</span>Phòng trẻ em</button>
+      <button class="quick-btn" onclick="quickSend('Bếp và phòng ăn kết hợp mở phong cách Scandinavian')"><span class="icon">🍽️</span>Bếp Scandinavian</button>
+      <hr class="sidebar-divider"/>
+      <div class="sidebar-title">Phối màu & Phong thủy</div>
+      <button class="quick-btn" onclick="quickSend('Phối màu cho căn hộ nhỏ tone màu pastel trẻ trung')"><span class="icon">🎨</span>Phối màu Pastel</button>
+      <button class="quick-btn" onclick="quickSend('Gợi ý nội thất phong thủy cho người mệnh Hỏa')"><span class="icon">🔥</span>Phong thủy mệnh Hỏa</button>
+      <button class="quick-btn" onclick="quickSend('Bố trí tủ giày và tủ quần áo đa năng tiết kiệm diện tích')"><span class="icon">🚪</span>Đồ đa năng</button>
+      <hr class="sidebar-divider"/>
+      <span class="badge-saved" id="badgeSaved">✓ Chat đã lưu</span>
+      <button class="btn-clear-chat" onclick="clearChat()">🗑️ Xóa lịch sử chat</button>
+    </nav>
+
+    <!-- ── CHAT MAIN ── -->
+    <div class="chat-main">
+      <div class="messages" id="messages">
+        <div class="welcome" id="welcome">
+          <div class="welcome-icon">🏠</div>
+          <h2>Xin chào! Tôi là MOHO AI</h2>
+          <p>Tư vấn thiết kế nội thất chuyên nghiệp & phối hợp sản phẩm phù hợp không gian.<br/>Nhập câu hỏi tư vấn hoặc gửi ảnh căn phòng để tôi phân tích bố trí tốt nhất!</p>
+          <div class="pills">
+            <span class="pill" onclick="quickSend('Tư vấn thiết kế phòng khách phong cách hiện đại tối giản')">💡 Tư vấn phòng khách</span>
+            <span class="pill" onclick="quickSend('Tư vấn nội thất phòng ngủ 15m2 budget 30 triệu')">💡 Tư vấn phòng ngủ</span>
+            <span class="pill" onclick="quickSend('Gợi ý màu sơn tường kết hợp với sofa màu xanh rêu')">🎨 Phối màu nội thất</span>
+            <span class="pill" onclick="quickSend('Phong cách nội thất nào đang là xu hướng thiết kế năm nay?')">✨ Xu hướng thiết kế</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-bar">
+        <div class="img-preview" id="imgPreview">
+          <img class="img-thumb" id="imgThumb" src="" alt=""/>
+          <span class="img-preview-name">Ảnh đính kèm</span>
+          <button class="btn-rm" onclick="removeImg()">✕</button>
+        </div>
+        <div class="input-row">
+          <button class="btn-img-attach" title="Đính kèm ảnh phòng" onclick="document.getElementById('fileIn').click()">📎</button>
+          <input type="file" id="fileIn" accept="image/*" onchange="handleFile(event)"/>
+          <div class="textarea-wrap">
+            <textarea id="inputBox"
+              placeholder="Nhập yêu cầu tư vấn thiết kế, phong cách phối màu, phong thủy... hoặc gửi ảnh căn phòng (Enter gửi, Shift+Enter xuống dòng)"
+              rows="1"
+              onkeydown="onKey(event)"
+              oninput="resizeTA(this)"
+              onpaste="onPaste(event)"></textarea>
+          </div>
+          <button class="btn-send" id="sendBtn" onclick="sendMessage()">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <script>
+    // ════════════════════════════════════════════════
+    //  DATA & STATE
+    // ════════════════════════════════════════════════
+    const ALL_PRODUCTS = <%- JSON.stringify(products) %>;
+    const STORAGE_KEY  = 'moho_chat_v8'; // v8: Bỏ tạo ảnh AI, tối ưu tư vấn
+
+    // Xóa tất cả version cũ để tránh restore URL lỗi
+    ['moho_chat_v1','moho_chat_v2','moho_chat_v3','moho_chat_v4','moho_chat_v5','moho_chat_v6','moho_chat_v7'].forEach(k => {
+      try { localStorage.removeItem(k); } catch(e) {}
+    });
+
+    let pendingB64   = null;
+    let pendingMime  = 'image/jpeg';
+    let chatHistory  = [];
+    let currentItems = [];
+    let serializedMsgs = [];
+
+    // ════════════════════════════════════════════════
+    //  JSON HELPERS
+    // ════════════════════════════════════════════════
+    function extractJSON(raw) {
+      if (!raw) return null;
+      let text = raw.replace(/```json|```/g, '').trim();
+      const start = text.indexOf('{');
+      if (start === -1) return null;
+
+      // Thử parse bình thường trước
+      const end = text.lastIndexOf('}');
+      if (end > start) {
+        try { return JSON.parse(text.slice(start, end + 1)); } catch (_) {}
+      }
+
+      // JSON bị cắt → cố tự đóng lại bằng cách bỏ key cuối bị dở
+      // Tìm } hoặc ] gần nhất trước điểm bị cắt và thêm đóng object
+      try {
+        let partial = text.slice(start);
+        // Cắt bỏ phần key bị dở (sau dấu , hoặc { cuối cùng không hoàn chỉnh)
+        // Tìm vị trí an toàn nhất: sau giá trị hoàn chỉnh cuối cùng
+        const safeEnd = Math.max(
+          partial.lastIndexOf('",'),
+          partial.lastIndexOf('",\n'),
+          partial.lastIndexOf(']'),
+          partial.lastIndexOf('}')
+        );
+        if (safeEnd > 0) {
+          // Đếm số { và [ đang mở để đóng lại đúng
+          let snippet = partial.slice(0, safeEnd + 1);
+          let opens = (snippet.match(/\{/g) || []).length - (snippet.match(/\}/g) || []).length;
+          let arrOpens = (snippet.match(/\[/g) || []).length - (snippet.match(/\]/g) || []).length;
+          // Đóng array trước rồi đóng object
+          snippet += ']'.repeat(Math.max(0, arrOpens)) + '}'.repeat(Math.max(0, opens));
+          return JSON.parse(snippet);
+        }
+      } catch (_) {}
+
+      return null;
+    }
+
+    // ════════════════════════════════════════════════
+    //  LOCALSTORAGE
+    // ════════════════════════════════════════════════
+    function saveChat() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          messages: serializedMsgs,
+          history:  chatHistory,
+          ts:       Date.now()
+        }));
+        showBadge();
+      } catch(e) {}
+    }
+
+    function loadSaved() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const saved = JSON.parse(raw);
+        if (!saved?.messages?.length) return;
+        document.getElementById('welcome')?.remove();
+        serializedMsgs = saved.messages || [];
+        chatHistory    = saved.history  || [];
+        serializedMsgs.forEach(m => restoreMsg(m));
+        showBadge();
+      } catch(e) { console.warn('loadSaved error', e); }
+    }
+
+    function restoreMsg(m) {
+      if      (m.type === 'user')     appendUser(m.text, m.imgSrc, false);
+      else if (m.type === 'ai-text')  appendAIText(m.text, false);
+      else if (m.type === 'ai-html')  appendAIHtml(m.advice, m.html, false);
+    }
+
+    function showBadge() {
+      const b = document.getElementById('badgeSaved');
+      if (!b) return;
+      b.classList.add('show');
+      setTimeout(() => b.classList.remove('show'), 2500);
+    }
+
+    function clearChat() {
+      if (!confirm('Xóa toàn bộ lịch sử chat?')) return;
+      localStorage.removeItem(STORAGE_KEY);
+      chatHistory = []; currentItems = []; serializedMsgs = [];
+      document.getElementById('messages').innerHTML = `
+        <div class="welcome" id="welcome">
+          <div class="welcome-icon">🏠</div>
+          <h2>Xin chào! Tôi là MOHO AI</h2>
+          <p>Tư vấn thiết kế nội thất chuyên nghiệp & phối hợp sản phẩm phù hợp không gian.<br/>Nhập câu hỏi tư vấn hoặc gửi ảnh căn phòng để tôi phân tích bố trí tốt nhất!</p>
+          <div class="pills">
+            <span class="pill" onclick="quickSend('Tư vấn thiết kế phòng khách phong cách hiện đại tối giản')">💡 Tư vấn phòng khách</span>
+            <span class="pill" onclick="quickSend('Tư vấn nội thất phòng ngủ 15m2 budget 30 triệu')">💡 Tư vấn phòng ngủ</span>
+            <span class="pill" onclick="quickSend('Gợi ý màu sơn tường kết hợp với sofa màu xanh rêu')">🎨 Phối màu nội thất</span>
+            <span class="pill" onclick="quickSend('Phong cách nội thất nào đang là xu hướng thiết kế năm nay?')">✨ Xu hướng thiết kế</span>
+          </div>
+        </div>`;
+      toast('Đã xóa lịch sử chat 🗑️');
+    }
+
+    // ════════════════════════════════════════════════
+    //  IMAGE HANDLING (attach / paste / compress)
+    // ════════════════════════════════════════════════
+    function handleFile(e) {
+      const f = e.target.files[0];
+      if (f) loadFile(f);
+    }
+
+    function onPaste(e) {
+      for (const it of (e.clipboardData?.items || [])) {
+        if (it.type.startsWith('image/')) { e.preventDefault(); loadFile(it.getAsFile()); return; }
+      }
+    }
+
+    function loadFile(f) {
+      if (!f) return;
+      pendingMime = 'image/jpeg';
+      const r = new FileReader();
+      r.onload = ev => {
+        const original = ev.target.result;
+        document.getElementById('imgThumb').src = original;
+        document.getElementById('imgPreview').classList.add('show');
+        compressImage(original, 1024, 0.85, (compressed) => {
+          pendingB64 = compressed.split(',')[1];
+          const kb = Math.round(pendingB64.length * 0.75 / 1024);
+          toast(`Đã đính kèm ảnh 🖼️ (~${kb}KB)`);
+        });
+      };
+      r.readAsDataURL(f);
+    }
+
+    function compressImage(dataUrl, maxSize, quality, callback) {
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if (w > maxSize || h > maxSize) {
+          if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; }
+          else       { w = Math.round(w * maxSize / h); h = maxSize; }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        callback(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = () => callback(dataUrl);
+      img.src = dataUrl;
+    }
+
+    function removeImg() {
+      pendingB64 = null;
+      document.getElementById('fileIn').value = '';
+      document.getElementById('imgPreview').classList.remove('show');
+    }
+
+    function resizeTA(el) {
+      el.style.height = 'auto';
+      el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+    }
+
+    function onKey(e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    }
+
+    function quickSend(t) {
+      document.getElementById('inputBox').value = t;
+      sendMessage();
+    }
+
+    // ════════════════════════════════════════════════
+    //  SEND — router chính
+    // ════════════════════════════════════════════════
+    async function sendMessage() {
+      const text   = document.getElementById('inputBox').value.trim();
+      const hasImg = !!pendingB64;
+      if (!text && !hasImg) return;
+
+      document.getElementById('welcome')?.remove();
+      appendUser(text, hasImg ? document.getElementById('imgThumb').src : null, true);
+      document.getElementById('inputBox').value = '';
+      document.getElementById('inputBox').style.height = 'auto';
+
+      const b64  = pendingB64;
+      const mime = pendingMime;
+      removeImg();
+      document.getElementById('sendBtn').disabled = true;
+      const tid = appendTyping();
+
+      try {
+        if (hasImg) {
+          // Gửi ảnh phòng → AI phân tích
+          await handleImageUpload(text, b64, mime, tid);
+        } else {
+          // Chat text thường
+          await handleTextChat(text, tid);
+        }
+      } catch(err) {
+        removeTyping(tid);
+        appendAIText('⚠️ Lỗi: ' + err.message, true);
+      } finally {
+        document.getElementById('sendBtn').disabled = false;
+      }
+    }
+
+    // ════════════════════════════════════════════════
+    //  TEXT CHAT
+    // ════════════════════════════════════════════════
+    async function handleTextChat(text, tid) {
+      const res = await fetch('/advice/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, history: chatHistory.slice(-10) })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || `HTTP ${res.status}`);
+      removeTyping(tid);
+      processChatResult(data.reply, text);
+    }
+
+    function processChatResult(raw, userText) {
+      const parsed = extractJSON(raw);
+      if (!parsed) {
+        appendAIText(raw, true);
+        return;
+      }
+
+      const reply = parsed.reply || raw;
+      chatHistory.push({ role: 'user',  text: userText });
+      chatHistory.push({ role: 'model', text: reply });
+
+      if (parsed.has_products && parsed.products?.length) {
+        const items = matchProducts(parsed.products);
+        currentItems = items;
+        appendAIHtml(reply, buildChatProductHTML(items), true);
+      } else {
+        appendAIText(reply, true);
+      }
+    }
+
+    // ════════════════════════════════════════════════
+    //  GỬI ẢNH PHÒNG → AI PHÂN TÍCH
+    // ════════════════════════════════════════════════
+    async function handleImageUpload(text, b64, mime, tid) {
+      const sendMime = 'image/jpeg';
+
+      const res = await fetch('/advice/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, image: { base64: b64, mime: sendMime } })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || `HTTP ${res.status}`);
+      removeTyping(tid);
+
+      // Parse JSON từ Gemini — thử nhiều cách khác nhau
+      let parsed = extractJSON(data.raw);
+      if (!parsed) {
+        // Gemini đôi khi trả về text có ký tự unicode hoặc escape lạ → thử clean thêm
+        try {
+          const cleaned = data.raw
+            .replace(/[\u0000-\u001F\u007F]/g, ' ') // strip control chars
+            .replace(/```json|```/g, '')
+            .trim();
+          const s = cleaned.indexOf('{');
+          const e = cleaned.lastIndexOf('}');
+          if (s !== -1 && e > s) parsed = JSON.parse(cleaned.slice(s, e + 1));
+        } catch (_) {}
+      }
+      if (!parsed) {
+        // Vẫn không parse được → hiển thị thông báo thân thiện, không dump raw JSON
+        console.warn('[advice] extractJSON failed, raw length:', data.raw?.length);
+        console.warn('[advice] raw FULL:', data.raw);
+        appendAIText('⚠️ AI không thể phân tích ảnh lúc này. Vui lòng thử lại hoặc chụp ảnh rõ hơn.', true);
+        return;
+      }
+
+      currentItems = matchProducts(parsed.products || []);
+
+      // Build và hiển thị kết quả cuối
+      const html = buildImageResultHTML(parsed, currentItems, b64, sendMime);
+      appendAIHtml(parsed.advice || 'Đây là gợi ý thiết kế cho phòng của bạn:', html, true);
+    }
+
+    // ════════════════════════════════════════════════
+    //  BUILD IMAGE RESULT HTML
+    // ════════════════════════════════════════════════
+    function buildImageResultHTML(parsed, items, b64, mime) {
+      const a = parsed.analysis || {};
+      const aRows = [
+        ['Loại phòng',        a.room_type],
+        ['Diện tích ước tính', a.area],
+        ['Phong cách',        a.style],
+        ['Điểm mạnh',         a.strengths],
+        ['Cần bổ sung',       a.missing],
+        ['Gợi ý phối màu',     a.color_palette],
+        ['Bố trí nội thất',    a.layout_tips]
+      ].filter(r => r[1]).map(r => `
+        <div class="a-row"><span class="lk">✅</span>
+        <span><strong>${r[0]}:</strong> ${esc(r[1])}</span></div>`).join('');
+
+      let total = 0;
+      const cards = items.map(({index, s, p}) => {
+        const price = p ? Number(p.product_sale_price || 0) : Number(s.price_estimate || 0);
+        total += price;
+        if (p) {
+          return `<div class="prod-card">
+            <div class="prod-num">${index}</div>
+            <div class="prod-img-wrap">
+              <a href="/product/${p.product_id}">
+                <img class="prod-img" src="${esc(p.image_url || '/images/placeholder.jpg')}"
+                  onerror="this.src='/images/placeholder.jpg'" alt="${esc(p.product_name)}"/>
+              </a>
+            </div>
+            <div class="prod-info">
+              <div class="prod-name">${esc(p.product_name)}</div>
+              <div class="prod-price">${price.toLocaleString('vi-VN')}đ</div>
+              <div class="prod-reason">${esc(s.reason || '')}</div>
+              ${s.placement ? `<div class="prod-placement">📍 ${esc(s.placement)}</div>` : ''}
+              <button class="btn-add" onclick="addCart('${p.product_id}','${(p.product_name || '').replace(/'/g, "\\'")}',${price})">
+                <i class="fa-solid fa-cart-plus"></i> Thêm vào giỏ
+              </button>
+            </div>
+          </div>`;
+        } else {
+          return `<div class="prod-card">
+            <div class="prod-num">${index}</div>
+            <div class="prod-img-wrap"><div style="font-size:32px;text-align:center;padding-top:20px">🪑</div></div>
+            <div class="prod-info">
+              <div class="prod-name">${esc(s.name)}</div>
+              <div class="prod-price">${price > 0 ? price.toLocaleString('vi-VN') + 'đ' : 'Liên hệ'}</div>
+              <div class="prod-reason">${esc(s.reason || '')}</div>
+              ${s.placement ? `<div class="prod-placement">📍 ${esc(s.placement)}</div>` : ''}
+              <button class="btn-add" onclick="location.href='/search?q=${encodeURIComponent(s.name)}'">
+                <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+              </button>
+            </div>
+          </div>`;
+        }
+      }).join('');
+
+      return `<div class="result-card">
+        <div class="result-top">
+          <div class="result-col image-col">
+            <div class="col-title">📷 Ảnh căn phòng của bạn</div>
+            <img class="room-img" src="data:${mime};base64,${b64}" alt="Room"/>
+          </div>
+          <div class="result-col analysis-col">
+            <div class="col-title">📐 Phân tích không gian & Bố cục</div>
+            <div class="analysis-list">${aRows}</div>
+          </div>
+        </div>
+        <div class="result-bottom">
+          <div class="section-title">
+            Sản phẩm gợi ý <span class="cnt-badge">${items.length}</span>
+          </div>
+          <div class="products-grid">${cards}</div>
+        </div>
+        <div class="result-footer">
+          <div class="total-block">
+            <div class="lbl">Tổng chi phí dự kiến</div>
+            <div class="amount">${total > 0 ? total.toLocaleString('vi-VN') + 'đ' : 'Liên hệ'}</div>
+          </div>
+          <div class="footer-btns">
+            <button class="btn-all primary"   onclick="addAllCart()">🛒 Thêm tất cả vào giỏ</button>
+            <button class="btn-all secondary" onclick="savePlan()">📋 Lưu phương án</button>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    // ════════════════════════════════════════════════
+    //  BUILD CHAT PRODUCT SCROLL
+    // ════════════════════════════════════════════════
+  function buildChatProductHTML(items) {
+  const cards = items.map(({s, p}) => {
+    if (p) {
+      const salePrice = Number(p.product_sale_price || 0);
+      const oldPrice = Number(p.product_price || 0);
+      const rating = Number(p.avg_rating || 0);
+      const fullStars = Math.floor(rating);
+      const hasHalf = rating % 1 >= 0.5;
+      const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
+
+      const starsHtml = rating > 0 ? `
+        <div class="product-rating">
+          ${'<i class="fa-solid fa-star active"></i>'.repeat(fullStars)}
+          ${hasHalf ? '<i class="fa-solid fa-star-half-stroke active"></i>' : ''}
+          ${'<i class="fa-regular fa-star"></i>'.repeat(emptyStars)}
+          <span class="rating-number">(${rating})</span>
+        </div>` : '<div></div>';
+
+      return `<div class="product-item">
+        <a href="/product/${p.product_id}" class="product-image">
+          <img src="${esc(p.image_url || '/images/placeholder.jpg')}"
+            onerror="this.src='/images/placeholder.jpg'"
+            alt="${esc(p.product_name)}" class="product-img"/>
+        </a>
+        <div class="product-info">
+          <h3 class="product-name">${esc(p.product_name)}</h3>
+          <div class="product-price">
+            <span class="current-price">${salePrice.toLocaleString('vi-VN')}đ</span>
+            ${oldPrice > salePrice ? `<span class="old-price">${oldPrice.toLocaleString('vi-VN')}đ</span>` : ''}
+          </div>
+          <div class="product-meta">
+            ${starsHtml}
+            <span class="sold-count">Đã bán ${p.total_sold || 0}</span>
+          </div>
+        </div>
+      </div>`;
+    } else {
+      return `<div class="product-item">
+        <a href="/search?q=${encodeURIComponent(s.name)}" class="product-image"
+          style="display:flex;align-items:center;justify-content:center;height:280px;background:#f5f5f5;font-size:48px">
+          🪑
+        </a>
+        <div class="product-info">
+          <h3 class="product-name">${esc(s.name)}</h3>
+          <div class="product-price">
+            <span class="current-price">${s.price_estimate > 0 ? Number(s.price_estimate).toLocaleString('vi-VN')+'đ' : 'Liên hệ'}</span>
+          </div>
+          <div class="product-meta">
+            <div></div>
+            <span class="sold-count">${esc(s.reason||'')}</span>
+          </div>
+        </div>
+      </div>`;
+    }
+  }).join('');
+
+  return `<div class="product-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));margin-top:8px">
+    ${cards}
+  </div>`;
+}
+    // ════════════════════════════════════════════════
+    //  MATCH PRODUCTS
+    // ════════════════════════════════════════════════
+    function matchProducts(list) {
+      return list.map((s, i) => {
+        let p = null;
+        if (s.product_id) {
+          p = ALL_PRODUCTS.find(x => String(x.product_id) === String(s.product_id));
+        }
+        if (!p && s.name) {
+          const key = s.name.toLowerCase().split(' ').slice(0, 2).join(' ');
+          p = ALL_PRODUCTS.find(x => (x.product_name || '').toLowerCase().includes(key));
+        }
+        return { index: i + 1, s, p };
+      });
+    }
+
+    // ════════════════════════════════════════════════
+    //  DOM HELPERS
+    // ════════════════════════════════════════════════
+    function appendUser(text, imgSrc, save) {
+      document.getElementById('welcome')?.remove();
+      const el = document.createElement('div');
+      el.className = 'msg-user';
+      el.innerHTML = `<div class="bubble-user">
+        ${text ? esc(text) : ''}
+        ${imgSrc ? `<br><img src="${imgSrc}" style="max-width:180px;border-radius:8px;margin-top:6px;display:block"/>` : ''}
+      </div>`;
+      document.getElementById('messages').appendChild(el);
+      scrollB();
+      if (save) { serializedMsgs.push({ type: 'user', text, imgSrc: imgSrc || null }); saveChat(); }
+    }
+
+    function appendTyping() {
+      const id = 'tp_' + Date.now();
+      const el = document.createElement('div');
+      el.className = 'msg-ai';
+      el.id = id;
+      el.innerHTML = `<div class="ai-lbl">MOHO AI</div><div class="typing"><span></span><span></span><span></span></div>`;
+      document.getElementById('messages').appendChild(el);
+      scrollB();
+      return id;
+    }
+
+    function removeTyping(id) { document.getElementById(id)?.remove(); }
+
+    function appendAIText(text, save) {
+      const el = document.createElement('div');
+      el.className = 'msg-ai';
+      el.innerHTML = `<div class="ai-lbl">MOHO AI</div><div class="bubble-ai">${renderMd(text)}</div>`;
+      document.getElementById('messages').appendChild(el);
+      scrollB();
+      if (save) { serializedMsgs.push({ type: 'ai-text', text }); saveChat(); }
+    }
+
+    function appendAIHtml(advice, html, save) {
+      const el = document.createElement('div');
+      el.className = 'msg-ai';
+      el.innerHTML = `<div class="ai-lbl">MOHO AI</div>
+        <div class="bubble-ai">${renderMd(advice)}</div>
+        ${html}`;
+      document.getElementById('messages').appendChild(el);
+      scrollB();
+      if (save) { serializedMsgs.push({ type: 'ai-html', advice, html }); saveChat(); }
+    }
+
+    function renderMd(t) {
+      if (!t) return '';
+      let cleanText = t.replace(/```json|```/g, '').trim();
+      const lines = cleanText.split('\n');
+      let inList = false;
+      let result = [];
+      
+      for (let line of lines) {
+        let trimmed = line.trim();
+        
+        // Heading 3
+        if (trimmed.startsWith('### ')) {
+          if (inList) { result.push('</ul>'); inList = false; }
+          result.push(`<h3>${esc(trimmed.substring(4))}</h3>`);
+          continue;
+        }
+        // Heading 2
+        if (trimmed.startsWith('## ')) {
+          if (inList) { result.push('</ul>'); inList = false; }
+          result.push(`<h2>${esc(trimmed.substring(3))}</h2>`);
+          continue;
+        }
+        // Bullet list
+        if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+          if (!inList) { result.push('<ul class="md-list">'); inList = true; }
+          let content = applyInline(trimmed.substring(2));
+          result.push(`<li>${content}</li>`);
+          continue;
+        }
+        // Ordered list
+        if (/^\d+\.\s/.test(trimmed)) {
+          if (inList) { result.push('</ul>'); inList = false; }
+          let dotIdx = trimmed.indexOf('.');
+          let content = applyInline(trimmed.substring(dotIdx + 1).trim());
+          result.push(`<div class="md-ol-item"><strong>${trimmed.substring(0, dotIdx + 1)}</strong> ${content}</div>`);
+          continue;
+        }
+        
+        if (inList) { result.push('</ul>'); inList = false; }
+        
+        if (trimmed === '') {
+          result.push('<br>');
+        } else {
+          result.push(`<p>${applyInline(trimmed)}</p>`);
+        }
+      }
+      if (inList) result.push('</ul>');
+      return result.join('');
+    }
+
+    // Escape HTML rồi áp dụng **bold** — đúng thứ tự
+    function applyInline(text) {
+      // 1. Escape các ký tự HTML nguy hiểm
+      let s = esc(text);
+      // 2. Sau đó áp markdown bold (dùng &ast;&ast; vì & đã bị escape)
+      //    Nhưng vì esc() biến * thành *, không escape *, nên ** vẫn còn nguyên
+      s = s.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      return s;
+    }
+
+    function scrollB() {
+      const m = document.getElementById('messages');
+      setTimeout(() => m.scrollTop = m.scrollHeight, 80);
+    }
+
+    function esc(s) {
+      if (!s) return '';
+      return String(s)
+        .replace(/&/g,  '&amp;')
+        .replace(/</g,  '&lt;')
+        .replace(/>/g,  '&gt;')
+        .replace(/"/g,  '&quot;');
+    }
+
+    // ════════════════════════════════════════════════
+    //  ACTIONS
+    // ════════════════════════════════════════════════
+    function addCart(id, name, price) {
+      fetch('/cart/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ product_id: id, quantity: 1 })
+      }).catch(() => {});
+      toast(`Đã thêm "${name}" vào giỏ! 🛒`);
+    }
+
+    function addAllCart() {
+      const real = currentItems.filter(i => i.p);
+      if (!real.length) { toast('Không tìm thấy sản phẩm.'); return; }
+      real.forEach(i => addCart(i.p.product_id, i.p.product_name, i.p.product_sale_price));
+      toast(`Đã thêm ${real.length} sản phẩm vào giỏ! 🛒`);
+    }
+
+    function savePlan() {
+      const plan = currentItems.map(({s, p}) => ({
+        name:   p ? p.product_name    : s.name,
+        price:  p ? p.product_sale_price : s.price_estimate,
+        reason: s.reason
+      }));
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([JSON.stringify(plan, null, 2)], { type: 'application/json' }));
+      a.download = 'phuong-an-moho.json';
+      a.click();
+    }
+
+    function toast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(window._tt);
+      window._tt = setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // ── INIT ──
+    loadSaved();
+  </script>
+</body>
+</html>

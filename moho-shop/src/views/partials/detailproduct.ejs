@@ -85,27 +85,52 @@
 
             <div class="detail-price">
 
-                <span class="sale-price">
+                <span class="sale-price" id="salePrice">
 
-                    <%= Number(product.product_sale_price).toLocaleString('vi-VN') %>đ
+    <%= Number(product.product_sale_price).toLocaleString('vi-VN') %>đ
 
-                </span>
+</span>
 
-                <span class="old-price-detail">
+<span class="old-price-detail" id="oldPrice">
 
-                    <%= Number(product.product_price).toLocaleString('vi-VN') %>đ
+    <%= Number(product.product_price).toLocaleString('vi-VN') %>đ
 
-                </span>
+</span>
 
             </div>
 
             <div class="detail-line"></div>
+            <div class="product-size">
+
+    <h4>Kích thước</h4>
+
+    <div class="size-list">
+
+        <% sizes.forEach(size=>{ %>
+
+       <div
+    class="size-item"
+    data-sizeid="<%= size.size_id %>"
+    data-extra="<%= size.extra_price %>"
+    onclick="selectSize(this)">
+
+    <%= size.size_name %>
+
+</div>
+
+        <% }) %>
+
+    </div>
+
+</div>
 
             <!-- DESC -->
 
             <div class="detail-desc">
 
-                <%= product.product_description %>
+                <div class="detail-desc">
+    <%- product.product_description.replace(/\n/g, '<br>') %>
+</div>
 
             </div>
 
@@ -141,7 +166,7 @@
 
                 </button>
 
-                <a href="https://zalo.me/" class="btn-zalo">
+                <a href="https://zalo.me/0365218395" class="btn-zalo">
 
                     LIÊN HỆ ZALO
 
@@ -151,17 +176,20 @@
 
             <!-- POLICY -->
 
-            <div class="detail-policy">
-
-                <p>
-                    Miễn phí giao hàng & lắp đặt tại tất cả quận huyện thuộc TP.HCM...
-                </p>
-
-                <p>
-                    Miễn phí 1 đổi 1 - Bảo hành 5 năm...
-                </p>
-
-            </div>
+           <div class="detail-policy">
+    <p>
+        <i class="fa-solid fa-check" style="color: #28a745; margin-right: 5px;"></i>
+        Miễn phí giao hàng & lắp đặt tại tất cả quận huyện thuộc TP.HCM, Hà Nội, Khu đô thị Ecopark, Biên Hòa và một số quận thuộc Bình Dương (*)
+    </p>
+    <p>
+        <i class="fa-solid fa-check" style="color: #28a745; margin-right: 5px;"></i>
+        Miễn phí 1 đổi 1 - Bảo hành 5 năm - Bảo trì trọn đời (**)
+    </p>
+    <p style=" color: #666;">
+        (*) Không áp dụng cho danh mục Đồ Trang Trí và Nệm<br>
+        (**) Không áp dụng cho các sản phẩm Clearance. Chỉ bảo hành 01 năm cho khung ghế, mâm và cần đối với Ghế Văn Phòng
+    </p>
+</div>
 
         </div>
 
@@ -197,25 +225,69 @@
 
     }
 
-    async function handleAddToCart(productId) {
+    const baseSale = Number("<%= product.product_sale_price %>");
+const basePrice = Number("<%= product.product_price %>");
 
-        const img = document.querySelector(".main-image img");
+window.addEventListener("DOMContentLoaded", function () {
 
-        if (img && typeof flyToCart === "function") {
-            flyToCart(img);
-        }
+    const first = document.querySelector(".size-item");
 
-        await addToCart(productId);
-
-        // 🔥 FIX QUAN TRỌNG: reload UI ngay
-        await loadCart();
+    if (first) {
+        first.classList.add("active");
     }
+
+});
+
+function selectSize(el) {
+
+    document
+        .querySelectorAll(".size-item")
+        .forEach(item => item.classList.remove("active"));
+
+    el.classList.add("active");
+
+    const extra = Number(el.dataset.extra);
+
+    document.getElementById("salePrice").innerText =
+        (baseSale + extra).toLocaleString("vi-VN") + "đ";
+
+    document.getElementById("oldPrice").innerText =
+        (basePrice + extra).toLocaleString("vi-VN") + "đ";
+}
+   async function handleAddToCart(productId) {
+
+    const activeSize =
+        document.querySelector(".size-item.active");
+
+    const sizeId =
+        activeSize
+            ? activeSize.dataset.sizeid
+            : null;
+
+    const img = document.querySelector(".main-image img");
+
+    if (img && typeof flyToCart === "function") {
+        flyToCart(img);
+    }
+
+    await addToCart(
+        productId,
+        sizeId
+    );
+
+    await loadCart();
+}
     function buyNow(id){
 
     window.location =
     "/checkout/buy-now/" + id;
 }
 
-
+function buyNow(id) {
+    const activeSize = document.querySelector(".size-item.active");
+    const sizeId = activeSize ? activeSize.dataset.sizeid : null;
+    if (!sizeId) return alert("Vui lòng chọn kích thước!");
+    window.location = "/checkout/buy-now/" + id + "?sizeId=" + sizeId;
+}
 
 </script>

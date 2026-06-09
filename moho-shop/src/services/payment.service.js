@@ -1,114 +1,402 @@
 const db = require("../config/db");
 
-// 1. Hàm tạo hành vi payment THÀNH CÔNG (HÀM GỐC CỦA BẠN - ĐỔI VỀ CALLBACK)
+/* =========================
+   CREATE PAYMENT
+========================= */
 exports.createPayment = (orderId, amount, method, callback) => {
     db.query(
-        `INSERT INTO payment (order_id, payment_method, amount, status) VALUES (?, ?, ?, 'success')`,
+        `INSERT INTO payment
+        (order_id, payment_method, amount, status)
+        VALUES (?, ?, ?, 'success')`,
         [orderId, method, amount],
         (err, result) => {
-            if (err) return callback(err, null);
-            return callback(null, result.insertId);
+            if (err) return callback(err);
+            callback(null, result.insertId);
         }
     );
 };
 
-// 2. Lấy thông tin đơn hàng và thông tin Customer (Ghép chuỗi họ tên bằng CONCAT)
-exports.getOrderWithCustomerInfo = (orderId, customerId, callback) => {
-    const query = `
-        SELECT 
-            o.order_id, 
-            o.total_amount, 
+
+/* =========================
+   LẤY THÔNG TIN ĐƠN HÀNG
+   (LOGIN + GUEST)
+========================= */
+exports.getOrderWithCustomerInfo = (orderId, callback) => {
+
+    const sql = `
+        SELECT
+            o.order_id,
+            o.total_amount,
             o.payment_status,
             o.shipping_address,
-            CONCAT(IFNULL(c.customer_lastname,''), ' ', IFNULL(c.customer_firstname,'')) AS customer_name, 
-            c.customer_phone, 
-            c.customer_email 
+
+            CONCAT(
+                IFNULL(c.customer_lastname,''),
+                ' ',
+                IFNULL(c.customer_firstname,'')
+            ) AS customer_name,
+
+            c.customer_phone,
+            c.customer_email
+
         FROM orders o
-        JOIN customer c ON o.customer_id = c.customer_id
-        WHERE o.order_id = ? AND o.customer_id = ?
+
+        LEFT JOIN customer c
+            ON o.customer_id = c.customer_id
+
+        WHERE o.order_id = ?
     `;
-    db.query(query, [orderId, customerId], (err, rows) => {
-        if (err) return callback(err, null);
-        return callback(null, rows[0] || null);
+
+    db.query(sql, [orderId], (err, rows) => {
+        if (err) return callback(err);
+
+        callback(null, rows[0] || null);
     });
 };
 
-// 3. Lấy trạng thái đơn hàng nhanh theo ID (Phục vụ polling check-status)
+
+/* =========================
+   CHECK STATUS
+========================= */
 exports.getOrderStatusById = (orderId, callback) => {
-    db.query("SELECT payment_status, total_amount FROM orders WHERE order_id = ?", [orderId], (err, rows) => {
-        if (err) return callback(err, null);
-        return callback(null, rows[0] || null);
-    });
+
+    db.query(
+        `SELECT payment_status,total_amount
+         FROM orders
+         WHERE order_id = ?`,
+        [orderId],
+        (err, rows) => {
+
+            if (err) return callback(err);
+
+            callback(null, rows[0] || null);
+        }
+    );
+
 };
 
-// 4. Xử lý khi khách bấm nút chủ động báo "Tôi đã chuyển khoản" trên giao diện Web
-exports.customerConfirmTransfer = (orderId, customerId, callback) => {
-    db.query("UPDATE orders SET payment_status = 'pending' WHERE order_id = ? AND customer_id = ?", [orderId, customerId], (err) => {
+
+/* =========================
+   KHÁCH BẤM ĐÃ CHUYỂN KHOẢN
+========================= */
+exports.customerConfirmTransfer = (
+    orderId,
+    customerId,
+    callback
+) => {
+
+    let sql = "";
+    let params = [];
+
+    if (customerId) {
+        sql =
+            `UPDATE orders
+             SET payment_status='pending'
+             WHERE order_id=?
+             AND customer_id=?`;
+
+        params = [orderId, customerId];
+    } else {
+        sql =
+            `UPDATE orders
+             SET payment_status='pending'
+             WHERE order_id=?`;
+
+        params = [orderId];
+    }
+
+    db.query(sql, params, (err) => {
+
         if (err) return callback(err);
 
-        db.query("SELECT payment_id FROM payment WHERE order_id = ?", [orderId], (pErr, existing) => {
-            if (pErr) return callback(pErr);
+        db.query(
+            `SELECT payment_id
+             FROM payment
+             WHERE order_id=?`,
+            [orderId],
+            (err2, rows) => {
 
-            if (existing.length > 0) {
-                db.query("UPDATE payment SET status = 'pending' WHERE order_id = ?", [orderId], callback);
-            } else {
-                db.query(`INSERT INTO payment (order_id, payment_method, amount, status) 
-                          SELECT order_id, 'bank', total_amount, 'pending' FROM orders WHERE order_id = ?`, [orderId], callback);
-            }
-        });
-    });
-};
+                if (err2)
+                    return callback(err2);
 
-// 5. Câu lệnh SQL hủy đơn khi hết 5 phút ngầm
-exports.cancelOrderOnTimeout = (orderId, totalAmount, callback) => {
-    db.query("UPDATE orders SET payment_status = 'failed' WHERE order_id = ?", [orderId], (err) => {
-        if (err) return callback ? callback(err) : console.error(err);
+                if (rows.length > 0) {
 
-        db.query("SELECT payment_id FROM payment WHERE order_id = ?", [orderId], (pErr, existing) => {
-            if (pErr) return callback ? callback(pErr) : console.error(pErr);
+                    db.query(
+                        `UPDATE payment
+                         SET status='pending'
+                         WHERE order_id=?`,
+                        [orderId],
+                        callback
+                    );
 
-            if (existing.length > 0) {
-                db.query("UPDATE payment SET status = 'failed' WHERE order_id = ?", [orderId], callback);
-            } else {
-                db.query(`INSERT INTO payment (order_id, payment_method, amount, status) VALUES (?, 'bank', ?, 'failed')`, [orderId, totalAmount], callback);
-            }
-        });
-    });
-};
-
-// 6. Câu lệnh SQL cập nhật khi bạn bấm duyệt thành công từ link trong Gmail
-exports.approveOrderFromAdmin = (orderId, callback) => {
-    db.query("UPDATE orders SET payment_status = 'paid' WHERE order_id = ?", [orderId], (err) => {
-        if (err) return callback(err);
-
-        db.query("SELECT total_amount FROM orders WHERE order_id = ?", [orderId], (amountErr, rows) => {
-            if (amountErr) return callback(amountErr);
-            const totalAmount = rows[0]?.total_amount || 0;
-
-            db.query("SELECT payment_id FROM payment WHERE order_id = ?", [orderId], (pErr, existing) => {
-                if (pErr) return callback(pErr);
-
-                if (existing.length > 0) {
-                    db.query("UPDATE payment SET status = 'success', amount = ? WHERE order_id = ?", [totalAmount, orderId], callback);
                 } else {
-                    db.query(`INSERT INTO payment (order_id, payment_method, amount, status) VALUES (?, 'bank', ?, 'success')`, [orderId, totalAmount], callback);
+
+                    db.query(
+                        `INSERT INTO payment
+                        (order_id,payment_method,amount,status)
+                        SELECT
+                            order_id,
+                            'bank',
+                            total_amount,
+                            'pending'
+                        FROM orders
+                        WHERE order_id=?`,
+                        [orderId],
+                        callback
+                    );
+
                 }
-            });
-        });
+            }
+        );
     });
 };
 
-// 7. Bộ hẹn giờ 5 phút chạy ngầm tự động hủy đơn hàng bằng Callback lồng
-exports.startTimeoutCounter = (orderId, totalAmount) => {
-    setTimeout(() => {
-        console.log(`⏱️ Tiến hành check đơn tự động sau 5 phút cho mã #${orderId}...`);
 
-        exports.getOrderStatusById(orderId, (err, order) => {
-            if (!err && order && order.payment_status === 'pending') {
-                exports.cancelOrderOnTimeout(orderId, totalAmount, (cancelErr) => {
-                    if (!cancelErr) console.log(`❌ Đơn hàng #${orderId} đã tự động hủy thành công do hết 5 phút.`);
-                });
+/* =========================
+   HỦY ĐƠN SAU 5 PHÚT
+========================= */
+exports.cancelOrderOnTimeout = (
+    orderId,
+    totalAmount,
+    callback
+) => {
+
+    db.query(
+        `UPDATE orders
+         SET payment_status='failed'
+         WHERE order_id=?`,
+        [orderId],
+        (err) => {
+
+            if (err)
+                return callback(err);
+
+            db.query(
+                `SELECT payment_id
+                 FROM payment
+                 WHERE order_id=?`,
+                [orderId],
+                (err2, rows) => {
+
+                    if (err2)
+                        return callback(err2);
+
+                    if (rows.length > 0) {
+
+                        db.query(
+                            `UPDATE payment
+                             SET status='failed'
+                             WHERE order_id=?`,
+                            [orderId],
+                            callback
+                        );
+
+                    } else {
+
+                        db.query(
+                            `INSERT INTO payment
+                            (order_id,payment_method,amount,status)
+                            VALUES
+                            (?, 'bank', ?, 'failed')`,
+                            [orderId, totalAmount],
+                            callback
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+};
+
+
+/* =========================
+   ADMIN DUYỆT
+========================= */
+exports.approveOrderFromAdmin = (
+    orderId,
+    callback
+) => {
+
+    db.query(
+        `UPDATE orders
+         SET payment_status='paid'
+         WHERE order_id=?`,
+        [orderId],
+        (err) => {
+
+            if (err)
+                return callback(err);
+
+            db.query(
+                `SELECT total_amount
+                 FROM orders
+                 WHERE order_id=?`,
+                [orderId],
+                (err2, rows) => {
+
+                    if (err2)
+                        return callback(err2);
+
+                    const amount =
+                        rows[0]?.total_amount || 0;
+
+                    db.query(
+                        `SELECT payment_id
+                         FROM payment
+                         WHERE order_id=?`,
+                        [orderId],
+                        (err3, paymentRows) => {
+
+                            if (err3)
+                                return callback(err3);
+
+                            if (
+                                paymentRows.length > 0
+                            ) {
+
+                                db.query(
+                                    `UPDATE payment
+                                     SET status='success',
+                                     amount=?
+                                     WHERE order_id=?`,
+                                    [amount, orderId],
+                                    callback
+                                );
+
+                            } else {
+
+                                db.query(
+                                    `INSERT INTO payment
+                                    (order_id,payment_method,amount,status)
+                                    VALUES
+                                    (?, 'bank', ?, 'success')`,
+                                    [orderId, amount],
+                                    callback
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+    );
+
+};
+
+
+/* =========================
+   ĐẾM NGƯỢC 5 PHÚT
+========================= */
+exports.startTimeoutCounter = (
+    orderId,
+    totalAmount
+) => {
+
+    setTimeout(() => {
+
+        exports.getOrderStatusById(
+            orderId,
+            (err, order) => {
+
+                if (
+                    !err &&
+                    order &&
+                    order.payment_status === "pending"
+                ) {
+
+                    exports.cancelOrderOnTimeout(
+                        orderId,
+                        totalAmount,
+                        () => {
+                            console.log(
+                                `❌ Đơn ${orderId} hết hạn`
+                            );
+                        }
+                    );
+
+                }
+
             }
+        );
+
+    }, 5 * 60 * 1000);
+
+};
+
+
+/* =========================
+   DUYỆT + TRỪ KHO
+========================= */
+exports.approveAndReduceStock = (
+    orderId,
+    callback
+) => {
+
+    db.getConnection((err, conn) => {
+
+        if (err)
+            return callback(err);
+
+        conn.beginTransaction((err) => {
+
+            if (err) {
+                conn.release();
+                return callback(err);
+            }
+
+            conn.query(
+                `UPDATE orders
+                 SET order_status='completed',
+                     payment_status='paid'
+                 WHERE order_id=?`,
+                [orderId],
+                (err) => {
+
+                    if (err)
+                        return conn.rollback(() => {
+                            conn.release();
+                            callback(err);
+                        });
+
+                    conn.query(
+                        `
+                        UPDATE product p
+                        JOIN order_detail od
+                        ON p.product_id = od.product_id
+                        SET p.product_stock_quantity =
+                            p.product_stock_quantity - od.quantity
+                        WHERE od.order_id = ?
+                        `,
+                        [orderId],
+                        (err) => {
+
+                            if (err)
+                                return conn.rollback(() => {
+                                    conn.release();
+                                    callback(err);
+                                });
+
+                            conn.commit((err) => {
+                                conn.release();
+                                callback(err);
+                            });
+
+                        }
+                    );
+
+                }
+            );
+
         });
-    }, 5 * 60 * 1000); // Đếm ngược 5 phút ngầm
+
+    });
+
 };

@@ -30,6 +30,7 @@
           <li><a href="/admin/dashboard/product">Sản phẩm</a></li>
           <li><a href="/admin/dashboard/category">Loại sản phẩm</a></li>
           <li><a href="/admin/dashboard/product-images">Hình ảnh sản phẩm</a></li>
+              <li><a href="/admin/dashboard/product-sizes">Kích thước sản phẩm</a></li>
         </ul>
       </li>
 
@@ -101,41 +102,45 @@
 
       <div class="table-wrapper">
         <table class="admin-table">
-          <thead>
-            <tr>
-              <th>Mã Đơn</th>
-              <th>Khách hàng đặt</th>
-              <th>Số điện thoại</th>
-              <th>Thời gian tạo đơn</th>
-              <th style="text-align: center;">Trạng thái đơn hàng</th>
-              <th style="text-align: center;">Chi tiết</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% orders.forEach(ord => { %>
-            <tr>
-              <td><strong>#ORD<%= ord.order_id %></strong></td>
-              <td><span style="color: #2c3e50; font-weight: 500;"><%= ord.customer_name || 'Khách vãng lai' %></span></td>
-              <td><%= ord.customer_phone || '---' %></td>
-              <td><%= new Date(ord.order_date).toLocaleString('vi-VN', {hour12: false}) %></td>
-              <td style="text-align: center;">
-                <% if(ord.order_status === 'pending') { %>
-                  <span class="badge-status status-pending"><i class="fa-regular fa-clock"></i> Chờ xử lý</span>
-                <% } else if(ord.order_status === 'completed') { %>
-                  <span class="badge-status status-completed"><i class="fa-regular fa-circle-check"></i> Hoàn thành</span>
-                <% } else { %>
-                  <span class="badge-status status-cancelled"><i class="fa-solid fa-ban"></i> Đã hủy bỏ</span>
-                <% } %>
-              </td>
-              <td style="text-align: center;">
-                <button type="button" class="btn-view-order btn-open-order-modal" data-id="<%= ord.order_id %>">
-                  <i class="fa-solid fa-magnifying-glass"></i> Xem chi tiết các sản phẩm
-                </button>
-              </td>
-            </tr>
-            <% }) %>
-          </tbody>
-        </table>
+  <thead>
+    <tr>
+      <th>Mã Đơn</th>
+      <th>Khách hàng đặt</th>
+      <th>Số điện thoại</th>
+      <th>Thời gian tạo đơn</th>
+      <th style="text-align: center;">Trạng thái đơn hàng</th>
+      <th style="text-align: center;">Chi tiết</th>
+      <th style="text-align: center;">Thao tác</th> </tr>
+  </thead>
+  <tbody>
+    <% orders.forEach(ord => { %>
+    <tr id="order-row-<%= ord.order_id %>"> <td><strong>#ORD<%= ord.order_id %></strong></td>
+      <td><span style="color: #2c3e50; font-weight: 500;"><%= ord.customer_name || 'Khách vãng lai' %></span></td>
+      <td><%= ord.customer_phone || '---' %></td>
+      <td><%= new Date(ord.order_date).toLocaleString('vi-VN', {hour12: false}) %></td>
+      <td style="text-align: center;">
+        <% if(ord.order_status === 'pending') { %>
+          <span class="badge-status status-pending"><i class="fa-regular fa-clock"></i> Chờ xử lý</span>
+        <% } else if(ord.order_status === 'completed') { %>
+          <span class="badge-status status-completed"><i class="fa-regular fa-circle-check"></i> Hoàn thành</span>
+        <% } else { %>
+          <span class="badge-status status-cancelled"><i class="fa-solid fa-ban"></i> Đã hủy bỏ</span>
+        <% } %>
+      </td>
+      <td style="text-align: center;">
+        <button type="button" class="btn-view-order btn-open-order-modal" data-id="<%= ord.order_id %>">
+          <i class="fa-solid fa-magnifying-glass"></i> Xem chi tiết
+        </button>
+      </td>
+      <td style="text-align: center;">
+        <button type="button" class="btn-delete-order" data-id="<%= ord.order_id %>" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">
+          <i class="fa-solid fa-trash-can"></i> Xóa
+        </button>
+      </td>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>
 
         <div class="pagination">
           <% if (currentPage > 1) { %><a href="/admin/dashboard/orders?page=<%= currentPage - 1 %>">← Trước</a><% } %>

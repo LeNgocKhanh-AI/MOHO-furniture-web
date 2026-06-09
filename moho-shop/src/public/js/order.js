@@ -169,3 +169,51 @@ document.addEventListener("DOMContentLoaded", () => {
             productDetailModal.style.display = "none";
     });
 });
+// ==========================================
+// XỬ LÝ LOGIC XÓA ĐƠN HÀNG (AJAX)
+// ==========================================
+document.querySelectorAll(".btn-delete-order").forEach((button) => {
+    button.addEventListener("click", async () => {
+        const orderId = button.dataset.id;
+
+        // Hiện hộp thoại xác nhận trước khi hủy/xóa
+        const confirmDelete = confirm(
+            `Bạn có chắc chắn muốn xóa vĩnh viễn đơn hàng #ORD${orderId} cùng toàn bộ sản phẩm bên trong không? Tác vụ này không thể hoàn tác!`,
+        );
+
+        if (confirmDelete) {
+            try {
+                // Gọi API Delete ngầm
+                const response = await fetch(`/admin/dashboard/api/delete/${orderId}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert(result.message);
+
+                    // Xóa mượt hàng vừa chọn trên giao diện mà không cần reload trang
+                    const orderRow = document.getElementById(`order-row-${orderId}`);
+                    if (orderRow) {
+                        orderRow.style.transition = "all 0.4s ease";
+                        orderRow.style.opacity = "0";
+                        setTimeout(() => {
+                            orderRow.remove();
+                            // Nếu muốn đồng bộ lại phân trang hoặc tải lại trang bạn có thể dùng: location.reload();
+                        }, 400);
+                    }
+                } else {
+                    alert("Thất bại: " + result.error);
+                }
+            } catch (error) {
+                console.error("Lỗi khi gửi yêu cầu xóa đơn hàng:", error);
+                alert("Có lỗi xảy ra, không thể kết nối tới máy chủ.");
+            }
+        }
+    });
+});
+

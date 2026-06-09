@@ -54,8 +54,9 @@ const create = async (req, res) => {
     try {
         const data = {
             title: req.body.title,
-            slug: removeVietnameseTones(req.body.title), // <-- TỰ ĐỘNG SINH ĐUÔI URL Ở ĐÂY
+            slug: removeVietnameseTones(req.body.title),
             thumbnail: req.body.thumbnail,
+            summary: req.body.summary, // <-- THÊM DÒNG NÀY ĐỂ LẤY NỘI DUNG TÓM TẮT TỪ VIEW
             content: req.body.content,
             category_id: req.body.category_id,
         };
@@ -63,7 +64,7 @@ const create = async (req, res) => {
         await postService.createPost(data); // Gọi sang service để lưu
         res.redirect("/admin/dashboard/posts");
     } catch (error) {
-        console.error(error);
+        console.error("Lỗi tạo bài viết (Controller):", error);
         res.status(500).send("Lỗi tạo bài viết");
     }
 };

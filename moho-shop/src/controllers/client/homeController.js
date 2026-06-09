@@ -33,9 +33,9 @@ exports.detail = (req, res) => {
   const productId = req.params.id;
 
   ProductModel.getProductDetail(productId, (err, result) => {
+
     if (err) {
       console.log(err);
-
       return;
     }
 
@@ -43,14 +43,24 @@ exports.detail = (req, res) => {
       return res.send("Không tìm thấy sản phẩm");
     }
 
-    const product = result[0];
+    ProductModel.getProductSizes(productId, (err, sizes) => {
 
-    const images = result;
+      if (err) {
+        console.log(err);
+        return;
+      }
 
-    res.render("page/productdetail", {
-      product,
-      images,
+      const product = result[0];
+      const images = result;
+
+      res.render("page/productdetail", {
+        product,
+        images,
+        sizes
+      });
+
     });
+
   });
 };
 

@@ -41,6 +41,7 @@
                         <li><a href="/admin/dashboard/product">Sản phẩm</a></li>
                         <li><a href="/admin/dashboard/category">Loại sản phẩm</a></li>
                         <li><a href="/admin/dashboard/product-images">Hình ảnh sản phẩm</a></li>
+                            <li><a href="/admin/dashboard/product-sizes">Kích thước sản phẩm</a></li>
                     </ul>
                 </li>
 
@@ -63,7 +64,7 @@
                             <i class="fa-solid fa-comments"></i> <span>Quản lý phản hồi</span>
                         </div>
                         <i class="fa-solid fa-chevron-down arrow-feedback"></i>
-                    </div>
+</div>
                     <ul class="submenu-feedback">
                         <li><a href="/admin/dashboard/feedbacks">Feedback</a></li>
                         <li><a href="/admin/dashboard/product-reviews">Review</a></li>
@@ -128,11 +129,11 @@
                                 <tr>
                                     <td><%= post.id %></td>
                                     <td>
-                                        <img src="<%= post.thumbnail || '/images/default-thumbnail.jpg' %>" class="post-thumbnail-img" alt="thumbnail">
+<img src="<%= post.thumbnail || '/images/default-thumbnail.jpg' %>" class="post-thumbnail-img" alt="thumbnail">
                                     </td>
                                     <td><div class="text-truncate"><strong><%= post.title %></strong></div></td>
                                     <td><span class="badge"><%= post.cat_name || 'Không xác định' %></span></td>
-                                    <td><div class="text-truncate"><%= post.content.replace(/<[^>]*>/g, '') %></div></td>
+                                    <td><div class="text-truncate"><%= post.summary || (post.content ? post.content.replace(/<[^>]*>/g, '') : '') %></div></td>
                                     <td class="actions-cell">
                                         <a href="#" class="btn-edit edit-post-btn" 
                                            data-id="<%= post.id %>"
@@ -141,10 +142,10 @@
                                            data-categoryid="<%= post.category_id %>"
                                            data-summary="<%= post.summary || '' %>"
                                            data-content="<%= post.content %>">
-                                            Sửa
+                                             Sửa
                                         </a>
                                         <a href="/admin/dashboard/posts/delete/<%= post.id %>" class="btn-delete" onclick="return confirm('Bạn có chắc muốn xoá bài viết này?')">
-                                            Xoá
+                                             Xoá
                                         </a>
                                     </td>
                                 </tr>
@@ -170,7 +171,7 @@
 
     <div id="postModal" class="modal" style="display:none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: hidden; background-color: rgba(0,0,0,0.5);">
         <div class="modal-content" style="background-color: #fff; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 20px; border-radius: 8px; width: 85%; max-width: 1200px; max-height: 90vh; overflow-y: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
-            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
+<div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
                 <h2>Thêm bài viết mới & Phân đoạn nội dung</h2>
                 <span class="close-post-modal" style="font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
             </div>
@@ -197,12 +198,17 @@
                             <select name="category_id" id="add_post_category" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
                                 <% categories.forEach(cat => { %>
                                     <option value="<%= cat.id %>"><%= cat.name %></option>
-                                        <% }) %>
+                                <% }) %>
                             </select>
                         </div>
 
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label style="display:block; margin-bottom: 5px; font-weight: bold;">Nội dung tóm tắt (Summary)</label>
+                            <textarea name="summary" id="add_post_summary" rows="4" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" placeholder="Tóm tắt ngắn hiển ở trang danh sách..."></textarea>
+                        </div>
+
                         <div style="margin-top: 30px;">
-                            <button type="submit" class="btn-save" style="width: 100%; padding: 12px; background: #2b78e4; color: white; border: none; border-radius: 5px; font-size: 15px; font-weight: bold; cursor: pointer;">
+<button type="submit" class="btn-save" style="width: 100%; padding: 12px; background: #2b78e4; color: white; border: none; border-radius: 5px; font-size: 15px; font-weight: bold; cursor: pointer;">
                                 <i class="fa-solid fa-paper-plane"></i> Đăng bài viết mới
                             </button>
                         </div>
@@ -237,7 +243,7 @@
                 
                 <div style="display: flex; gap: 25px;">
                     <div class="form-left-panel" style="flex: 4; border-right: 1px solid #eee; padding-right: 20px;">
-                        <h3 style="color: #2b78e4; margin-bottom: 15px; font-size: 16px;"><i class="fa-solid fa-circle-info"></i> Form 1: Thông tin cơ bản</h3>
+<h3 style="color: #2b78e4; margin-bottom: 15px; font-size: 16px;"><i class="fa-solid fa-circle-info"></i> Form 1: Thông tin cơ bản</h3>
                         
                         <div class="form-group" style="margin-bottom: 15px;">
                             <label style="display:block; margin-bottom: 5px; font-weight: bold;">Tiêu đề bài viết</label>
@@ -272,7 +278,7 @@
                     
                     <div class="form-right-panel" style="flex: 6; display: flex; flex-direction: column;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                            <h3 style="color: #2b78e4; margin-top: 0; font-size: 16px;"><i class="fa-solid fa-layer-group"></i> Form 2: Nội dung phân đoạn chi tiết</h3>
+<h3 style="color: #2b78e4; margin-top: 0; font-size: 16px;"><i class="fa-solid fa-layer-group"></i> Form 2: Nội dung phân đoạn chi tiết</h3>
                             <button type="button" id="add-block-btn" style="background: #2b78e4; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">
                                 <i class="fa-solid fa-plus"></i> Thêm phân đoạn mới
                             </button>

@@ -123,3 +123,32 @@ window.addEventListener("click", (e) => {
         viewDetailModal.style.display = "none";
     }
 });
+
+const searchInput = document.getElementById("searchProduct");
+const cards = document.querySelectorAll(".product-card");
+const notFound = document.getElementById("notFound");
+
+searchInput.addEventListener("input", function () {
+
+    const keyword = this.value.trim().toLowerCase();
+    let count = 0;
+
+    cards.forEach(card => {
+        const id = card.dataset.id;
+        const name = card.dataset.name;
+        const sku = card.dataset.sku;
+
+        if (
+            id.includes(keyword) ||
+            name.includes(keyword) ||
+            sku.includes(keyword)
+        ) {
+            card.style.display = "block";
+            count++;
+        } else {
+            card.style.display = "none";
+        }
+    });
+
+    notFound.style.display = count === 0 ? "block" : "none";
+});

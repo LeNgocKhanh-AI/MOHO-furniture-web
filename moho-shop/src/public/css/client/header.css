@@ -260,61 +260,82 @@
 
 
 /* LIST */
+/* ================= MINI CART ITEM ================= */
+
 .mini-cart-item {
   display: flex;
   gap: 10px;
   padding: 10px;
-  border-bottom: 1px solid #eee;
-  align-items: center;
+  align-items: flex-start;
   position: relative;
 }
 
-/* IMAGE */
+/* fix lỗi selector sai của bạn */
+.mini-cart-item>div {
+  flex: 1;
+  position: relative;
+  min-height: 70px;
+}
+
+/* ================= IMAGE ================= */
+
 .mini-cart-item img {
-  width: 55px;
-  height: 55px;
+  width: 60px;
+  height: 60px;
   object-fit: cover;
   border-radius: 4px;
 }
 
-/* NAME */
+/* ================= NAME ================= */
+
 .mini-cart-name {
   font-size: 13px;
   font-weight: 600;
   text-transform: uppercase;
+  margin-bottom: 3px;
 }
 
-/* PRICE AREA */
+/* ================= PRICE ================= */
+
 .mini-cart-price {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 4px;
-  flex-wrap: wrap;
+  display: block;
+  margin-top: 2px;
 }
 
-/* CURRENT PRICE */
 .price-current {
   font-weight: 600;
   color: #000;
 }
 
-/* OLD PRICE */
-.price-old {
+.old-price {
   font-size: 12px;
   color: #999;
   text-decoration: line-through;
+  margin-left: 5px;
 }
 
-/* QTY */
+/* ================= SIZE ================= */
+
+.mini-cart-size {
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
+}
+
+/* ================= QTY (GÓC PHẢI DƯỚI) ================= */
+
 .qty-box {
+  position: absolute;
+  right: 38px;
+  bottom: 0;
   background: #eee;
-  padding: 2px 6px;
+  padding: 2px 7px;
   font-size: 12px;
   border-radius: 3px;
 }
 
-/* REMOVE BUTTON */
+/* ================= REMOVE (X) ================= */
+
 .remove-btn {
   position: absolute;
   right: 12px;
@@ -361,24 +382,34 @@
   flex: 1;
   padding: 10px;
   text-align: center;
-  border-radius: 4px;
+
   cursor: pointer;
-  font-weight: 600;
+
 }
 
 /* VIEW CART */
-.mini-cart-footer a {
-  border: 1px solid #0F7D6C;
-  color: #0F7D6C;
+.viewcart {
+  border: none;
+  color: white;
+  background: black;
   text-decoration: none;
 }
 
+.payment {
+
+  border: none;
+  color: white;
+  background: #1976d2;
+  text-decoration: none;
+
+}
+
 /* PAY */
-.mini-cart-footer button {
-  background: #0F7D6C;
+/* .mini-cart-footer button {
+  background: black;
   color: white;
   border: none;
-}
+} */
 
 /* HOVER EFFECT */
 .mini-cart-footer a:hover,

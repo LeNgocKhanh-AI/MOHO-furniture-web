@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý kích thước sản phẩm</title>
+    <link rel="stylesheet" href="/css/admin/admindashboard.css">
+    <link rel="stylesheet" href="/css/admin/product.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <a href="/admin/dashboard">
+                    <img src="/images/banners/LogoMoho.png" alt="Moho Logo" class="sidebar-logo">
+                </a>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="/admin/dashboard">
+                        <i class="fa-solid fa-chart-line"></i> Tổng quan
+                    </a>
+                </li>
+
+                <li class="dropdown-product active">
+                    <div class="dropdown-product-toggle">
+                        <div class="menu-left">
+                            <i class="fa-solid fa-box"></i>
+                            <span>Quản lý sản phẩm</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down arrow-product"></i>
+                    </div>
+                    <ul class="submenu-product">
+                        <li><a href="/admin/dashboard/product">Sản phẩm</a></li>
+                        <li><a href="/admin/dashboard/category">Loại sản phẩm</a></li>
+                        <li><a href="/admin/dashboard/product-images">Hình ảnh sản phẩm</a></li>
+                        <li><a href="/admin/dashboard/product-sizes" class="active">Kích thước sản phẩm</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown-orders">
+                    <div class="dropdown-orders-toggle">
+                        <div class="menu-left"><i class="fa-solid fa-cart-shopping"></i><span>Quản lý đơn hàng</span></div>
+                        <i class="fa-solid fa-chevron-down arrow-orders"></i>
+                    </div>
+                    <ul class="submenu-orders">
+                        <li><a href="/admin/dashboard/orders">Đơn hàng</a></li>
+                        <li><a href="/admin/dashboard/order-details">Chi tiết đơn hàng</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown-feedback">
+                    <div class="dropdown-feedback-toggle">
+                        <div class="menu-left"><i class="fa-solid fa-comments"></i><span>Quản lý phản hồi</span></div>
+                        <i class="fa-solid fa-chevron-down arrow-feedback"></i>
+                    </div>
+                    <ul class="submenu-feedback">
+                        <li><a href="/admin/dashboard/feedbacks">Feedback</a></li>
+                        <li><a href="/admin/dashboard/product-reviews">Review</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown-product">
+                    <div class="dropdown-product-toggle">
+                        <div class="menu-left">
+                            <i class="fa-solid fa-newspaper"></i>
+                            <span>Quản lý bài viết</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down arrow-product"></i>
+                    </div>
+                    <ul class="submenu-product">
+                        <li><a href="/admin/dashboard/posts">Bài viết / Tin tức</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown-menu">
+                    <div class="dropdown-toggle">
+                        <div class="menu-left"><i class="fa-solid fa-users"></i><span>Quản lý người dùng</span></div>
+                        <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                    </div>
+                    <ul class="submenu">
+                        <li><a href="/admin/dashboard/customers">Khách hàng</a></li>
+                        <li><a href="/admin/dashboard/admin-users">Admin</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="dashboard-header">
+                <h1>Quản lý kích thước sản phẩm</h1>
+                <p>Danh sách các kích thước (size) của từng sản phẩm — tồn kho tự động tổng hợp từ các size</p>
+            </div>
+
+            <div class="table-container">
+                <div class="table-header">
+                    <h3>Danh sách kích thước</h3>
+                      <input
+        type="text"
+        id="searchSize"
+        placeholder="Tìm kiếm theo ID, tên sản phẩm hoặc SKU..."
+        style="padding:8px 12px;width:320px;border:1px solid #ccc;border-radius:6px;">
+
+                    <button id="openSizeModal" class="btn-add">+ Thêm kích thước</button>
+                </div>
+<p id="notFound"
+   style="display:none;text-align:center;color:red;margin-top:15px;">
+    Không tìm thấy sản phẩm !
+</p>
+
+                <div class="table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>size_id</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Tên kích thước</th>
+                                <th>Giá gốc SP</th>
+                                <th>Giá KM gốc SP</th>
+                                <th>Giá thêm (extra)</th>
+                                <th>Giá size</th>
+                                <th>Giá KM size</th>
+                                <th>Tồn kho</th>
+                                <th style="text-align: center;">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% sizes.forEach(size => { %>
+                                <tr
+    data-id="<%= size.product_id %>"
+    data-name="<%= (size.product_name || '').toLowerCase() %>"
+>
+                                    <td><%= size.size_id %></td>
+                                    <td><strong><%= size.product_name ? size.product_name : ('ID: ' + size.product_id) %></strong></td>
+                                    <td><span class="badge-category"><%= size.size_name %></span></td>
+                                    <td><%= Number(size.product_price).toLocaleString('vi-VN') %>đ</td>
+                                    <td>
+                                        <% if (size.product_sale_price) { %>
+                                            <strong style="color: #e74c3c;"><%= Number(size.product_sale_price).toLocaleString('vi-VN') %>đ</strong>
+                                        <% } else { %>
+                                            <span style="color: #aaa;">—</span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <% if (size.extra_price > 0) { %>
+                                            <span style="color: #e67e22;">+<%= Number(size.extra_price).toLocaleString('vi-VN') %>đ</span>
+                                        <% } else { %>
+                                            <span style="color: #aaa;">0đ</span>
+                                        <% } %>
+                                    </td>
+                                    <td><strong style="color: #2ecc71;"><%= Number(size.price).toLocaleString('vi-VN') %>đ</strong></td>
+                                    <td>
+                                        <% if (size.sale_price) { %>
+                                            <strong style="color: #e74c3c;"><%= Number(size.sale_price).toLocaleString('vi-VN') %>đ</strong>
+                                        <% } else { %>
+                                            <span style="color: #aaa;">—</span>
+                                        <% } %>
+                                    </td>
+                                    <td><%= size.stock_quantity %></td>
+                                    <td class="actions-cell">
+                                        <a href="#" class="btn-edit edit-size-btn"
+                                            data-id="<%= size.size_id %>"
+                                            data-product="<%= size.product_id %>"
+                                            data-sizename="<%= size.size_name %>"
+                                            data-extra="<%= size.extra_price %>"
+                                            data-stock="<%= size.stock_quantity %>">
+                                            Sửa
+                                        </a>
+                                        <a href="/admin/dashboard/product-sizes/delete/<%= size.size_id %>"
+                                            class="btn-delete"
+                                            onclick="return confirm('Bạn có chắc chắn muốn xoá kích thước này không?')">
+                                            Xoá
+                                        </a>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+
+                    <div class="pagination">
+                        <% if (currentPage > 1) { %>
+                            <a href="/admin/dashboard/product-sizes?page=<%= currentPage - 1 %>">← Trước</a>
+                        <% } %>
+                        <% for (let i = 1; i <= totalPages; i++) { %>
+                            <a href="/admin/dashboard/product-sizes?page=<%= i %>"
+                                class="<%= i === currentPage ? 'active' : '' %>">
+                                <%= i %>
+                            </a>
+                        <% } %>
+                        <% if (currentPage < totalPages) { %>
+                            <a href="/admin/dashboard/product-sizes?page=<%= currentPage + 1 %>">Sau →</a>
+                        <% } %>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Thêm size -->
+    <div id="sizeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Thêm kích thước mới</h2>
+                <span class="close-size-modal">&times;</span>
+            </div>
+            <form action="/admin/dashboard/product-sizes/create" method="POST">
+                <div class="form-group">
+                    <label>Chọn sản phẩm áp dụng</label>
+                    <select name="product_id" id="add_product_id" required>
+                        <option value="">-- Chọn sản phẩm --</option>
+                        <% products.forEach(prod => { %>
+                            <option value="<%= prod.product_id %>" data-price="<%= prod.product_price %>">
+                                <%= prod.product_name %> — Giá gốc: <%= Number(prod.product_price).toLocaleString('vi-VN') %>đ
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tên kích thước (VD: 1m6, 120x80, S, M, L...)</label>
+                    <input type="text" name="size_name" placeholder="Ví dụ: 1m6" required>
+                </div>
+                <div class="form-group">
+                    <label>Giá thêm (extra_price) — để 0 nếu không thêm</label>
+                    <input type="number" name="extra_price" id="add_extra_price" value="0" min="0" oninput="calcAddPrice()">
+                </div>
+                <div class="form-group">
+                    <label>Giá size = Giá gốc + Giá thêm</label>
+                    <input type="text" id="add_preview_price" readonly placeholder="Chọn sản phẩm trước" style="background:#f5f5f5; color:#555;">
+                </div>
+                <div class="form-group">
+                    <label>Số lượng tồn kho cho size này</label>
+                    <input type="number" name="stock_quantity" value="0" min="0" required>
+                </div>
+                <button type="submit" class="btn-save">Lưu kích thước</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Sửa size -->
+    <div id="editSizeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Sửa thông tin kích thước</h2>
+                <span class="close-edit-size">&times;</span>
+            </div>
+            <form id="editSizeForm" method="POST">
+                <input type="hidden" name="size_id" id="edit_size_id">
+                <div class="form-group">
+                    <label>Sản phẩm áp dụng</label>
+                    <select name="product_id" id="edit_product_id" required>
+                        <% products.forEach(prod => { %>
+                            <option value="<%= prod.product_id %>" data-price="<%= prod.product_price %>">
+                                <%= prod.product_name %> — Giá gốc: <%= Number(prod.product_price).toLocaleString('vi-VN') %>đ
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tên kích thước</label>
+                    <input type="text" name="size_name" id="edit_size_name" required>
+                </div>
+                <div class="form-group">
+                    <label>Giá thêm (extra_price)</label>
+                    <input type="number" name="extra_price" id="edit_extra_price" min="0" oninput="calcEditPrice()">
+                </div>
+                <div class="form-group">
+                    <label>Giá size = Giá gốc + Giá thêm</label>
+                    <input type="text" id="edit_preview_price" readonly style="background:#f5f5f5; color:#555;">
+                </div>
+                <div class="form-group">
+                    <label>Số lượng tồn kho cho size này</label>
+                    <input type="number" name="stock_quantity" id="edit_stock_quantity" min="0" required>
+                </div>
+                <button type="submit" class="btn-save">Cập nhật kích thước</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById("searchSize");
+const rows = document.querySelectorAll(".admin-table tbody tr");
+const notFound = document.getElementById("notFound");
+
+searchInput.addEventListener("input", function () {
+    const keyword = this.value.trim().toLowerCase();
+    let count = 0;
+
+    rows.forEach(row => {
+        const id = row.dataset.id;
+        const name = row.dataset.name;
+
+        if (id.includes(keyword) || name.includes(keyword)) {
+            row.style.display = "";
+            count++;
+        } else {
+            row.style.display = "none";
+        }
+    });
+
+    notFound.style.display = count === 0 ? "block" : "none";
+});
+        const sizeModal = document.getElementById('sizeModal');
+        const editSizeModal = document.getElementById('editSizeModal');
+
+        document.getElementById('openSizeModal').addEventListener('click', () => {
+            sizeModal.style.display = 'flex';
+        });
+        document.querySelector('.close-size-modal').addEventListener('click', () => {
+            sizeModal.style.display = 'none';
+        });
+        document.querySelector('.close-edit-size').addEventListener('click', () => {
+            editSizeModal.style.display = 'none';
+        });
+        window.addEventListener('click', (e) => {
+            if (e.target === sizeModal) sizeModal.style.display = 'none';
+            if (e.target === editSizeModal) editSizeModal.style.display = 'none';
+        });
+
+        function calcAddPrice() {
+            const select = document.getElementById('add_product_id');
+            const selectedOpt = select.options[select.selectedIndex];
+            const basePrice = parseFloat(selectedOpt.dataset.price) || 0;
+            const extra = parseFloat(document.getElementById('add_extra_price').value) || 0;
+            document.getElementById('add_preview_price').value = (basePrice + extra).toLocaleString('vi-VN') + 'đ';
+        }
+        document.getElementById('add_product_id').addEventListener('change', calcAddPrice);
+
+        function calcEditPrice() {
+            const select = document.getElementById('edit_product_id');
+            const selectedOpt = select.options[select.selectedIndex];
+            const basePrice = parseFloat(selectedOpt.dataset.price) || 0;
+            const extra = parseFloat(document.getElementById('edit_extra_price').value) || 0;
+            document.getElementById('edit_preview_price').value = (basePrice + extra).toLocaleString('vi-VN') + 'đ';
+        }
+        document.getElementById('edit_product_id').addEventListener('change', calcEditPrice);
+
+        document.querySelectorAll('.edit-size-btn').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.getElementById('edit_size_id').value = this.dataset.id;
+                document.getElementById('edit_size_name').value = this.dataset.sizename;
+                document.getElementById('edit_extra_price').value = this.dataset.extra;
+                document.getElementById('edit_stock_quantity').value = this.dataset.stock;
+                document.getElementById('edit_product_id').value = this.dataset.product;
+                calcEditPrice();
+                document.getElementById('editSizeForm').action = `/admin/dashboard/product-sizes/edit/${this.dataset.id}`;
+                editSizeModal.style.display = 'flex';
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -32,18 +32,17 @@ const getPostById = async (id) => {
 // 4. Thêm mới bài viết
 const createPost = async (data) => {
     const query = `
-        INSERT INTO posts (title, thumbnail, content, category_id)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO posts (title, slug, thumbnail, summary, content, category_id)
+        VALUES (?, ?, ?, ?, ?, ?)
     `;
-    const [result] = await db
-        .promise()
-        .query(query, [
-            data.title,
-            data.slug,
-            data.thumbnail || null,
-            data.content,
-            data.category_id,
-        ]);
+    const [result] = await db.promise().query(query, [
+        data.title, // 1. ứng với title
+        data.slug, // 2. ứng với slug
+        data.thumbnail || null, // 3. ứng với thumbnail
+        data.summary || null, // 4. ứng với summary (Mới thêm)
+        data.content, // 5. ứng với content
+        data.category_id, // 6. ứng với category_id
+    ]);
     return result.insertId;
 };
 

@@ -101,8 +101,8 @@
                   <h4 class="prod-name"><%= item.product_name %></h4>
                   <p class="prod-variant">Mặc định</p>
                   <div class="prod-price-row">
-                    <span class="price-old-strike"><%= Number(item.price).toLocaleString('vi-VN') %>đ</span>
-                    <span class="price-current-red"><%= Number(item.unit_price).toLocaleString('vi-VN') %>đ</span>
+                    <span class="price-old-strike"><%= Number(item.product_price).toLocaleString('vi-VN') %>đ</span>
+                    <span class="price-current-red"><%= Number(item.product_sale_price || item.product_price).toLocaleString('vi-VN') %>đ</span>
                   </div>
                 </div>
                 <div class="prod-qty">x<%= item.quantity %></div>
@@ -110,10 +110,7 @@
             <% }) } %>
           </div>
           
-          <!-- Phần giảm giá nếu có -->
-          <div class="discount-alert-box">
-            <span>Bạn đã được giảm <strong class="text-red">4,000,000đ</strong> <i class="fa-solid fa-chevron-down"></i></span>
-          </div>
+          
         </div>
 
         <!-- Tóm tắt đơn hàng -->
