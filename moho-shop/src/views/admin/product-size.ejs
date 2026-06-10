@@ -131,9 +131,11 @@
                         </thead>
                         <tbody>
                             <% sizes.forEach(size => { %>
-                                <tr
+              <tr
     data-id="<%= size.product_id %>"
+    data-size-id="<%= size.size_id %>"
     data-name="<%= (size.product_name || '').toLowerCase() %>"
+    data-sku="<%= (size.sku || '').toLowerCase() %>"
 >
                                     <td><%= size.size_id %></td>
                                     <td><strong><%= size.product_name ? size.product_name : ('ID: ' + size.product_id) %></strong></td>
@@ -292,10 +294,17 @@ searchInput.addEventListener("input", function () {
     let count = 0;
 
     rows.forEach(row => {
-        const id = row.dataset.id;
-        const name = row.dataset.name;
+        const productId = (row.dataset.id || '').toLowerCase();
+        const sizeId    = (row.dataset.sizeId || '').toLowerCase();
+        const name      = (row.dataset.name || '').toLowerCase();
+        const sku       = (row.dataset.sku || '').toLowerCase();
 
-        if (id.includes(keyword) || name.includes(keyword)) {
+        if (
+            productId.includes(keyword) ||
+            sizeId.includes(keyword)    ||
+            name.includes(keyword)      ||
+            sku.includes(keyword)
+        ) {
             row.style.display = "";
             count++;
         } else {

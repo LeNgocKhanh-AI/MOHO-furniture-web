@@ -132,6 +132,19 @@
           <i class="fa-solid fa-magnifying-glass"></i> Xem chi tiết
         </button>
       </td>
+      <td>
+        <!-- Thêm nút In trước nút Xóa -->
+<button type="button" class="btn-print-order" data-id="<%= ord.order_id %>"
+    data-name="<%= ord.customer_name || 'Khách vãng lai' %>"
+    data-phone="<%= ord.customer_phone || '---' %>"
+    data-date="<%= new Date(ord.order_date).toLocaleString('vi-VN', {hour12: false}) %>"
+    data-status="<%= ord.order_status %>"
+    style="background:#3b82f6;color:white;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:13px;margin-right:4px;">
+    <i class="fa-solid fa-print"></i> In
+</button>
+
+<button type="button" class="btn-delete-order" ...> <!-- giữ nguyên -->
+      </td>
       <td style="text-align: center;">
         <button type="button" class="btn-delete-order" data-id="<%= ord.order_id %>" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">
           <i class="fa-solid fa-trash-can"></i> Xóa

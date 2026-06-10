@@ -63,12 +63,15 @@ const homeRoutes = require("./src/routes/client/home.routes");
 const authRoutes = require("./src/routes/client/auth.routes");
 const cartRoutes = require("./src/routes/client/cart.routes");
 const adviceRoutes = require("./src/routes/client/advice.routes");
+const accountRoutes = require("./src/routes/client/account.routes");
+const orderAccountRoutes = require("./src/routes/client/orderaccount.routes");
 
 app.use("/advice", adviceRoutes);
-
 app.use("/", homeRoutes);
 app.use("/", authRoutes);
 app.use("/cart", cartRoutes);
+app.use("/account", accountRoutes);
+app.use("/orderaccount", orderAccountRoutes);
 
 /* =========================
    ADMIN ROUTES (CLEAN)

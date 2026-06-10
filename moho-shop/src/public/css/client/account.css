@@ -1,0 +1,65 @@
+.account-container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+.account-wrapper {
+    display: flex;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.account-sidebar {
+    width: 250px;
+}
+
+.account-sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.account-sidebar li a {
+    display: block;
+    padding: 10px 0;
+    color: #333;
+    text-decoration: none;
+}
+
+.account-sidebar li a.active {
+    font-weight: bold;
+    color: #000;
+    border-bottom: 2px solid #000;
+}
+
+.account-content {
+    flex: 1;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.btn-update {
+    background: #000;
+    color: #fff;
+    padding: 12px 25px;
+    border: none;
+    cursor: pointer;
+}
+
+.account-breadcrumb {
+    margin-bottom: 20px;
+    font-size: 14px;
+}

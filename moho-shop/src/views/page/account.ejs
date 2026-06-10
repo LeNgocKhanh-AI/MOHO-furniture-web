@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tài khoản của bạn - MOHO</title>
+    <link rel="stylesheet" href="/css/client/header.css" />
+    <link rel="stylesheet" href="/css/client/footer.css" />
+    <link rel="stylesheet" href="/css/client/account.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body>
+    <%- include("../partials/header") %>
+
+    <main class="account-container">
+      <div class="account-breadcrumb">
+        <a href="/">Trang chủ</a> <span>/</span>
+        <span class="current">Tài khoản của bạn</span>
+      </div>
+
+      <div class="account-wrapper">
+        <aside class="account-sidebar">
+          <ul>
+            <li><a href="/account" class="active">Thông tin tài khoản</a></li>
+            <li><a href="/orderaccount">Đơn hàng của tôi</a></li>
+            <li><a href="/logout">Đăng xuất</a></li>
+          </ul>
+        </aside>
+
+        <section class="account-content">
+          <h2>Thông tin tài khoản</h2>
+          <form action="/account/update" method="POST" class="account-form">
+            <div class="form-group">
+              <label>Email:</label>
+              <input
+                type="email"
+                name="email"
+                value="<%= user.customer_email || '' %>"
+                disabled
+              />
+            </div>
+            <div class="form-group">
+              <label>Họ:</label>
+              <input
+                type="text"
+                name="firstname"
+                value="<%= user.customer_firstname || '' %>"
+              />
+            </div>
+            <div class="form-group">
+              <label>Tên:</label>
+              <input
+                type="text"
+                name="lastname"
+                value="<%= user.customer_lastname || '' %>"
+              />
+            </div>
+            <div class="form-group">
+              <label>Số điện thoại:</label>
+              <input
+                type="text"
+                name="phone"
+                value="<%= user.customer_phone || '' %>"
+              />
+            </div>
+            <button type="submit" class="btn-update">Cập nhật thông tin</button>
+          </form>
+        </section>
+      </div>
+    </main>
+
+    <%- include("../partials/footer") %>
+
+    <script src="/js/search.js"></script>
+    <script src="/js/cart.js"></script>
+    <script src="/js/auth.js"></script>
+  </body>
+</html>

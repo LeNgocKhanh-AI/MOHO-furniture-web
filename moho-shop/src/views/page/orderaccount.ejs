@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đơn hàng của tôi - MOHO</title>
+    <link rel="stylesheet" href="/css/client/header.css" />
+    <link rel="stylesheet" href="/css/client/footer.css" />
+    <link rel="stylesheet" href="/css/client/account.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        .order-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .order-table th, .order-table td { padding: 15px; border-bottom: 1px solid #eee; text-align: left; }
+        .order-header { background: #f9f9f9; font-weight: bold; }
+        .btn-confirm { background: #000; color: #fff; border: none; padding: 10px 20px; cursor: pointer; display: block; margin: 10px 0; }
+        .status-completed { color: green; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <%- include('../partials/header') %>
+
+    <main class="account-container">
+        <div class="account-wrapper">
+            <aside class="account-sidebar">
+                <h3>Tài khoản</h3>
+                <ul>
+                    <li><a href="/account">Thông tin tài khoản</a></li>
+                    <li><a href="/orderaccount" class="active">Đơn hàng của tôi</a></li>
+                    <li><a href="/logout">Đăng xuất</a></li>
+                </ul>
+            </aside>
+
+<section class="account-content">
+    <h2>Đơn hàng của tôi</h2>
+    <% if (orders && orders.length > 0) { %>
+        <% orders.forEach(order => { %>
+            <div class="order-box" style="border: 1px solid #ddd; margin-bottom: 20px; padding: 15px;">
+                <h3>Mã đơn: #<%= order.order_id %> - <%= new Date(order.order_date).toLocaleDateString('vi-VN') %></h3>
+                <table class="order-table" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Thông tin</th>
+                            <th>Số lượng</th>
+                            <th>Tổng tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% order.items.forEach(item => { %>
+                            <tr>
+                                <td>
+                                    <img src="<%= item.image_url %>" style="width: 50px; height: 50px;">
+                                    <%= item.product_name %>
+                                </td>
+                                <td>Size: <%= item.size_name %></td>
+                                <td><%= item.quantity %></td>
+                                <td><%= item.total_price.toLocaleString('vi-VN') %>đ</td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+<% if(order.order_status === 'pending') { %>
+                    <form action="/orderaccount/confirm/<%= order.order_id %>" method="POST">
+                        <button type="submit" class="btn-confirm">Xác nhận đã nhận được hàng</button>
+                    </form>
+                <% } else { %>
+                    <p style="color: green; font-weight: bold;">Đã hoàn thành</p>
+                <% } %>
+            </div>
+        <% }) %>
+    <% } else { %>
+        <p>Bạn chưa có đơn hàng nào.</p>
+    <% } %>
+</section>
+        </div>
+    </main>
+
+    <%- include('../partials/footer') %>
+    <script src="/js/search.js"></script>
+    <script src="/js/cart.js"></script>
+    <script src="/js/auth.js"></script>
+</body>
+</html>
