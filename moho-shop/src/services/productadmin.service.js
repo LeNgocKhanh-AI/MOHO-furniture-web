@@ -53,7 +53,7 @@ const createProduct = async (data) => {
       product_description,
       is_featured
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
   `;
 
   await db

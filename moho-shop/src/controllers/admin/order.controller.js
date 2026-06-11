@@ -35,25 +35,27 @@ const getItemsApi = async (req, res) => {
         // - Liên kết sang bảng `product` (p) để lấy tên, sku, mô tả
         // - Liên kết an toàn sang bảng `product_image` (pi) để lấy ảnh đại diện
         const query = `
-      SELECT 
-        od.order_id,
-        od.product_id,
-        od.quantity,
-        od.unit_price,
-        p.product_name, 
-        p.product_sku,
-        p.product_description,
-        p.is_featured,
-        (
-          SELECT pi.image_url 
-          FROM product_image pi 
-          WHERE pi.product_id = p.product_id 
-          LIMIT 1
-        ) AS product_image
-      FROM order_detail od
-      LEFT JOIN product p ON od.product_id = p.product_id
-      WHERE od.order_id = ?
-    `;
+  SELECT 
+    od.order_id,
+    od.product_id,
+    od.quantity,
+    od.unit_price,
+    p.product_name, 
+    p.product_sku,
+    p.product_description,
+    p.is_featured,
+    ps.size_name,
+    (
+      SELECT pi.image_url 
+      FROM product_image pi 
+      WHERE pi.product_id = p.product_id 
+      LIMIT 1
+    ) AS product_image
+  FROM order_detail od
+  LEFT JOIN product p ON od.product_id = p.product_id
+  LEFT JOIN product_size ps ON od.size_id = ps.size_id
+  WHERE od.order_id = ?
+`;
 
         const [rows] = await db.promise().query(query, [orderId]);
 

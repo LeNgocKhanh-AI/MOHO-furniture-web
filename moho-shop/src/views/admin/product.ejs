@@ -310,7 +310,7 @@
                     <textarea id="edit_description" name="product_description"></textarea>
                 </div>
                 <div class="checkbox-inline">
-                    <input type="checkbox" name="is_featured" id="is_featured" value="1">
+                    <input type="checkbox" name="is_featured" id="edit_featured" value="1">
                     <label for="is_featured">Không hiển thị lên trang chủ</label>
                 </div>
                 <button type="submit" class="btn-save">Cập nhật</button>
@@ -357,6 +357,13 @@
             .then(editor => { editEditor = editor; })
             .catch(error => { console.error(error); });
     </script>
+<script>
+    document.getElementById('editForm').addEventListener('submit', function() {
+        if (typeof editEditor !== 'undefined' && editEditor) {
+            document.getElementById('edit_description').value = editEditor.getData();
+        }
+    });
+</script>
     <script src="/js/product.js"></script>
 </body>
 

@@ -44,9 +44,9 @@ const editForm = document.getElementById("editForm");
 if (editModal && editForm) {
     document.querySelectorAll(".edit-btn").forEach((btn) => {
         btn.addEventListener("click", (e) => {
-            e.preventDefault(); // QUAN TRỌNG
+            e.preventDefault();
 
-            editModal.style.display = "block";
+            editForm.action = `/admin/dashboard/product/edit/${btn.dataset.id}`;
 
             document.getElementById("edit_id").value = btn.dataset.id;
             document.getElementById("edit_name").value = btn.dataset.name;
@@ -55,26 +55,24 @@ if (editModal && editForm) {
             document.getElementById("edit_sale").value = btn.dataset.sale;
             document.getElementById("edit_sku").value = btn.dataset.sku;
             document.getElementById("edit_stock").value = btn.dataset.stock;
-            document.getElementById("edit_desc").value = btn.dataset.desc;
-            document.getElementById("edit_featured").checked =
-                btn.dataset.featured == 1;
+            document.getElementById("edit_featured").checked = btn.dataset.featured == 1;
 
-            editForm.action = `/admin/dashboard/product/edit/${btn.dataset.id}`;
+            if (typeof editEditor !== 'undefined' && editEditor) {
+                editEditor.setData(btn.dataset.desc || '');
+            } else {
+                document.getElementById("edit_description").value = btn.dataset.desc || '';
+            }
+
+            editModal.style.display = "block";
         });
     });
 
-    const closeBtn = document.querySelector(".close-edit");
-
-    if (closeBtn) {
-        closeBtn.addEventListener("click", () => {
-            editModal.style.display = "none";
-        });
-    }
+    document.querySelector(".close-edit").addEventListener("click", () => {
+        editModal.style.display = "none";
+    });
 
     window.addEventListener("click", (e) => {
-        if (e.target === editModal) {
-            editModal.style.display = "none";
-        }
+        if (e.target === editModal) editModal.style.display = "none";
     });
 }
 

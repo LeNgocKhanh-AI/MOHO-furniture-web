@@ -11,9 +11,11 @@ const getOrderDetails = async (page = 1, limit = 10) => {
       od.unit_price,
       od.total_price,
       p.product_name,
-      p.product_sku
+      p.product_sku,
+          ps.size_name  
     FROM order_detail od
     LEFT JOIN product p ON od.product_id = p.product_id
+       LEFT JOIN product_size ps ON od.size_id = ps.size_id 
     ORDER BY od.id DESC
     LIMIT ? OFFSET ?
   `;

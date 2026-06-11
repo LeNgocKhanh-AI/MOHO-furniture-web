@@ -102,6 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <button type="button" class="btn-popup-detail" 
                   data-name="${prod.product_name}" 
                   data-sku="${prod.product_sku || "Không có"}" 
+                   data-size="${prod.size_name || "Không có"}"
                   data-desc="${prod.product_description || "Không có mô tả sản phẩm."}">
             <i class="fa-regular fa-eye"></i> Xem chi tiết
           </button>
@@ -118,6 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
             detailBtn.addEventListener("click", () => {
                 document.getElementById("dt_name").innerText = detailBtn.dataset.name;
                 document.getElementById("dt_sku").innerText = detailBtn.dataset.sku;
+                document.getElementById("dt_size").innerText = detailBtn.dataset.size;
                 document.getElementById("dt_desc").innerText = detailBtn.dataset.desc;
                 productDetailModal.style.display = "block";
             });
@@ -253,6 +255,7 @@ document.querySelectorAll('.btn-print-order').forEach(btn => {
                 <td style="padding:8px;border:1px solid #ddd;text-align:center;">${idx + 1}</td>
                 <td style="padding:8px;border:1px solid #ddd;">${it.product_name || '---'}</td>
                 <td style="padding:8px;border:1px solid #ddd;text-align:center;">${it.product_sku || '---'}</td>
+                 <td style="padding:8px;border:1px solid #ddd;text-align:center;">${it.size_name || '---'}</td>
                 <td style="padding:8px;border:1px solid #ddd;text-align:center;">${it.quantity}</td>
                 <td style="padding:8px;border:1px solid #ddd;text-align:right;">${Number(it.unit_price).toLocaleString('vi-VN')}đ</td>
                 <td style="padding:8px;border:1px solid #ddd;text-align:right;font-weight:bold;">
@@ -330,6 +333,7 @@ document.querySelectorAll('.btn-print-order').forEach(btn => {
                             <th style="width:40px;">STT</th>
                             <th>Tên sản phẩm</th>
                             <th style="width:100px;">SKU</th>
+                            <th style="width:90px;text-align:center;">Kích thước</th>
                             <th style="width:60px;text-align:center;">SL</th>
                             <th style="width:110px;text-align:right;">Đơn giá</th>
                             <th style="width:120px;text-align:right;">Thành tiền</th>

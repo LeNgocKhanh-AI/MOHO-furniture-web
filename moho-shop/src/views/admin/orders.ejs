@@ -20,7 +20,7 @@
 
     <ul class="sidebar-menu">
       <li><a href="/admin/dashboard"><i class="fa-solid fa-chart-line"></i> Tổng quan</a></li>
-      
+
       <li class="dropdown-product">
         <div class="dropdown-product-toggle">
           <div class="menu-left"><i class="fa-solid fa-box"></i><span>Quản lý sản phẩm</span></div>
@@ -30,7 +30,7 @@
           <li><a href="/admin/dashboard/product">Sản phẩm</a></li>
           <li><a href="/admin/dashboard/category">Loại sản phẩm</a></li>
           <li><a href="/admin/dashboard/product-images">Hình ảnh sản phẩm</a></li>
-              <li><a href="/admin/dashboard/product-sizes">Kích thước sản phẩm</a></li>
+          <li><a href="/admin/dashboard/product-sizes">Kích thước sản phẩm</a></li>
         </ul>
       </li>
 
@@ -39,14 +39,10 @@
           <div class="menu-left"><i class="fa-solid fa-cart-shopping"></i><span>Quản lý đơn hàng</span></div>
           <i class="fa-solid fa-chevron-down arrow-orders"></i>
         </div>
-<ul class="submenu-orders">
-  <li>
-    <a href="/admin/dashboard/orders" class="active">Đơn hàng</a>
-  </li>
-  <li>
-    <a href="/admin/dashboard/order-details">Chi tiết đơn hàng</a>
-  </li>
-</ul>
+        <ul class="submenu-orders">
+          <li><a href="/admin/dashboard/orders" class="active">Đơn hàng</a></li>
+          <li><a href="/admin/dashboard/order-details">Chi tiết đơn hàng</a></li>
+        </ul>
       </li>
 
       <li class="dropdown-feedback">
@@ -60,21 +56,18 @@
         </ul>
       </li>
 
-      
-          <li class="dropdown-product">
-            <div class="dropdown-product-toggle">
-              <div class="menu-left">
-                <i class="fa-solid fa-newspaper"></i>
-                <span>Quản lý bài viết</span>
-              </div>
-              <i class="fa-solid fa-chevron-down arrow-product"></i>
-            </div>
-            <ul class="submenu-product">
-              <li>
-                <a href="/admin/dashboard/posts"> Bài viết / Tin tức </a>
-              </li>
-            </ul>
-          </li>
+      <li class="dropdown-product">
+        <div class="dropdown-product-toggle">
+          <div class="menu-left">
+            <i class="fa-solid fa-newspaper"></i>
+            <span>Quản lý bài viết</span>
+          </div>
+          <i class="fa-solid fa-chevron-down arrow-product"></i>
+        </div>
+        <ul class="submenu-product">
+          <li><a href="/admin/dashboard/posts">Bài viết / Tin tức</a></li>
+        </ul>
+      </li>
 
       <li class="dropdown-menu">
         <div class="dropdown-toggle">
@@ -102,76 +95,81 @@
 
       <div class="table-wrapper">
         <table class="admin-table">
-  <thead>
-    <tr>
-      <th>Mã Đơn</th>
-      <th>Khách hàng đặt</th>
-      <th>Số điện thoại</th>
-      <th>Thời gian tạo đơn</th>
-      <th style="text-align: center;">Trạng thái đơn hàng</th>
-      <th style="text-align: center;">Chi tiết</th>
-      <th style="text-align: center;">Thao tác</th> </tr>
-  </thead>
-  <tbody>
-    <% orders.forEach(ord => { %>
-    <tr id="order-row-<%= ord.order_id %>"> <td><strong>#ORD<%= ord.order_id %></strong></td>
-      <td><span style="color: #2c3e50; font-weight: 500;"><%= ord.customer_name || 'Khách vãng lai' %></span></td>
-      <td><%= ord.customer_phone || '---' %></td>
-      <td><%= new Date(ord.order_date).toLocaleString('vi-VN', {hour12: false}) %></td>
-      <td style="text-align: center;">
-        <% if(ord.order_status === 'pending') { %>
-          <span class="badge-status status-pending"><i class="fa-regular fa-clock"></i> Chờ xử lý</span>
-        <% } else if(ord.order_status === 'completed') { %>
-          <span class="badge-status status-completed"><i class="fa-regular fa-circle-check"></i> Hoàn thành</span>
-        <% } else { %>
-          <span class="badge-status status-cancelled"><i class="fa-solid fa-ban"></i> Đã hủy bỏ</span>
-        <% } %>
-      </td>
-      <td style="text-align: center;">
-        <button type="button" class="btn-view-order btn-open-order-modal" data-id="<%= ord.order_id %>">
-          <i class="fa-solid fa-magnifying-glass"></i> Xem chi tiết
-        </button>
-      </td>
-      <td>
-        <!-- Thêm nút In trước nút Xóa -->
-<button type="button" class="btn-print-order" data-id="<%= ord.order_id %>"
-    data-name="<%= ord.customer_name || 'Khách vãng lai' %>"
-    data-phone="<%= ord.customer_phone || '---' %>"
-    data-date="<%= new Date(ord.order_date).toLocaleString('vi-VN', {hour12: false}) %>"
-    data-status="<%= ord.order_status %>"
-    style="background:#3b82f6;color:white;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:13px;margin-right:4px;">
-    <i class="fa-solid fa-print"></i> In
-</button>
-
-<button type="button" class="btn-delete-order" ...> <!-- giữ nguyên -->
-      </td>
-      <td style="text-align: center;">
-        <button type="button" class="btn-delete-order" data-id="<%= ord.order_id %>" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">
-          <i class="fa-solid fa-trash-can"></i> Xóa
-        </button>
-      </td>
-    </tr>
-    <% }) %>
-  </tbody>
-</table>
+          <thead>
+            <tr>
+              <th>Mã Đơn</th>
+              <th>Khách hàng đặt</th>
+              <th>Số điện thoại</th>
+              <th>Thời gian tạo đơn</th>
+              <th style="text-align:center;">Trạng thái đơn hàng</th>
+              <th style="text-align:center;">Chi tiết</th>
+              <th style="text-align:center;">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% orders.forEach(ord => { %>
+            <tr id="order-row-<%= ord.order_id %>">
+              <td><strong>#ORD<%= ord.order_id %></strong></td>
+              <td><span style="color:#2c3e50;font-weight:500;"><%= ord.customer_name || 'Khách vãng lai' %></span></td>
+              <td><%= ord.customer_phone || '---' %></td>
+              <td><%= new Date(ord.order_date).toLocaleString('vi-VN', {hour12: false}) %></td>
+              <td style="text-align:center;">
+                <% if(ord.order_status === 'pending') { %>
+                  <span class="badge-status status-pending"><i class="fa-regular fa-clock"></i> Chờ xử lý</span>
+                <% } else if(ord.order_status === 'completed') { %>
+                  <span class="badge-status status-completed"><i class="fa-regular fa-circle-check"></i> Hoàn thành</span>
+                <% } else { %>
+                  <span class="badge-status status-cancelled"><i class="fa-solid fa-ban"></i> Đã hủy bỏ</span>
+                <% } %>
+              </td>
+              <td style="text-align:center;">
+                <button type="button" class="btn-view-order btn-open-order-modal" data-id="<%= ord.order_id %>">
+                  <i class="fa-solid fa-magnifying-glass"></i> Xem chi tiết
+                </button>
+              </td>
+              <td style="text-align:center;">
+                <button type="button" class="btn-print-order"
+                  data-id="<%= ord.order_id %>"
+                  data-name="<%= ord.customer_name || 'Khách vãng lai' %>"
+                  data-phone="<%= ord.customer_phone || '---' %>"
+                  data-date="<%= new Date(ord.order_date).toLocaleString('vi-VN', {hour12: false}) %>"
+                  data-status="<%= ord.order_status %>"
+                  style="background:#3b82f6;color:white;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:13px;margin-right:4px;">
+                  <i class="fa-solid fa-print"></i> In
+                </button>
+                <button type="button" class="btn-delete-order"
+                  data-id="<%= ord.order_id %>"
+                  style="background:#ef4444;color:white;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:13px;">
+                  <i class="fa-solid fa-trash-can"></i> Xóa
+                </button>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
 
         <div class="pagination">
-          <% if (currentPage > 1) { %><a href="/admin/dashboard/orders?page=<%= currentPage - 1 %>">← Trước</a><% } %>
+          <% if (currentPage > 1) { %>
+            <a href="/admin/dashboard/orders?page=<%= currentPage - 1 %>">← Trước</a>
+          <% } %>
           <% for (let i = 1; i <= totalPages; i++) { %>
             <a href="/admin/dashboard/orders?page=<%= i %>" class="<%= i === currentPage ? 'active' : '' %>"><%= i %></a>
           <% } %>
-          <% if (currentPage < totalPages) { %><a href="/admin/dashboard/orders?page=<%= currentPage + 1 %>">Sau →</a><% } %>
+          <% if (currentPage < totalPages) { %>
+            <a href="/admin/dashboard/orders?page=<%= currentPage + 1 %>">Sau →</a>
+          <% } %>
         </div>
       </div>
     </div>
   </main>
 </div>
 
+<!-- Modal tầng 1: Danh sách sản phẩm trong đơn -->
 <div id="orderItemsModal" class="modal">
-  <div class="modal-content" style="max-width: 680px; border-radius: 8px;">
+  <div class="modal-content" style="max-width:680px;border-radius:8px;">
     <div class="modal-header">
       <h2>Sản phẩm của đơn hàng <span id="popupOrderIdText"></span></h2>
-      <span class="close-items-modal" style="cursor: pointer; font-size: 24px;">&times;</span>
+      <span class="close-items-modal" style="cursor:pointer;font-size:24px;">&times;</span>
     </div>
     <div class="modal-body">
       <div class="popup-order-grid" id="popupGridContainer"></div>
@@ -180,18 +178,20 @@
   </div>
 </div>
 
-<div id="productDetailModal" class="modal" style="z-index: 1100;">
-  <div class="modal-content" style="max-width: 420px; border-radius: 6px;">
+<!-- Modal tầng 2: Chi tiết 1 sản phẩm -->
+<div id="productDetailModal" class="modal" style="z-index:1100;">
+  <div class="modal-content" style="max-width:420px;border-radius:6px;">
     <div class="modal-header">
       <h3>Chi tiết sản phẩm</h3>
-      <span class="close-detail-modal" style="cursor: pointer; font-size: 22px;">&times;</span>
+      <span class="close-detail-modal" style="cursor:pointer;font-size:22px;">&times;</span>
     </div>
-    <div class="modal-body" style="font-size: 13px; line-height: 1.6;">
+    <div class="modal-body" style="font-size:13px;line-height:1.6;">
       <p><strong>Tên sản phẩm:</strong> <span id="dt_name"></span></p>
       <p><strong>Mã SKU:</strong> <span id="dt_sku"></span></p>
-      <div style="margin-top: 8px;">
+      <p><strong>Kích thước:</strong> <span id="dt_size"></span></p>
+      <div style="margin-top:8px;">
         <strong>Mô tả:</strong>
-        <div id="dt_desc" style="background:#f1f5f9; padding:8px; border-radius:4px; max-height:100px; overflow-y:auto; font-style:italic;"></div>
+        <div id="dt_desc" style="background:#f1f5f9;padding:8px;border-radius:4px;max-height:100px;overflow-y:auto;font-style:italic;"></div>
       </div>
     </div>
   </div>

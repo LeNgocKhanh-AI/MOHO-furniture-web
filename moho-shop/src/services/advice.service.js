@@ -196,7 +196,7 @@ Phân tích ảnh phòng, trả JSON thuần (KHÔNG markdown):
     { "product_id": "id từ danh sách", "name": "tên", "reason": "lý do ngắn", "price_estimate": 0, "placement": "vị trí đặt" }
   ]
 }
-Gợi ý 3-4 sản phẩm. Chỉ JSON thuần.`;
+Gợi ý đúng 4 sản phẩm. Chỉ JSON thuần.`;
 
     return await callGemini(() => ({
         contents: [{
